@@ -304,7 +304,7 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
                 <Activity className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
                 <h3 className="text-xl font-bold mb-3 tracking-wide">LIVE INTEL</h3>
                 <p className="text-gray-400 font-light">
-                  Real-time market intelligence from global defense contractors. Automated price tracking and procurement optimization.
+                  Real-time market intelligence from trusted industry experts. Automated price tracking and procurement optimization.
                 </p>
               </div>
             </div>
@@ -394,7 +394,7 @@ const DealsPage = () => {
           </div>
           <h3 className="text-xl font-bold text-gray-300 mb-4 tracking-wide">INTEL NETWORK DEPLOYING</h3>
           <p className="text-gray-500 font-light max-w-md mx-auto">
-            Real-time market intelligence from defense contractors worldwide. 
+            Real-time market intelligence from trusted indsutry experts. 
             Automated procurement optimization and supply chain analysis protocols deploying.
           </p>
           <div className="mt-6 flex items-center justify-center space-x-2 text-cyan-400 text-sm font-mono">
@@ -421,8 +421,8 @@ const AboutPage = () => {
           <div className="space-y-6 text-gray-300 font-light leading-relaxed">
             <p>
               <span className="text-cyan-400 font-mono">LOADOUTLAB</span> represents the next evolution 
-              in tactical weapons engineering. Our advanced quantum computing systems enable 
-              precise molecular-level design and optimization of AR-15 platform configurations.
+              in tactical weapons engineering. Our advanced computing systems enable 
+              tailored design and optimization of AR-15 platform configurations.
             </p>
             <p>
               Utilizing classified defense protocols and real-time supply chain intelligence, 
