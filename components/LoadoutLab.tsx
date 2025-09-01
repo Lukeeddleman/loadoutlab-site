@@ -238,7 +238,8 @@ const MainSite = () => {
 };
 
 // Home Page Component
-const HomePage = ({ setCurrentSection }) => {
+const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => void }) => {
+
   return (
     <div>
       {/* Hero Section */}
