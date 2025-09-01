@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Wrench, Target, Shield, ChevronRight, Crosshair, Settings, DollarSign, Zap, Activity, Cpu } from 'lucide-react';
 
 const LoadoutLab = () => {
-  const [ageVerified, setAgeVerified] = useState(null);
-  const [showAgePrompt, setShowAgePrompt] = useState(false);
-  const [isRejected, setIsRejected] = useState(false);
+  const [ageVerified, setAgeVerified] = useState<boolean | null>(null);
+  const [showAgePrompt, setShowAgePrompt] = useState<boolean>(false);
+  const [isRejected, setIsRejected] = useState<boolean>(false);
 
   useEffect(() => {
     // Check if user has already been verified in this session
