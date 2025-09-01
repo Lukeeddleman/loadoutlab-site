@@ -264,8 +264,7 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
             </h1>
             <div className="h-px w-32 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-light leading-relaxed">
-              Advanced tactical systems engineering platform. Design, simulate, and manufacture 
-              next-generation AR-15 configurations using our quantum-enhanced 3D forge technology.
+              Welcome to the Loadout Lab. Design, visualize, and configure the next perfectly tailored addition to your collection.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
@@ -273,14 +272,14 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
                 className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-cyan-500/30"
               >
                 <Zap className="w-5 h-5" />
-                <span className="tracking-wide">INITIATE FORGE</span>
+                <span className="tracking-wide">ENTER THE FORGE</span>
               </button>
               <button 
                 onClick={() => setCurrentSection('deals')}
                 className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600"
               >
                 <DollarSign className="w-5 h-5" />
-                <span className="tracking-wide">ACCESS SUPPLY CHAIN</span>
+                <span className="tracking-wide">PRICE COMPONENTS</span>
               </button>
             </div>
           </div>
