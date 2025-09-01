@@ -143,7 +143,7 @@ const LoadoutLab = () => {
                 onClick={() => handleAgeVerification(true)}
                 className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-cyan-500/30"
               >
-                <span className="tracking-wide">I AM OVER THE AGE OF 18</span>
+                <span className="tracking-wide">I AM 18+</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
               
@@ -151,7 +151,7 @@ const LoadoutLab = () => {
                 onClick={() => handleAgeVerification(false)}
                 className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 border border-gray-600"
               >
-                I AM UNDER THE AGE OF 18
+                I AM UNDER 18
               </button>
             </div>
 
