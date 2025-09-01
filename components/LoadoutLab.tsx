@@ -133,7 +133,7 @@ const LoadoutLab = () => {
               <h2 className="text-xl font-bold text-white mb-1 tracking-wide">SECURITY CLEARANCE</h2>
               <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
               <p className="text-gray-300 text-sm leading-relaxed font-light">
-                LOADOUTLAB contains classified weapons systems and tactical equipment specifications. 
+                The LOADOUT LAB contains classified weapons systems and tactical equipment specifications. 
                 minimum age of 18+ required for facility access.
               </p>
             </div>
