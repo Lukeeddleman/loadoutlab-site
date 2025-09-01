@@ -23,7 +23,8 @@ const LoadoutLab = () => {
     }
   }, []);
 
-  const handleAgeVerification = (isOfAge) => {
+  const handleAgeVerification = (isOfAge: boolean) => {
+
     if (isOfAge) {
       setAgeVerified(true);
       setShowAgePrompt(false);
