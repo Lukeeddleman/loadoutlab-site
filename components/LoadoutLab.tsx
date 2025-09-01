@@ -18,7 +18,7 @@ const LoadoutLab = () => {
       // Show age prompt after a brief delay
       const timer = setTimeout(() => {
         setShowAgePrompt(true);
-      }, 1500);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, []);
