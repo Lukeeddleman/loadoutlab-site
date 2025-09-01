@@ -326,10 +326,10 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
       {/* CTA Section */}
       <div className="bg-gray-900/80 backdrop-blur-sm px-6 py-16 border-t border-cyan-500/20">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-2 tracking-wide">READY FOR DEPLOYMENT?</h2>
+          <h2 className="text-3xl font-bold mb-2 tracking-wide">READY FOR YOUR NEXT BUILD?</h2>
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
           <p className="text-gray-300 text-lg mb-8 font-light">
-            Join the elite engineering corps. Access classified weapon systems and next-generation tactical solutions.
+            Join thousands of other gun-owners in designing the perfect tool for the job.
           </p>
           <button 
             onClick={() => setCurrentSection('builder')}
