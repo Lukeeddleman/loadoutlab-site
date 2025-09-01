@@ -134,7 +134,7 @@ const LoadoutLab = () => {
               <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
               <p className="text-gray-300 text-sm leading-relaxed font-light">
                 LOADOUTLAB contains classified weapons systems and tactical equipment specifications. 
-                Security clearance level 18+ required for facility access.
+                minimum age of 18+ required for facility access.
               </p>
             </div>
 
@@ -143,7 +143,7 @@ const LoadoutLab = () => {
                 onClick={() => handleAgeVerification(true)}
                 className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-cyan-500/30"
               >
-                <span className="tracking-wide">CLEARANCE LEVEL 18+</span>
+                <span className="tracking-wide">I am 18+</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
               
@@ -151,7 +151,7 @@ const LoadoutLab = () => {
                 onClick={() => handleAgeVerification(false)}
                 className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 border border-gray-600"
               >
-                INSUFFICIENT CLEARANCE
+                I AM UNDER 18
               </button>
             </div>
 
