@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Wrench, Target, Shield, ChevronRight, Crosshair, Settings, DollarSign, Zap, Activity, Cpu } from 'lucide-react';
-import AR15ForgeBuilder from "./ar15_forge_builder";
 
 
 const LoadoutLab = () => {
@@ -204,12 +203,12 @@ const MainSite = () => {
             >
               HOME
             </button>
-            <button 
-              onClick={() => setCurrentSection('builder')}
-              className={`font-medium transition-colors tracking-wide ${currentSection === 'builder' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
+            <a 
+              href="/forge"
+              className="font-medium transition-colors tracking-wide text-gray-300 hover:text-white"
             >
               WEAPON FORGE
-            </button>
+            </a>
             <button 
               onClick={() => setCurrentSection('deals')}
               className={`font-medium transition-colors tracking-wide ${currentSection === 'deals' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
@@ -232,7 +231,6 @@ const MainSite = () => {
 
       {/* Main Content */}
       {currentSection === 'home' && <HomePage setCurrentSection={setCurrentSection} />}
-      {currentSection === 'builder' && <BuilderPage />}
       {currentSection === 'deals' && <DealsPage />}
       {currentSection === 'about' && <AboutPage />}
     </div>
@@ -269,13 +267,13 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
               Welcome to the Loadout Lab. Design, visualize, and configure the next perfectly tailored addition to your collection.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => setCurrentSection('builder')}
+              <a 
+                href="/forge"
                 className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-cyan-500/30"
               >
                 <Zap className="w-5 h-5" />
                 <span className="tracking-wide">ENTER THE FORGE</span>
-              </button>
+              </a>
               <button 
                 onClick={() => setCurrentSection('deals')}
                 className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600"
@@ -332,30 +330,17 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
           <p className="text-gray-300 text-lg mb-8 font-light">
             Join thousands of other gun-owners in designing the perfect tool for the job.
           </p>
-          <button 
-            onClick={() => setCurrentSection('builder')}
+          <a 
+            href="/forge"
             className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 border border-cyan-500/30 tracking-wide"
           >
             ENTER THE FORGE
-          </button>
+          </a>
         </div>
       </div>
     </div>
   );
 };
-
-// Builder Page
-const BuilderPage = () => {
-  return (
-    <div className="px-6 py-12 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <AR15ForgeBuilder />
-      </div>
-    </div>
-  );
-};
-
-
 
 // Deals Page
 const DealsPage = () => {
