@@ -143,12 +143,27 @@ const RifleVisualization: React.FC<{ selected: SelectedParts }> = ({ selected })
       
       {/* Spotlight effect */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] opacity-30">
-          <div className="w-full h-full bg-gradient-radial from-cyan-400/20 via-cyan-600/10 to-transparent rounded-full blur-3xl" />
-        </div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] opacity-40">
-          <div className="w-full h-full bg-gradient-radial from-white/10 via-cyan-400/15 to-transparent rounded-full blur-2xl" />
-        </div>
+        {/* Outer glow */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[700px] opacity-60 blur-3xl rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 70%)'
+          }}
+        />
+        {/* Inner spotlight */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[450px] opacity-80 blur-2xl rounded-full"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.12) 0%, rgba(34, 211, 238, 0.18) 35%, transparent 65%)'
+          }}
+        />
+        {/* Core light */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[200px] opacity-50 blur-xl rounded-full"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.2) 0%, rgba(34, 211, 238, 0.25) 50%, transparent 80%)'
+          }}
+        />
       </div>
 
       {/* Main rifle SVG - much larger */}
@@ -487,13 +502,31 @@ export default function AR15ForgeBuilder() {
       {/* Top header bar */}
       <div className="absolute top-0 left-0 right-0 z-30 bg-gray-900/95 backdrop-blur-sm border-b border-cyan-500/20 px-6 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
+            {/* LoadoutLab Logo */}
+            <a href="/" className="flex items-center gap-3 group">
+              <div className="relative">
+                <Target className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
+                <div className="absolute inset-0 animate-pulse">
+                  <Target className="w-8 h-8 text-cyan-400/30" />
+                </div>
+              </div>
+              <div>
+                <span className="text-xl font-bold text-white tracking-wide group-hover:text-cyan-50 transition-colors">LOADOUT</span>
+                <span className="text-cyan-400 font-light group-hover:text-cyan-300 transition-colors">LAB</span>
+              </div>
+            </a>
+            
+            {/* Divider */}
+            <div className="h-6 w-px bg-gray-600"></div>
+            
+            {/* Page Title */}
             <div className="flex items-center gap-2">
-              <Target className="w-6 h-6 text-cyan-400" />
               <h1 className="text-xl font-bold text-white">AR15 FORGE</h1>
+              <div className="text-xs text-gray-400 font-mono">WEAPON CONFIGURATION SYSTEM</div>
             </div>
-            <div className="text-xs text-gray-400 font-mono">WEAPON CONFIGURATION SYSTEM</div>
           </div>
+          
           <div className="flex items-center gap-4">
             <div className="text-right">
               <div className="text-xs text-gray-400 font-mono">BUILD TOTAL</div>
