@@ -1,6 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Wrench, Target, Shield, ChevronRight, Crosshair, Settings, DollarSign, Zap, Activity, Cpu } from 'lucide-react';
+import AR15ForgeBuilder from "./ar15_forge_builder";
+
 
 const LoadoutLab = () => {
   const [ageVerified, setAgeVerified] = useState<boolean | null>(null);
@@ -346,33 +348,14 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
 const BuilderPage = () => {
   return (
     <div className="px-6 py-12 min-h-screen">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 tracking-wide">WEAPON FORGE</h1>
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-          <p className="text-gray-400 font-mono">QUANTUM ENGINEERING PLATFORM</p>
-        </div>
-        <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-16 text-center">
-          <div className="relative mb-6">
-            <Crosshair className="w-16 h-16 text-cyan-400 mx-auto" />
-            <div className="absolute inset-0 animate-pulse">
-              <Crosshair className="w-16 h-16 text-cyan-400/30 mx-auto" />
-            </div>
-          </div>
-          <h3 className="text-xl font-bold text-gray-300 mb-4 tracking-wide">FORGE SYSTEMS INITIALIZING</h3>
-          <p className="text-gray-500 font-light max-w-md mx-auto">
-            Quantum-enhanced 3D weapon forge coming online. Advanced molecular assembly 
-            and tactical optimization protocols will be available here.
-          </p>
-          <div className="mt-6 flex items-center justify-center space-x-2 text-cyan-400 text-sm font-mono">
-            <Activity className="w-4 h-4" />
-            <span>SYSTEMS STATUS: DEVELOPMENT PHASE</span>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <AR15ForgeBuilder />
       </div>
     </div>
   );
 };
+
+
 
 // Deals Page
 const DealsPage = () => {
