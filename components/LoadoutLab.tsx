@@ -53,14 +53,14 @@ const LoadoutLab = () => {
             <h1 className="text-2xl font-bold text-white mb-4">ACCESS DENIED</h1>
             <div className="h-px w-32 bg-gradient-to-r from-transparent via-red-500 to-transparent mx-auto mb-4" />
             <p className="text-gray-300 leading-relaxed">
-              LOADOUTLAB systems are restricted to authorized personnel aged 18 and older. 
-              This facility contains classified weapons development content.
+              LoadoutLab is restricted to users 18 and older due to firearms-related content. 
+              This platform contains detailed firearm specifications and pricing information.
             </p>
           </div>
           <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
             <p className="text-red-300 text-sm font-mono">
-              SECURITY PROTOCOL ACTIVATED<br />
-              CLEARANCE LEVEL: INSUFFICIENT
+              ACCESS RESTRICTED<br />
+              AGE VERIFICATION REQUIRED
             </p>
           </div>
         </div>
@@ -131,11 +131,11 @@ const LoadoutLab = () => {
                   <Shield className="w-12 h-12 text-cyan-400/30 mx-auto" />
                 </div>
               </div>
-              <h2 className="text-xl font-bold text-white mb-1 tracking-wide">SECURITY CLEARANCE</h2>
+              <h2 className="text-xl font-bold text-white mb-1 tracking-wide">AGE VERIFICATION</h2>
               <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
               <p className="text-gray-300 text-sm leading-relaxed font-light">
-                The LOADOUT LAB contains classified weapons systems and tactical equipment specifications. 
-                minimum age of 18+ required for facility access.
+                LoadoutLab provides detailed firearm specifications, pricing, and configuration tools. 
+                You must be 18 or older to access this content.
               </p>
             </div>
 
@@ -213,19 +213,19 @@ const MainSite = () => {
               onClick={() => setCurrentSection('deals')}
               className={`font-medium transition-colors tracking-wide ${currentSection === 'deals' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
             >
-              SUPPLY CHAIN
+              PRICING
             </button>
             <button 
               onClick={() => setCurrentSection('about')}
               className={`font-medium transition-colors tracking-wide ${currentSection === 'about' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
             >
-              INTEL
+              ABOUT
             </button>
           </div>
           
-          <button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-6 py-2 rounded-lg font-medium transition-all duration-200 border border-cyan-500/30 tracking-wide">
-            INITIALIZE BUILD
-          </button>
+          <a href="/forge" className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-6 py-2 rounded-lg font-medium transition-all duration-200 border border-cyan-500/30 tracking-wide">
+            START BUILD
+          </a>
         </div>
       </nav>
 
@@ -255,16 +255,16 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
             <div className="mb-8">
               <div className="inline-flex items-center space-x-2 text-cyan-400 text-sm font-mono mb-4">
                 <Activity className="w-4 h-4" />
-                <span>WEAPONS DEVELOPMENT FACILITY</span>
+                <span>FIREARM CONFIGURATION PLATFORM</span>
               </div>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">ENGINEER YOUR</span><br />
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">PERFECT WEAPON</span>
+              <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">BUILD YOUR</span><br />
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">IDEAL RIFLE</span>
             </h1>
             <div className="h-px w-32 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-light leading-relaxed">
-              Welcome to the Loadout Lab. Design, visualize, and configure the next perfectly tailored addition to your collection.
+              Professional AR-15 configuration tool with real-time pricing, compatibility checking, and detailed component specifications from trusted manufacturers.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
@@ -279,7 +279,7 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
                 className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600"
               >
                 <DollarSign className="w-5 h-5" />
-                <span className="tracking-wide">PRICE COMPONENTS</span>
+                <span className="tracking-wide">VIEW PRICING</span>
               </button>
             </div>
           </div>
@@ -290,9 +290,9 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
               <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
               <div className="relative z-10">
                 <Cpu className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-3 tracking-wide">QUANTUM FORGE</h3>
+                <h3 className="text-xl font-bold mb-3 tracking-wide">SMART BUILDER</h3>
                 <p className="text-gray-400 font-light">
-                  Real-time molecular visualization and component compatibility analysis using advanced quantum computing protocols.
+                  Interactive rifle builder with real-time compatibility checking, pricing updates, and detailed component specifications.
                 </p>
               </div>
             </div>
@@ -301,9 +301,9 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
               <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
               <div className="relative z-10">
                 <Activity className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-3 tracking-wide">LIVE INTEL</h3>
+                <h3 className="text-xl font-bold mb-3 tracking-wide">MARKET DATA</h3>
                 <p className="text-gray-400 font-light">
-                  Real-time market intelligence from trusted industry experts. Automated price tracking and procurement optimization.
+                  Current pricing from major retailers and manufacturers. Track availability and compare costs across multiple vendors.
                 </p>
               </div>
             </div>
@@ -312,9 +312,9 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
               <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
               <div className="relative z-10">
                 <Shield className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-3 tracking-wide">TACTICAL ANALYSIS</h3>
+                <h3 className="text-xl font-bold mb-3 tracking-wide">COMPATIBILITY CHECK</h3>
                 <p className="text-gray-400 font-light">
-                  Advanced ballistics simulation and performance optimization algorithms ensure maximum operational effectiveness.
+                  Automatic compatibility verification ensures all selected components work together properly for reliable performance.
                 </p>
               </div>
             </div>
@@ -325,10 +325,10 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
       {/* CTA Section */}
       <div className="bg-gray-900/80 backdrop-blur-sm px-6 py-16 border-t border-cyan-500/20">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-2 tracking-wide">READY FOR YOUR NEXT BUILD?</h2>
+          <h2 className="text-3xl font-bold mb-2 tracking-wide">START BUILDING TODAY</h2>
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
           <p className="text-gray-300 text-lg mb-8 font-light">
-            Join thousands of other gun-owners in designing the perfect tool for the job.
+            Join thousands of firearms enthusiasts who trust LoadoutLab for their AR-15 build planning and component selection.
           </p>
           <a 
             href="/forge"
@@ -348,9 +348,9 @@ const DealsPage = () => {
     <div className="px-6 py-12 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 tracking-wide">SUPPLY CHAIN INTEL</h1>
+          <h1 className="text-4xl font-bold mb-2 tracking-wide">PRICING & DEALS</h1>
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-          <p className="text-gray-400 font-mono">GLOBAL PROCUREMENT NETWORK</p>
+          <p className="text-gray-400 font-mono">COMPONENT PRICING TRACKER</p>
         </div>
         <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-16 text-center">
           <div className="relative mb-6">
@@ -359,14 +359,14 @@ const DealsPage = () => {
               <DollarSign className="w-16 h-16 text-cyan-400/30 mx-auto" />
             </div>
           </div>
-          <h3 className="text-xl font-bold text-gray-300 mb-4 tracking-wide">INTEL NETWORK DEPLOYING</h3>
+          <h3 className="text-xl font-bold text-gray-300 mb-4 tracking-wide">PRICING SYSTEM IN DEVELOPMENT</h3>
           <p className="text-gray-500 font-light max-w-md mx-auto">
-            Real-time market intelligence from trusted indsutry experts. 
-            Automated procurement optimization and supply chain analysis protocols deploying.
+            Real-time pricing from major retailers and manufacturers. 
+            Track deals, monitor availability, and get alerts on price drops for your build components.
           </p>
           <div className="mt-6 flex items-center justify-center space-x-2 text-cyan-400 text-sm font-mono">
             <Activity className="w-4 h-4" />
-            <span>NETWORK STATUS: ESTABLISHING CONNECTIONS</span>
+            <span>STATUS: COMING SOON</span>
           </div>
         </div>
       </div>
@@ -380,28 +380,27 @@ const AboutPage = () => {
     <div className="px-6 py-12 min-h-screen">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 tracking-wide">FACILITY INTEL</h1>
+          <h1 className="text-4xl font-bold mb-2 tracking-wide">ABOUT LOADOUTLAB</h1>
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-          <p className="text-gray-400 font-mono">CLASSIFICATION: RESTRICTED</p>
+          <p className="text-gray-400 font-mono">PROFESSIONAL AR-15 BUILD PLATFORM</p>
         </div>
         <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-8">
           <div className="space-y-6 text-gray-300 font-light leading-relaxed">
             <p>
-              <span className="text-cyan-400 font-mono">LOADOUTLAB</span> represents the next evolution 
-              in tactical weapons engineering. Our advanced computing systems enable 
-              tailored design and optimization of AR-15 platform configurations.
+              <span className="text-cyan-400 font-mono">LoadoutLab</span> is a professional AR-15 configuration 
+              platform designed for firearms enthusiasts, builders, and professionals. Our interactive tools help 
+              you plan, visualize, and optimize your rifle build with accurate specifications and current pricing.
             </p>
             <p>
-              Utilizing classified defense protocols and real-time supply chain intelligence, 
-              we provide military-grade engineering tools for the modern tactical operator. 
-              Every component is analyzed through advanced ballistics simulation and 
-              performance optimization algorithms.
+              We provide detailed component information from trusted manufacturers like Aero Precision, BCM, 
+              Magpul, and others. Each part includes specifications, compatibility data, and real-world pricing 
+              to help you make informed decisions for your build.
             </p>
             <div className="border-l-2 border-cyan-500/50 pl-4 bg-cyan-500/5 py-3">
               <p className="text-cyan-300 font-mono text-sm">
-                CLEARANCE LEVEL: AUTHORIZED PERSONNEL ONLY<br />
-                FACILITY STATUS: FULLY OPERATIONAL<br />
-                SECURITY PROTOCOL: ACTIVE
+                PLATFORM STATUS: ACTIVE<br />
+                BUILD TOOLS: FULLY OPERATIONAL<br />
+                COMPATIBILITY: AR-15 PLATFORM
               </p>
             </div>
           </div>

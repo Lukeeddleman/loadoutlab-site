@@ -318,7 +318,7 @@ const ComponentsPanel: React.FC<{
             <Target className="w-5 h-5 text-cyan-400" />
             COMPONENTS
           </h2>
-          <p className="text-xs text-gray-400 font-mono mt-1">SELECT PARTS TO BUILD</p>
+          <p className="text-xs text-gray-400 font-mono mt-1">SELECT COMPONENTS</p>
         </div>
         
         <div className="overflow-y-auto h-full pb-20">
@@ -416,7 +416,7 @@ const FilterPanel: React.FC<{
             <Filter className="w-5 h-5 text-cyan-400" />
             FILTERS
           </h2>
-          <p className="text-xs text-gray-400 font-mono mt-1">REFINE YOUR SEARCH</p>
+          <p className="text-xs text-gray-400 font-mono mt-1">FILTER OPTIONS</p>
         </div>
         
         <div className="p-4 space-y-6 overflow-y-auto h-full pb-20">
@@ -532,7 +532,7 @@ export default function AR15ForgeBuilder() {
             {/* Page Title */}
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold text-white">AR15 FORGE</h1>
-              <div className="text-xs text-gray-400 font-mono">WEAPON CONFIGURATION SYSTEM</div>
+              <div className="text-xs text-gray-400 font-mono">AR-15 BUILD CONFIGURATOR</div>
             </div>
           </div>
           
