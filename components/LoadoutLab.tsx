@@ -387,9 +387,13 @@ const AboutPage = () => {
         <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-8">
           <div className="space-y-6 text-gray-300 font-light leading-relaxed">
             <p>
-              <span className="text-cyan-400 font-mono">LoadoutLab</span> is a professional AR-15 configuration 
-              platform designed for firearms enthusiasts, builders, and professionals. Our interactive tools help 
-              you plan, visualize, and optimize your rifle build with accurate specifications and current pricing.
+              <span className="text-cyan-400 font-mono">LoadoutLab</span> is an online shopping and comparison platform built specifically for the firearms and tactical community. Our site allows users to assemble their ideal rifle or handgun setup in an interactive "loadout builder," while automatically comparing prices and availability across multiple trusted retailers.
+            </p>
+            <p>
+              Our audience is highly engaged, consisting of firearms enthusiasts, hobbyists, and professionals who are actively shopping for parts such as barrels, optics, handguards, triggers, and other accessories. We deliver a shopping experience that is equal parts intuitive and informative, helping customers discover the best deals while also suggesting similar alternatives that may fit their needs or budget better.
+            </p>
+            <p>
+              By partnering with LoadoutLab, merchants gain exposure to a motivated, purchase-ready audience and benefit from high-quality referral traffic. Our goal is to connect buyers with the right products at the right price, creating wins for both customers and retailers.
             </p>
             <p>
               We provide detailed component information from trusted manufacturers like Aero Precision, BCM, 
