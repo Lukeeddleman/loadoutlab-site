@@ -141,14 +141,18 @@ const RifleVisualization: React.FC<{ selected: SelectedParts }> = ({ selected })
         backgroundSize: '40px 40px'
       }} />
       
-      {/* Crosshair guides */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-full h-px bg-cyan-500/20" />
-        <div className="absolute w-px h-full bg-cyan-500/20" />
+      {/* Spotlight effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] opacity-30">
+          <div className="w-full h-full bg-gradient-radial from-cyan-400/20 via-cyan-600/10 to-transparent rounded-full blur-3xl" />
+        </div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] opacity-40">
+          <div className="w-full h-full bg-gradient-radial from-white/10 via-cyan-400/15 to-transparent rounded-full blur-2xl" />
+        </div>
       </div>
 
       {/* Main rifle SVG - much larger */}
-      <svg viewBox="0 0 800 300" className="w-full h-full max-w-5xl">
+      <svg viewBox="0 0 800 300" className="w-full h-full max-w-5xl relative z-10">
         {/* Drop shadow */}
         <defs>
           <filter id="drop-shadow">
@@ -264,19 +268,27 @@ const ComponentsPanel: React.FC<{
 
   return (
     <>
-      {/* Hover trigger area */}
+      {/* Hover trigger area - wider and more reliable */}
       <div 
-        className="fixed left-0 top-0 w-8 h-full z-40"
+        className="fixed left-0 top-0 w-16 h-full z-40"
         onMouseEnter={() => setIsHovered(true)}
       />
       
       {/* Panel */}
       <div 
-        className={`fixed left-0 top-0 h-full w-80 bg-gray-900/95 backdrop-blur-sm border-r border-cyan-500/30 transform transition-transform duration-300 ease-out z-50 ${
+        className={`fixed left-0 top-0 h-full w-80 bg-gray-900/95 backdrop-blur-sm border-r border-cyan-500/30 transform transition-all duration-300 ease-out z-50 ${
           isHovered ? 'translate-x-0' : '-translate-x-72'
         }`}
+        onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {/* Tab indicator when hidden */}
+        <div className={`absolute -right-8 top-1/2 -translate-y-1/2 w-8 h-16 bg-cyan-500/20 rounded-r-lg flex items-center justify-center transition-opacity duration-300 ${
+          isHovered ? 'opacity-0' : 'opacity-100'
+        }`}>
+          <ChevronRight className="w-4 h-4 text-cyan-400" />
+        </div>
+
         <div className="p-4 border-b border-gray-800">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Target className="w-5 h-5 text-cyan-400" />
@@ -342,6 +354,8 @@ const FilterPanel: React.FC<{
   selectedBrands: string[];
   setSelectedBrands: (brands: string[]) => void;
 }> = ({ priceRange, setPriceRange, selectedBrands, setSelectedBrands }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
   const allBrands = useMemo(() => {
     const brands = new Set<string>();
     Object.values(PARTS_DATABASE).forEach(parts => 
@@ -351,72 +365,94 @@ const FilterPanel: React.FC<{
   }, []);
 
   return (
-    <div className="fixed right-0 top-0 h-full w-80 bg-gray-900/95 backdrop-blur-sm border-l border-cyan-500/30 z-40">
-      <div className="p-4 border-b border-gray-800">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-          <Filter className="w-5 h-5 text-cyan-400" />
-          FILTERS
-        </h2>
-        <p className="text-xs text-gray-400 font-mono mt-1">REFINE YOUR SEARCH</p>
-      </div>
+    <>
+      {/* Hover trigger area */}
+      <div 
+        className="fixed right-0 top-0 w-16 h-full z-40"
+        onMouseEnter={() => setIsHovered(true)}
+      />
       
-      <div className="p-4 space-y-6">
-        {/* Price Range */}
-        <div>
-          <label className="block text-sm font-medium text-white mb-2">Price Range</label>
-          <div className="space-y-2">
-            <input
-              type="range"
-              min="0"
-              max="1000"
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-              className="w-full accent-cyan-500"
-            />
-            <div className="flex justify-between text-xs text-gray-400 font-mono">
-              <span>{money(priceRange[0])}</span>
-              <span>{money(priceRange[1])}</span>
+      {/* Panel */}
+      <div 
+        className={`fixed right-0 top-0 h-full w-80 bg-gray-900/95 backdrop-blur-sm border-l border-cyan-500/30 transform transition-all duration-300 ease-out z-50 ${
+          isHovered ? 'translate-x-0' : 'translate-x-72'
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Tab indicator when hidden */}
+        <div className={`absolute -left-8 top-1/2 -translate-y-1/2 w-8 h-16 bg-cyan-500/20 rounded-l-lg flex items-center justify-center transition-opacity duration-300 ${
+          isHovered ? 'opacity-0' : 'opacity-100'
+        }`}>
+          <ChevronLeft className="w-4 h-4 text-cyan-400" />
+        </div>
+
+        <div className="p-4 border-b border-gray-800">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <Filter className="w-5 h-5 text-cyan-400" />
+            FILTERS
+          </h2>
+          <p className="text-xs text-gray-400 font-mono mt-1">REFINE YOUR SEARCH</p>
+        </div>
+        
+        <div className="p-4 space-y-6 overflow-y-auto h-full pb-20">
+          {/* Price Range */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Price Range</label>
+            <div className="space-y-2">
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                value={priceRange[1]}
+                onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                className="w-full accent-cyan-500"
+              />
+              <div className="flex justify-between text-xs text-gray-400 font-mono">
+                <span>{money(priceRange[0])}</span>
+                <span>{money(priceRange[1])}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Brand Filter */}
-        <div>
-          <label className="block text-sm font-medium text-white mb-2">Brands</label>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {allBrands.map(brand => (
-              <label key={brand} className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedBrands.includes(brand)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedBrands([...selectedBrands, brand]);
-                    } else {
-                      setSelectedBrands(selectedBrands.filter(b => b !== brand));
-                    }
-                  }}
-                  className="rounded border-gray-600 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-0"
-                />
-                <span className="text-sm text-gray-300">{brand}</span>
-              </label>
-            ))}
+          {/* Brand Filter */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Brands</label>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {allBrands.map(brand => (
+                <label key={brand} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedBrands.includes(brand)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedBrands([...selectedBrands, brand]);
+                      } else {
+                        setSelectedBrands(selectedBrands.filter(b => b !== brand));
+                      }
+                    }}
+                    className="rounded border-gray-600 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-0"
+                  />
+                  <span className="text-sm text-gray-300">{brand}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-2">
+            <button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+              <Save className="w-4 h-4" />
+              Save Build
+            </button>
+            <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+              <RotateCcw className="w-4 h-4" />
+              Reset All
+            </button>
           </div>
         </div>
-
-        {/* Quick Actions */}
-        <div className="space-y-2">
-          <button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-            <Save className="w-4 h-4" />
-            Save Build
-          </button>
-          <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-            <RotateCcw className="w-4 h-4" />
-            Reset All
-          </button>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
