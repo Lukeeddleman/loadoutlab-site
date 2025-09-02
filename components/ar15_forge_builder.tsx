@@ -141,25 +141,34 @@ const RifleVisualization: React.FC<{ selected: SelectedParts }> = ({ selected })
         backgroundSize: '40px 40px'
       }} />
       
-      {/* Spotlight effect */}
+      {/* Spotlight effect - responsive sizing */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Outer glow */}
+        {/* Outer glow - scales with viewport */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[700px] opacity-60 blur-3xl rounded-full"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-60 blur-3xl rounded-full
+                     w-[120vw] h-[80vh] 
+                     min-w-[800px] min-h-[600px] 
+                     max-w-[2000px] max-h-[1400px]"
           style={{
             background: 'radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 70%)'
           }}
         />
-        {/* Inner spotlight */}
+        {/* Inner spotlight - scales with viewport */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[450px] opacity-80 blur-2xl rounded-full"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80 blur-2xl rounded-full
+                     w-[80vw] h-[60vh] 
+                     min-w-[600px] min-h-[450px] 
+                     max-w-[1400px] max-h-[1000px]"
           style={{
             background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.12) 0%, rgba(34, 211, 238, 0.18) 35%, transparent 65%)'
           }}
         />
-        {/* Core light */}
+        {/* Core light - scales with viewport */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[200px] opacity-50 blur-xl rounded-full"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50 blur-xl rounded-full
+                     w-[50vw] h-[35vh] 
+                     min-w-[400px] min-h-[280px] 
+                     max-w-[800px] max-h-[600px]"
           style={{
             background: 'radial-gradient(ellipse, rgba(255, 255, 255, 0.2) 0%, rgba(34, 211, 238, 0.25) 50%, transparent 80%)'
           }}
