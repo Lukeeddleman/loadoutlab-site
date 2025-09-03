@@ -34,6 +34,10 @@ export type SelectedParts = {
   optic: Part | null;
   trigger: Part | null;
   bcg: Part | null;
+  gasblock: Part | null;
+  buffertube: Part | null;
+  buffer: Part | null;
+  bufferspring: Part | null;
 };
 
 export type CategoryKey = keyof SelectedParts;
@@ -107,6 +111,30 @@ const PARTS_DATABASE: Record<CategoryKey, Part[]> = {
     { id: "toolcraft-nitride", name: "5.56 BCG", brand: "Toolcraft", price: 109.0, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
     { id: "bcm-auto", name: "Auto BCG", brand: "BCM", price: 189.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
     { id: "lmt-enhanced", name: "Enhanced BCG", brand: "LMT", price: 349.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+  ],
+  gasblock: [
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "aero-low-profile", name: "Low Profile", brand: "Aero", price: 39.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "superlative-adjustable", name: "Adjustable", brand: "Superlative", price: 89.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "wojtek-adjustable", name: "Adjustable Clamp", brand: "Wojtek", price: 49.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+  ],
+  buffertube: [
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "aero-carbine", name: "Carbine Buffer Tube", brand: "Aero", price: 29.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "bcm-receiver-extension", name: "Receiver Extension", brand: "BCM", price: 49.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "vltor-a5", name: "A5 Buffer Tube", brand: "Vltor", price: 69.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+  ],
+  buffer: [
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "aero-carbine-h", name: "Carbine Buffer (H)", brand: "Aero", price: 14.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "bcm-h2", name: "H2 Buffer", brand: "BCM", price: 24.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "vltor-a5h2", name: "A5H2 Buffer", brand: "Vltor", price: 34.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+  ],
+  bufferspring: [
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "aero-carbine", name: "Carbine Spring", brand: "Aero", price: 9.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "sprinco-blue", name: "Blue Spring", brand: "Sprinco", price: 19.99, color: "#3b82f6", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "vltor-a5", name: "A5 Spring", brand: "Vltor", price: 16.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
   ],
 };
 
@@ -297,15 +325,19 @@ const LOWER_RECEIVER_CATEGORIES: CategoryMeta[] = [
   { id: "lower", name: "Lower Receiver", required: true, receiver: "lower" },
   { id: "trigger", name: "Trigger", receiver: "lower" },
   { id: "stock", name: "Stock", receiver: "lower" },
-  { id: "grip", name: "Pistol Grip", receiver: "lower" },
+  { id: "grip", name: "Pistol Grip", required: true, receiver: "lower" },
+  { id: "buffertube", name: "Buffer Tube", required: true, receiver: "lower" },
+  { id: "buffer", name: "Buffer", required: true, receiver: "lower" },
+  { id: "bufferspring", name: "Buffer Spring", required: true, receiver: "lower" },
 ];
 
 const UPPER_RECEIVER_CATEGORIES: CategoryMeta[] = [
   { id: "upper", name: "Upper Receiver", required: true, receiver: "upper" },
   { id: "barrel", name: "Barrel", required: true, receiver: "upper" },
-  { id: "handguard", name: "Handguard", receiver: "upper" },
+  { id: "gasblock", name: "Gas Block", required: true, receiver: "upper" },
+  { id: "handguard", name: "Handguard", required: true, receiver: "upper" },
   { id: "muzzle", name: "Muzzle Device", receiver: "upper" },
-  { id: "bcg", name: "Bolt Carrier Group", receiver: "upper" },
+  { id: "bcg", name: "Bolt Carrier Group", required: true, receiver: "upper" },
   { id: "foregrip", name: "Foregrip", receiver: "upper" },
   { id: "optic", name: "Optic", receiver: "upper" },
 ];
@@ -635,6 +667,10 @@ function AR15ForgeBuilderInner() {
     optic: PARTS_DATABASE.optic[0],
     trigger: PARTS_DATABASE.trigger[0],
     bcg: PARTS_DATABASE.bcg[0],
+    gasblock: PARTS_DATABASE.gasblock[0],
+    buffertube: PARTS_DATABASE.buffertube[0],
+    buffer: PARTS_DATABASE.buffer[0],
+    bufferspring: PARTS_DATABASE.bufferspring[0],
   });
 
   const [expanded, setExpanded] = useState<CategoryKey | null>(null);
