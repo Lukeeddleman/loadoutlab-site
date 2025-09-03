@@ -135,7 +135,11 @@ function sumSelected(selected: SelectedParts) {
 /*************************
  * Enhanced Rifle Visualization
  *************************/
-const RifleVisualization: React.FC<{ selected: SelectedParts }> = ({ selected }) => {
+const RifleVisualization: React.FC<{ 
+  selected: SelectedParts; 
+  buildingPhase: "foundation" | "complete";
+  setBuildingPhase: (phase: "foundation" | "complete") => void;
+}> = ({ selected, buildingPhase, setBuildingPhase }) => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-gray-950 to-black relative overflow-hidden">
       {/* Background grid pattern */}
@@ -190,73 +194,112 @@ const RifleVisualization: React.FC<{ selected: SelectedParts }> = ({ selected })
           </filter>
         </defs>
 
-        {/* Upper rail - main body */}
-        <rect x={80} y={140} width={500} height={25} rx={4} fill="#1f2937" filter="url(#drop-shadow)" />
+        {/* Show different parts based on building phase */}
+        {buildingPhase === "complete" && (
+          <>
+            {/* Upper rail - main body */}
+            <rect x={80} y={140} width={500} height={25} rx={4} fill="#1f2937" filter="url(#drop-shadow)" />
 
-        {/* Barrel */}
-        {selected.barrel && selected.barrel.id !== "none" && (
-          <rect x={570} y={148} width={150} height={6} fill={selected.barrel.color} filter="url(#drop-shadow)" />
+            {/* Barrel */}
+            {selected.barrel && selected.barrel.id !== "none" && (
+              <rect x={570} y={148} width={150} height={6} fill={selected.barrel.color} filter="url(#drop-shadow)" />
+            )}
+
+            {/* Muzzle */}
+            {selected.muzzle && selected.muzzle.id !== "none" && (
+              <rect x={720} y={146} width={30} height={10} fill={selected.muzzle.color} filter="url(#drop-shadow)" />
+            )}
+
+            {/* Receiver (more detailed) */}
+            <rect x={200} y={135} width={180} height={35} rx={6} fill="#111827" filter="url(#drop-shadow)" />
+            
+            {/* Charging handle */}
+            <rect x={190} y={138} width={15} height={8} rx={2} fill="#374151" />
+
+            {/* Buffer tube */}
+            <rect x={80} y={144} width={90} height={8} rx={4} fill="#374151" filter="url(#drop-shadow)" />
+
+            {/* Stock */}
+            {selected.stock && selected.stock.id !== "none" && (
+              <rect x={20} y={130} width={75} height={28} rx={6} fill={selected.stock.color} filter="url(#drop-shadow)" />
+            )}
+
+            {/* Foregrip */}
+            {selected.foregrip && selected.foregrip.id !== "none" && (
+              <rect x={380} y={180} width={15} height={30} rx={6} fill={selected.foregrip.color} filter="url(#drop-shadow)" />
+            )}
+
+            {/* Handguard overlay */}
+            {selected.handguard && selected.handguard.id !== "none" && (
+              <rect x={280} y={140} width={280} height={25} rx={4} fill={selected.handguard.color} opacity={0.8} filter="url(#drop-shadow)" />
+            )}
+
+            {/* Optic */}
+            {selected.optic && selected.optic.id !== "none" && (
+              <g filter="url(#drop-shadow)">
+                <rect x={320} y={115} width={100} height={22} rx={4} fill={selected.optic.color} />
+                <text x={325} y={108} fill="#22d3ee" fontSize={12} fontWeight="bold">
+                  {selected.optic.brand}
+                </text>
+                <text x={325} y={150} fill="#e5e7eb" fontSize={11}>
+                  {selected.optic.name} • {money(selected.optic.price)}
+                </text>
+              </g>
+            )}
+          </>
         )}
 
-        {/* Muzzle */}
-        {selected.muzzle && selected.muzzle.id !== "none" && (
-          <rect x={720} y={146} width={30} height={10} fill={selected.muzzle.color} filter="url(#drop-shadow)" />
-        )}
+        {/* Lower Receiver - Always visible */}
+        {selected.lower && selected.lower.id !== "none" && (
+          <g>
+            {/* Lower receiver main body */}
+            <rect x={200} y={170} width={120} height={45} rx={6} fill={selected.lower.color} filter="url(#drop-shadow)" />
+            
+            {/* Magazine well */}
+            <rect x={270} y={170} width={25} height={35} rx={3} fill="#1f2937" filter="url(#drop-shadow)" />
 
-        {/* Receiver (more detailed) */}
-        <rect x={200} y={135} width={180} height={35} rx={6} fill="#111827" filter="url(#drop-shadow)" />
-        
-        {/* Charging handle */}
-        <rect x={190} y={138} width={15} height={8} rx={2} fill="#374151" />
-
-        {/* Buffer tube */}
-        <rect x={80} y={144} width={90} height={8} rx={4} fill="#374151" filter="url(#drop-shadow)" />
-
-        {/* Stock */}
-        {selected.stock && selected.stock.id !== "none" && (
-          <rect x={20} y={130} width={75} height={28} rx={6} fill={selected.stock.color} filter="url(#drop-shadow)" />
-        )}
-
-        {/* Pistol grip */}
-        {selected.grip && selected.grip.id !== "none" && (
-          <rect x={280} y={172} width={22} height={40} rx={6} fill={selected.grip.color} filter="url(#drop-shadow)" />
-        )}
-
-        {/* Foregrip */}
-        {selected.foregrip && selected.foregrip.id !== "none" && (
-          <rect x={380} y={180} width={15} height={30} rx={6} fill={selected.foregrip.color} filter="url(#drop-shadow)" />
-        )}
-
-        {/* Handguard overlay */}
-        {selected.handguard && selected.handguard.id !== "none" && (
-          <rect x={280} y={140} width={280} height={25} rx={4} fill={selected.handguard.color} opacity={0.8} filter="url(#drop-shadow)" />
-        )}
-
-        {/* Optic */}
-        {selected.optic && selected.optic.id !== "none" && (
-          <g filter="url(#drop-shadow)">
-            <rect x={320} y={115} width={100} height={22} rx={4} fill={selected.optic.color} />
-            <text x={325} y={108} fill="#22d3ee" fontSize={12} fontWeight="bold">
-              {selected.optic.brand}
+            {/* Trigger guard */}
+            <ellipse cx={290} cy={185} rx={12} ry={8} fill="none" stroke="#374151" strokeWidth={2} />
+            
+            {/* Lower receiver label */}
+            <text x={205} y={235} fill="#22d3ee" fontSize={12} fontWeight="bold">
+              {selected.lower.brand}
             </text>
-            <text x={325} y={150} fill="#e5e7eb" fontSize={11}>
-              {selected.optic.name} • {money(selected.optic.price)}
+            <text x={205} y={250} fill="#e5e7eb" fontSize={11}>
+              {selected.lower.name} • {money(selected.lower.price)}
             </text>
           </g>
         )}
 
-        {/* Magazine well */}
-        <rect x={270} y={170} width={25} height={35} rx={3} fill="#1f2937" filter="url(#drop-shadow)" />
-
-        {/* Trigger guard */}
-        <ellipse cx={290} cy={185} rx={12} ry={8} fill="none" stroke="#374151" strokeWidth={2} />
+        {/* Pistol grip - Always visible */}
+        {selected.grip && selected.grip.id !== "none" && (
+          <rect x={280} y={172} width={22} height={40} rx={6} fill={selected.grip.color} filter="url(#drop-shadow)" />
+        )}
       </svg>
 
       {/* Build info overlay */}
       <div className="absolute bottom-8 right-8 bg-gray-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-4">
         <div className="text-cyan-400 text-sm font-mono mb-1">BUILD TOTAL</div>
         <div className="text-white text-2xl font-bold">{money(sumSelected(selected))}</div>
+        
+        {/* Phase indicator */}
+        {buildingPhase === "foundation" && (
+          <div className="text-xs text-orange-400 font-mono mt-2">FOUNDATION PHASE</div>
+        )}
       </div>
+
+      {/* Phase transition button */}
+      {buildingPhase === "foundation" && (
+        <div className="absolute bottom-8 left-8 bg-gray-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-4">
+          <button
+            onClick={() => setBuildingPhase("complete")}
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white py-3 px-6 rounded-lg font-bold transition-all duration-300 hover:scale-[1.02]"
+          >
+            BUILD COMPLETE RIFLE
+          </button>
+          <div className="text-xs text-gray-400 font-mono mt-2 text-center">Add upper receiver & accessories</div>
+        </div>
+      )}
     </div>
   );
 };
@@ -293,9 +336,15 @@ const ComponentsPanel: React.FC<{
   onSelect: (key: CategoryKey, part: Part) => void;
   expanded: CategoryKey | null;
   setExpanded: (key: CategoryKey | null) => void;
-}> = ({ selected, onSelect, expanded, setExpanded }) => {
+  buildingPhase: "foundation" | "complete";
+}> = ({ selected, onSelect, expanded, setExpanded, buildingPhase }) => {
   const [isHovered, setIsHovered] = useState(false);
   const { configuration } = useForgeContext();
+
+  // Filter categories based on building phase
+  const availableCategories = buildingPhase === "foundation" 
+    ? CATEGORIES.filter(cat => cat.id === "lower" || cat.id === "grip")
+    : CATEGORIES;
 
   return (
     <>
@@ -329,7 +378,7 @@ const ComponentsPanel: React.FC<{
         </div>
         
         <div className="overflow-y-auto h-full pb-20">
-          {CATEGORIES.map((category) => (
+          {availableCategories.map((category) => (
             <div key={category.id} className="border-b border-gray-800/50">
               <button
                 onClick={() => setExpanded(expanded === category.id ? null : category.id)}
@@ -492,8 +541,9 @@ const FilterPanel: React.FC<{
  *************************/
 function AR15ForgeBuilderInner() {
   const [showQuestionnaire, setShowQuestionnaire] = useState(true);
+  const [buildingPhase, setBuildingPhase] = useState<"foundation" | "complete">("foundation");
   const [selected, setSelected] = useState<SelectedParts>({
-    lower: PARTS_DATABASE.lower[0],
+    lower: PARTS_DATABASE.lower[0], // Will be updated by questionnaire
     upper: PARTS_DATABASE.upper[0],
     grip: PARTS_DATABASE.grip[0],
     foregrip: PARTS_DATABASE.foregrip[0],
@@ -514,11 +564,20 @@ function AR15ForgeBuilderInner() {
     setSelected(prev => ({ ...prev, [key]: part }));
   };
 
-  const { setConfiguration } = useForgeContext();
+  const { setConfiguration, setSelectedLower } = useForgeContext();
 
-  const handleQuestionnaireComplete = (configuration: FirearmConfiguration) => {
+  const handleQuestionnaireComplete = (configuration: FirearmConfiguration, selectedLower?: Part) => {
     setConfiguration(configuration);
+    if (selectedLower) {
+      setSelectedLower(selectedLower);
+      // Set the selected lower in the main state
+      setSelected(prev => ({ ...prev, lower: selectedLower }));
+    } else {
+      // If no lower selected (user skipped), set to "none" option
+      setSelected(prev => ({ ...prev, lower: PARTS_DATABASE.lower[0] }));
+    }
     setShowQuestionnaire(false);
+    setBuildingPhase("foundation"); // Start in foundation phase
   };
 
   // Show questionnaire on initial load
@@ -567,7 +626,11 @@ function AR15ForgeBuilderInner() {
 
       {/* Main visualization area */}
       <div className="absolute inset-0 pt-16">
-        <RifleVisualization selected={selected} />
+        <RifleVisualization 
+          selected={selected} 
+          buildingPhase={buildingPhase} 
+          setBuildingPhase={setBuildingPhase}
+        />
       </div>
 
       {/* Left components panel */}
@@ -576,6 +639,7 @@ function AR15ForgeBuilderInner() {
         onSelect={selectPart}
         expanded={expanded}
         setExpanded={setExpanded}
+        buildingPhase={buildingPhase}
       />
 
       {/* Right filter panel */}

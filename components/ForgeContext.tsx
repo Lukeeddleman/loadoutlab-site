@@ -12,6 +12,16 @@ export type FirearmConfiguration = {
   subType: RifleType | PistolType | ShotgunType;
 };
 
+export type Part = {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  color: string;
+  compatibility: PartCompatibility;
+  description?: string;
+};
+
 export type PartCompatibility = {
   firearmTypes: FirearmType[];
   subTypes?: (RifleType | PistolType | ShotgunType)[];
@@ -21,6 +31,8 @@ export type PartCompatibility = {
 interface ForgeContextType {
   configuration: FirearmConfiguration | null;
   setConfiguration: (config: FirearmConfiguration) => void;
+  selectedLower: Part | null;
+  setSelectedLower: (lower: Part | null) => void;
   isPartCompatible: (compatibility: PartCompatibility) => boolean;
   resetConfiguration: () => void;
 }
@@ -41,6 +53,7 @@ interface ForgeProviderProps {
 
 export function ForgeProvider({ children }: ForgeProviderProps) {
   const [configuration, setConfiguration] = useState<FirearmConfiguration | null>(null);
+  const [selectedLower, setSelectedLower] = useState<Part | null>(null);
 
   const isPartCompatible = (compatibility: PartCompatibility): boolean => {
     if (!configuration) return true; // Show all parts if no configuration is set
@@ -69,11 +82,14 @@ export function ForgeProvider({ children }: ForgeProviderProps) {
 
   const resetConfiguration = () => {
     setConfiguration(null);
+    setSelectedLower(null);
   };
 
   const value: ForgeContextType = {
     configuration,
     setConfiguration,
+    selectedLower,
+    setSelectedLower,
     isPartCompatible,
     resetConfiguration,
   };
