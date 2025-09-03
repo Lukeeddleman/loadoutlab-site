@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Target, ChevronRight, Search, Check } from "lucide-react";
 import { FirearmType, RifleType, PistolType, ShotgunType, FirearmConfiguration } from "./ForgeContext";
+import ForgeSignInPage from "./ForgeSignInPage";
 
 type Part = {
   id: string;
@@ -35,12 +36,16 @@ function money(n: number) {
 }
 
 export default function ForgeQuestionnaire({ onComplete }: QuestionnaireProps) {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [firearmType, setFirearmType] = useState<FirearmType | null>(null);
   const [rifleType, setRifleType] = useState<RifleType | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 400]);
+
+  const handleContinueAsGuest = () => {
+    setStep(1);
+  };
 
   const handleFirearmSelection = (type: FirearmType) => {
     setFirearmType(type);
@@ -78,6 +83,11 @@ export default function ForgeQuestionnaire({ onComplete }: QuestionnaireProps) {
   });
 
   const availableBrands = [...new Set(AR15_LOWERS.map(lower => lower.brand))].sort();
+
+  // If on step 0 (sign-in), render the sign-in page directly
+  if (step === 0) {
+    return <ForgeSignInPage onContinueAsGuest={handleContinueAsGuest} />;
+  }
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-gray-950 to-black z-50 flex items-center justify-center animate-fadeIn">
