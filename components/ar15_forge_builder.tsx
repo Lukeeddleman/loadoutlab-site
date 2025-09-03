@@ -194,59 +194,54 @@ const RifleVisualization: React.FC<{
           </filter>
         </defs>
 
-        {/* Show different parts based on building phase */}
-        {buildingPhase === "complete" && (
-          <>
-            {/* Upper rail - main body */}
-            <rect x={80} y={140} width={500} height={25} rx={4} fill="#1f2937" filter="url(#drop-shadow)" />
+        {/* Upper rail - main body */}
+        <rect x={80} y={140} width={500} height={25} rx={4} fill="#1f2937" filter="url(#drop-shadow)" />
 
-            {/* Barrel */}
-            {selected.barrel && selected.barrel.id !== "none" && (
-              <rect x={570} y={148} width={150} height={6} fill={selected.barrel.color} filter="url(#drop-shadow)" />
-            )}
+        {/* Barrel */}
+        {selected.barrel && selected.barrel.id !== "none" && (
+          <rect x={570} y={148} width={150} height={6} fill={selected.barrel.color} filter="url(#drop-shadow)" />
+        )}
 
-            {/* Muzzle */}
-            {selected.muzzle && selected.muzzle.id !== "none" && (
-              <rect x={720} y={146} width={30} height={10} fill={selected.muzzle.color} filter="url(#drop-shadow)" />
-            )}
+        {/* Muzzle */}
+        {selected.muzzle && selected.muzzle.id !== "none" && (
+          <rect x={720} y={146} width={30} height={10} fill={selected.muzzle.color} filter="url(#drop-shadow)" />
+        )}
 
-            {/* Receiver (more detailed) */}
-            <rect x={200} y={135} width={180} height={35} rx={6} fill="#111827" filter="url(#drop-shadow)" />
-            
-            {/* Charging handle */}
-            <rect x={190} y={138} width={15} height={8} rx={2} fill="#374151" />
+        {/* Receiver (more detailed) */}
+        <rect x={200} y={135} width={180} height={35} rx={6} fill="#111827" filter="url(#drop-shadow)" />
+        
+        {/* Charging handle */}
+        <rect x={190} y={138} width={15} height={8} rx={2} fill="#374151" />
 
-            {/* Buffer tube */}
-            <rect x={80} y={144} width={90} height={8} rx={4} fill="#374151" filter="url(#drop-shadow)" />
+        {/* Buffer tube */}
+        <rect x={80} y={144} width={90} height={8} rx={4} fill="#374151" filter="url(#drop-shadow)" />
 
-            {/* Stock */}
-            {selected.stock && selected.stock.id !== "none" && (
-              <rect x={20} y={130} width={75} height={28} rx={6} fill={selected.stock.color} filter="url(#drop-shadow)" />
-            )}
+        {/* Stock */}
+        {selected.stock && selected.stock.id !== "none" && (
+          <rect x={20} y={130} width={75} height={28} rx={6} fill={selected.stock.color} filter="url(#drop-shadow)" />
+        )}
 
-            {/* Foregrip */}
-            {selected.foregrip && selected.foregrip.id !== "none" && (
-              <rect x={380} y={180} width={15} height={30} rx={6} fill={selected.foregrip.color} filter="url(#drop-shadow)" />
-            )}
+        {/* Foregrip */}
+        {selected.foregrip && selected.foregrip.id !== "none" && (
+          <rect x={380} y={180} width={15} height={30} rx={6} fill={selected.foregrip.color} filter="url(#drop-shadow)" />
+        )}
 
-            {/* Handguard overlay */}
-            {selected.handguard && selected.handguard.id !== "none" && (
-              <rect x={280} y={140} width={280} height={25} rx={4} fill={selected.handguard.color} opacity={0.8} filter="url(#drop-shadow)" />
-            )}
+        {/* Handguard overlay */}
+        {selected.handguard && selected.handguard.id !== "none" && (
+          <rect x={280} y={140} width={280} height={25} rx={4} fill={selected.handguard.color} opacity={0.8} filter="url(#drop-shadow)" />
+        )}
 
-            {/* Optic */}
-            {selected.optic && selected.optic.id !== "none" && (
-              <g filter="url(#drop-shadow)">
-                <rect x={320} y={115} width={100} height={22} rx={4} fill={selected.optic.color} />
-                <text x={325} y={108} fill="#22d3ee" fontSize={12} fontWeight="bold">
-                  {selected.optic.brand}
-                </text>
-                <text x={325} y={150} fill="#e5e7eb" fontSize={11}>
-                  {selected.optic.name} • {money(selected.optic.price)}
-                </text>
-              </g>
-            )}
-          </>
+        {/* Optic */}
+        {selected.optic && selected.optic.id !== "none" && (
+          <g filter="url(#drop-shadow)">
+            <rect x={320} y={115} width={100} height={22} rx={4} fill={selected.optic.color} />
+            <text x={325} y={108} fill="#22d3ee" fontSize={12} fontWeight="bold">
+              {selected.optic.brand}
+            </text>
+            <text x={325} y={150} fill="#e5e7eb" fontSize={11}>
+              {selected.optic.name} • {money(selected.optic.price)}
+            </text>
+          </g>
         )}
 
         {/* Lower Receiver - Always visible */}
@@ -281,25 +276,7 @@ const RifleVisualization: React.FC<{
       <div className="absolute bottom-8 right-8 bg-gray-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-4">
         <div className="text-cyan-400 text-sm font-mono mb-1">BUILD TOTAL</div>
         <div className="text-white text-2xl font-bold">{money(sumSelected(selected))}</div>
-        
-        {/* Phase indicator */}
-        {buildingPhase === "foundation" && (
-          <div className="text-xs text-orange-400 font-mono mt-2">FOUNDATION PHASE</div>
-        )}
       </div>
-
-      {/* Phase transition button */}
-      {buildingPhase === "foundation" && (
-        <div className="absolute bottom-8 left-8 bg-gray-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-4">
-          <button
-            onClick={() => setBuildingPhase("complete")}
-            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white py-3 px-6 rounded-lg font-bold transition-all duration-300 hover:scale-[1.02]"
-          >
-            BUILD COMPLETE RIFLE
-          </button>
-          <div className="text-xs text-gray-400 font-mono mt-2 text-center">Add upper receiver & accessories</div>
-        </div>
-      )}
     </div>
   );
 };
@@ -312,21 +289,28 @@ export type CategoryMeta = {
   name: string;
   required?: boolean;
   icon?: string;
+  receiver: "lower" | "upper";
 };
 
-const CATEGORIES: CategoryMeta[] = [
-  { id: "lower", name: "Lower Receiver", required: true, icon: "🔧" },
-  { id: "upper", name: "Upper Receiver", required: true, icon: "⚙️" },
-  { id: "barrel", name: "Barrel", required: true, icon: "🎯" },
-  { id: "handguard", name: "Handguard", icon: "🛡️" },
-  { id: "muzzle", name: "Muzzle Device", icon: "💥" },
-  { id: "bcg", name: "Bolt Carrier Group", icon: "⚡" },
-  { id: "trigger", name: "Trigger", icon: "🎛️" },
-  { id: "stock", name: "Stock", icon: "📐" },
-  { id: "grip", name: "Pistol Grip", icon: "✋" },
-  { id: "foregrip", name: "Foregrip", icon: "👊" },
-  { id: "optic", name: "Optic", icon: "🔍" },
+const LOWER_RECEIVER_CATEGORIES: CategoryMeta[] = [
+  { id: "lower", name: "Lower Receiver", required: true, icon: "🔧", receiver: "lower" },
+  { id: "trigger", name: "Trigger", icon: "🎛️", receiver: "lower" },
+  { id: "stock", name: "Stock", icon: "📐", receiver: "lower" },
+  { id: "grip", name: "Pistol Grip", icon: "✋", receiver: "lower" },
 ];
+
+const UPPER_RECEIVER_CATEGORIES: CategoryMeta[] = [
+  { id: "upper", name: "Upper Receiver", required: true, icon: "⚙️", receiver: "upper" },
+  { id: "barrel", name: "Barrel", required: true, icon: "🎯", receiver: "upper" },
+  { id: "handguard", name: "Handguard", icon: "🛡️", receiver: "upper" },
+  { id: "muzzle", name: "Muzzle Device", icon: "💥", receiver: "upper" },
+  { id: "bcg", name: "Bolt Carrier Group", icon: "⚡", receiver: "upper" },
+  { id: "foregrip", name: "Foregrip", icon: "👊", receiver: "upper" },
+  { id: "optic", name: "Optic", icon: "🔍", receiver: "upper" },
+];
+
+// Combined categories for backward compatibility
+const CATEGORIES: CategoryMeta[] = [...LOWER_RECEIVER_CATEGORIES, ...UPPER_RECEIVER_CATEGORIES];
 
 /*************************
  * Left Components Panel
@@ -339,12 +323,11 @@ const ComponentsPanel: React.FC<{
   buildingPhase: "foundation" | "complete";
 }> = ({ selected, onSelect, expanded, setExpanded, buildingPhase }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<"lower" | "upper" | null>("lower");
   const { configuration } = useForgeContext();
 
-  // Filter categories based on building phase
-  const availableCategories = buildingPhase === "foundation" 
-    ? CATEGORIES.filter(cat => cat.id === "lower" || cat.id === "grip")
-    : CATEGORIES;
+  const hasUpperReceiver = selected.upper && selected.upper.id !== "none";
+  const showUpperPrompt = expandedSection === "upper" && !hasUpperReceiver;
 
   return (
     <>
@@ -374,51 +357,151 @@ const ComponentsPanel: React.FC<{
             <Target className="w-5 h-5 text-cyan-400" />
             COMPONENTS
           </h2>
-          <p className="text-xs text-gray-400 font-mono mt-1">SELECT COMPONENTS</p>
+          <p className="text-xs text-gray-400 font-mono mt-1">SELECT COMPONENTS BY RECEIVER</p>
         </div>
         
         <div className="overflow-y-auto h-full pb-20">
-          {availableCategories.map((category) => (
-            <div key={category.id} className="border-b border-gray-800/50">
-              <button
-                onClick={() => setExpanded(expanded === category.id ? null : category.id)}
-                className="w-full p-3 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">{category.icon}</span>
-                  <div>
-                    <div className="text-sm font-medium text-white">{category.name}</div>
-                    {category.required && (
-                      <div className="text-xs text-red-400 font-mono">REQUIRED</div>
+          {/* Lower Receiver Section */}
+          <div className="border-b border-gray-800">
+            <button
+              onClick={() => setExpandedSection(expandedSection === "lower" ? null : "lower")}
+              className="w-full p-4 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between bg-gray-900/50"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-xl">🔧</span>
+                <div>
+                  <div className="text-base font-bold text-white">LOWER RECEIVER</div>
+                  <div className="text-xs text-gray-400 font-mono">TRIGGER • STOCK • GRIP</div>
+                </div>
+              </div>
+              <ChevronRight className={`w-5 h-5 text-cyan-400 transition-transform ${expandedSection === "lower" ? 'rotate-90' : ''}`} />
+            </button>
+            
+            {expandedSection === "lower" && (
+              <div className="bg-gray-950/50">
+                {LOWER_RECEIVER_CATEGORIES.map((category) => (
+                  <div key={category.id} className="border-b border-gray-800/30 last:border-b-0">
+                    <button
+                      onClick={() => setExpanded(expanded === category.id ? null : category.id)}
+                      className="w-full p-3 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-base">{category.icon}</span>
+                        <div>
+                          <div className="text-sm font-medium text-white">{category.name}</div>
+                          {category.required && (
+                            <div className="text-xs text-red-400 font-mono">REQUIRED</div>
+                          )}
+                        </div>
+                      </div>
+                      <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expanded === category.id ? 'rotate-90' : ''}`} />
+                    </button>
+                    
+                    {expanded === category.id && (
+                      <div className="bg-gray-900/50 p-2">
+                        {filterCompatibleParts(PARTS_DATABASE[category.id], configuration).map((part) => (
+                          <button
+                            key={part.id}
+                            onClick={() => onSelect(category.id, part)}
+                            className={`w-full text-left p-3 rounded-lg mb-1 transition-all ${
+                              selected[category.id]?.id === part.id
+                                ? "bg-cyan-600/20 border border-cyan-500/50"
+                                : "hover:bg-gray-800/50 border border-transparent"
+                            }`}
+                          >
+                            <div className="text-sm font-medium text-white">{part.name}</div>
+                            <div className="text-xs text-gray-400 flex justify-between">
+                              <span>{part.brand}</span>
+                              <span className="text-cyan-400 font-mono">{money(part.price)}</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
                     )}
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Upper Receiver Section */}
+          <div className="border-b border-gray-800">
+            <button
+              onClick={() => setExpandedSection(expandedSection === "upper" ? null : "upper")}
+              className="w-full p-4 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between bg-gray-900/50"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-xl">⚙️</span>
+                <div>
+                  <div className="text-base font-bold text-white">UPPER RECEIVER</div>
+                  <div className="text-xs text-gray-400 font-mono">BARREL • HANDGUARD • OPTICS</div>
                 </div>
-                <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expanded === category.id ? 'rotate-90' : ''}`} />
-              </button>
-              
-              {expanded === category.id && (
-                <div className="bg-gray-950/50 p-2">
-                  {filterCompatibleParts(PARTS_DATABASE[category.id], configuration).map((part) => (
+              </div>
+              <ChevronRight className={`w-5 h-5 text-cyan-400 transition-transform ${expandedSection === "upper" ? 'rotate-90' : ''}`} />
+            </button>
+            
+            {expandedSection === "upper" && (
+              <div className="bg-gray-950/50">
+                {showUpperPrompt ? (
+                  <div className="p-6 text-center bg-orange-500/10 border border-orange-500/30 m-2 rounded-lg">
+                    <div className="text-orange-400 text-sm font-mono mb-2">UPPER RECEIVER REQUIRED</div>
+                    <p className="text-gray-300 text-sm mb-4">Select an upper receiver to continue building upper components</p>
                     <button
-                      key={part.id}
-                      onClick={() => onSelect(category.id, part)}
-                      className={`w-full text-left p-3 rounded-lg mb-1 transition-all ${
-                        selected[category.id]?.id === part.id
-                          ? "bg-cyan-600/20 border border-cyan-500/50"
-                          : "hover:bg-gray-800/50 border border-transparent"
-                      }`}
+                      onClick={() => {
+                        setExpanded("upper");
+                        setExpandedSection("upper");
+                      }}
+                      className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                     >
-                      <div className="text-sm font-medium text-white">{part.name}</div>
-                      <div className="text-xs text-gray-400 flex justify-between">
-                        <span>{part.brand}</span>
-                        <span className="text-cyan-400 font-mono">{money(part.price)}</span>
-                      </div>
+                      SELECT UPPER RECEIVER
                     </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                  </div>
+                ) : (
+                  UPPER_RECEIVER_CATEGORIES.map((category) => (
+                    <div key={category.id} className="border-b border-gray-800/30 last:border-b-0">
+                      <button
+                        onClick={() => setExpanded(expanded === category.id ? null : category.id)}
+                        className="w-full p-3 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-base">{category.icon}</span>
+                          <div>
+                            <div className="text-sm font-medium text-white">{category.name}</div>
+                            {category.required && (
+                              <div className="text-xs text-red-400 font-mono">REQUIRED</div>
+                            )}
+                          </div>
+                        </div>
+                        <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expanded === category.id ? 'rotate-90' : ''}`} />
+                      </button>
+                      
+                      {expanded === category.id && (
+                        <div className="bg-gray-900/50 p-2">
+                          {filterCompatibleParts(PARTS_DATABASE[category.id], configuration).map((part) => (
+                            <button
+                              key={part.id}
+                              onClick={() => onSelect(category.id, part)}
+                              className={`w-full text-left p-3 rounded-lg mb-1 transition-all ${
+                                selected[category.id]?.id === part.id
+                                  ? "bg-cyan-600/20 border border-cyan-500/50"
+                                  : "hover:bg-gray-800/50 border border-transparent"
+                              }`}
+                            >
+                              <div className="text-sm font-medium text-white">{part.name}</div>
+                              <div className="text-xs text-gray-400 flex justify-between">
+                                <span>{part.brand}</span>
+                                <span className="text-cyan-400 font-mono">{money(part.price)}</span>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -577,7 +660,7 @@ function AR15ForgeBuilderInner() {
       setSelected(prev => ({ ...prev, lower: PARTS_DATABASE.lower[0] }));
     }
     setShowQuestionnaire(false);
-    setBuildingPhase("foundation"); // Start in foundation phase
+    setBuildingPhase("complete"); // Start in complete phase to show all components
   };
 
   // Show questionnaire on initial load
