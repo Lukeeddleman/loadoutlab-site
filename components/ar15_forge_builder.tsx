@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Filter, Search, DollarSign, Target, ChevronLeft, ChevronRight, RotateCcw, Save } from "lucide-react";
+import { Filter, Search, DollarSign, Target, ChevronLeft, ChevronRight, RotateCcw, Save, Edit3 } from "lucide-react";
 import ForgeQuestionnaire from "./ForgeQuestionnaire";
+import PartSelectionModal from "./PartSelectionModal";
 import { ForgeProvider, useForgeContext, filterCompatibleParts, FirearmConfiguration } from "./ForgeContext";
 
 /*************************
@@ -317,11 +318,9 @@ const CATEGORIES: CategoryMeta[] = [...LOWER_RECEIVER_CATEGORIES, ...UPPER_RECEI
  *************************/
 const ComponentsPanel: React.FC<{
   selected: SelectedParts;
-  onSelect: (key: CategoryKey, part: Part) => void;
-  expanded: CategoryKey | null;
-  setExpanded: (key: CategoryKey | null) => void;
+  onOpenModal: (categoryKey: CategoryKey) => void;
   buildingPhase: "foundation" | "complete";
-}> = ({ selected, onSelect, expanded, setExpanded, buildingPhase }) => {
+}> = ({ selected, onOpenModal, buildingPhase }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [expandedSection, setExpandedSection] = useState<"lower" | "upper" | null>("lower");
   const { configuration } = useForgeContext();
@@ -380,11 +379,8 @@ const ComponentsPanel: React.FC<{
             {expandedSection === "lower" && (
               <div className="bg-gray-950/50">
                 {LOWER_RECEIVER_CATEGORIES.map((category) => (
-                  <div key={category.id} className="border-b border-gray-800/30 last:border-b-0">
-                    <button
-                      onClick={() => setExpanded(expanded === category.id ? null : category.id)}
-                      className="w-full p-3 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between"
-                    >
+                  <div key={category.id} className="border-b border-gray-800/30 last:border-b-0 p-4">
+                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
                         <span className="text-base">{category.icon}</span>
                         <div>
@@ -394,30 +390,36 @@ const ComponentsPanel: React.FC<{
                           )}
                         </div>
                       </div>
-                      <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expanded === category.id ? 'rotate-90' : ''}`} />
-                    </button>
+                    </div>
                     
-                    {expanded === category.id && (
-                      <div className="bg-gray-900/50 p-2">
-                        {filterCompatibleParts(PARTS_DATABASE[category.id], configuration).map((part) => (
-                          <button
-                            key={part.id}
-                            onClick={() => onSelect(category.id, part)}
-                            className={`w-full text-left p-3 rounded-lg mb-1 transition-all ${
-                              selected[category.id]?.id === part.id
-                                ? "bg-cyan-600/20 border border-cyan-500/50"
-                                : "hover:bg-gray-800/50 border border-transparent"
-                            }`}
-                          >
-                            <div className="text-sm font-medium text-white">{part.name}</div>
-                            <div className="text-xs text-gray-400 flex justify-between">
-                              <span>{part.brand}</span>
-                              <span className="text-cyan-400 font-mono">{money(part.price)}</span>
+                    {/* Selected Part Display */}
+                    <div className="bg-gray-800/50 rounded-lg p-3">
+                      {selected[category.id] && selected[category.id]?.id !== "none" ? (
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-white font-medium">{selected[category.id]?.name}</div>
+                            <div className="text-sm text-gray-400">
+                              {selected[category.id]?.brand} • {money(selected[category.id]?.price || 0)}
                             </div>
+                          </div>
+                          <button
+                            onClick={() => onOpenModal(category.id)}
+                            className="flex items-center gap-2 px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-sm rounded-lg transition-colors"
+                          >
+                            <Edit3 className="w-3 h-3" />
+                            CHANGE
                           </button>
-                        ))}
-                      </div>
-                    )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => onOpenModal(category.id)}
+                          className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-600 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 rounded-lg transition-colors"
+                        >
+                          <span className="text-lg">{category.icon}</span>
+                          SELECT {category.name.toUpperCase()}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -447,57 +449,59 @@ const ComponentsPanel: React.FC<{
                     <div className="text-orange-400 text-sm font-mono mb-2">UPPER RECEIVER REQUIRED</div>
                     <p className="text-gray-300 text-sm mb-4">Select an upper receiver to continue building upper components</p>
                     <button
-                      onClick={() => {
-                        setExpanded("upper");
-                        setExpandedSection("upper");
-                      }}
+                      onClick={() => onOpenModal("upper")}
                       className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                     >
                       SELECT UPPER RECEIVER
                     </button>
                   </div>
                 ) : (
-                  UPPER_RECEIVER_CATEGORIES.map((category) => (
-                    <div key={category.id} className="border-b border-gray-800/30 last:border-b-0">
-                      <button
-                        onClick={() => setExpanded(expanded === category.id ? null : category.id)}
-                        className="w-full p-3 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-base">{category.icon}</span>
-                          <div>
-                            <div className="text-sm font-medium text-white">{category.name}</div>
-                            {category.required && (
-                              <div className="text-xs text-red-400 font-mono">REQUIRED</div>
-                            )}
+                  <div className="bg-gray-950/50">
+                    {UPPER_RECEIVER_CATEGORIES.map((category) => (
+                      <div key={category.id} className="border-b border-gray-800/30 last:border-b-0 p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <span className="text-base">{category.icon}</span>
+                            <div>
+                              <div className="text-sm font-medium text-white">{category.name}</div>
+                              {category.required && (
+                                <div className="text-xs text-red-400 font-mono">REQUIRED</div>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expanded === category.id ? 'rotate-90' : ''}`} />
-                      </button>
-                      
-                      {expanded === category.id && (
-                        <div className="bg-gray-900/50 p-2">
-                          {filterCompatibleParts(PARTS_DATABASE[category.id], configuration).map((part) => (
-                            <button
-                              key={part.id}
-                              onClick={() => onSelect(category.id, part)}
-                              className={`w-full text-left p-3 rounded-lg mb-1 transition-all ${
-                                selected[category.id]?.id === part.id
-                                  ? "bg-cyan-600/20 border border-cyan-500/50"
-                                  : "hover:bg-gray-800/50 border border-transparent"
-                              }`}
-                            >
-                              <div className="text-sm font-medium text-white">{part.name}</div>
-                              <div className="text-xs text-gray-400 flex justify-between">
-                                <span>{part.brand}</span>
-                                <span className="text-cyan-400 font-mono">{money(part.price)}</span>
+                        
+                        {/* Selected Part Display */}
+                        <div className="bg-gray-800/50 rounded-lg p-3">
+                          {selected[category.id] && selected[category.id]?.id !== "none" ? (
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-white font-medium">{selected[category.id]?.name}</div>
+                                <div className="text-sm text-gray-400">
+                                  {selected[category.id]?.brand} • {money(selected[category.id]?.price || 0)}
+                                </div>
                               </div>
+                              <button
+                                onClick={() => onOpenModal(category.id)}
+                                className="flex items-center gap-2 px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-sm rounded-lg transition-colors"
+                              >
+                                <Edit3 className="w-3 h-3" />
+                                CHANGE
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => onOpenModal(category.id)}
+                              className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-600 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 rounded-lg transition-colors"
+                            >
+                              <span className="text-lg">{category.icon}</span>
+                              SELECT {category.name.toUpperCase()}
                             </button>
-                          ))}
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ))
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             )}
@@ -642,9 +646,31 @@ function AR15ForgeBuilderInner() {
   const [expanded, setExpanded] = useState<CategoryKey | null>(null);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalCategory, setModalCategory] = useState<CategoryKey | null>(null);
+  
+  const currentCategory = modalCategory ? CATEGORIES.find(cat => cat.id === modalCategory) : null;
 
   const selectPart = (key: CategoryKey, part: Part) => {
     setSelected(prev => ({ ...prev, [key]: part }));
+  };
+
+  const openPartModal = (categoryKey: CategoryKey) => {
+    setModalCategory(categoryKey);
+    setModalOpen(true);
+  };
+
+  const closePartModal = () => {
+    setModalOpen(false);
+    setModalCategory(null);
+  };
+
+  const handlePartSelect = (part: Part) => {
+    if (modalCategory) {
+      selectPart(modalCategory, part);
+    }
   };
 
   const { setConfiguration, setSelectedLower } = useForgeContext();
@@ -719,9 +745,7 @@ function AR15ForgeBuilderInner() {
       {/* Left components panel */}
       <ComponentsPanel
         selected={selected}
-        onSelect={selectPart}
-        expanded={expanded}
-        setExpanded={setExpanded}
+        onOpenModal={openPartModal}
         buildingPhase={buildingPhase}
       />
 
@@ -732,6 +756,19 @@ function AR15ForgeBuilderInner() {
         selectedBrands={selectedBrands}
         setSelectedBrands={setSelectedBrands}
       />
+
+      {/* Part Selection Modal */}
+      {modalCategory && currentCategory && (
+        <PartSelectionModal
+          isOpen={modalOpen}
+          onClose={closePartModal}
+          onSelect={handlePartSelect}
+          parts={PARTS_DATABASE[modalCategory]}
+          categoryName={currentCategory.name}
+          categoryIcon={currentCategory.icon || "🔧"}
+          selectedPart={selected[modalCategory]}
+        />
+      )}
     </div>
   );
 }
