@@ -294,20 +294,20 @@ export type CategoryMeta = {
 };
 
 const LOWER_RECEIVER_CATEGORIES: CategoryMeta[] = [
-  { id: "lower", name: "Lower Receiver", required: true, icon: "🔧", receiver: "lower" },
-  { id: "trigger", name: "Trigger", icon: "🎛️", receiver: "lower" },
-  { id: "stock", name: "Stock", icon: "📐", receiver: "lower" },
-  { id: "grip", name: "Pistol Grip", icon: "✋", receiver: "lower" },
+  { id: "lower", name: "Lower Receiver", required: true, receiver: "lower" },
+  { id: "trigger", name: "Trigger", receiver: "lower" },
+  { id: "stock", name: "Stock", receiver: "lower" },
+  { id: "grip", name: "Pistol Grip", receiver: "lower" },
 ];
 
 const UPPER_RECEIVER_CATEGORIES: CategoryMeta[] = [
-  { id: "upper", name: "Upper Receiver", required: true, icon: "⚙️", receiver: "upper" },
-  { id: "barrel", name: "Barrel", required: true, icon: "🎯", receiver: "upper" },
-  { id: "handguard", name: "Handguard", icon: "🛡️", receiver: "upper" },
-  { id: "muzzle", name: "Muzzle Device", icon: "💥", receiver: "upper" },
-  { id: "bcg", name: "Bolt Carrier Group", icon: "⚡", receiver: "upper" },
-  { id: "foregrip", name: "Foregrip", icon: "👊", receiver: "upper" },
-  { id: "optic", name: "Optic", icon: "🔍", receiver: "upper" },
+  { id: "upper", name: "Upper Receiver", required: true, receiver: "upper" },
+  { id: "barrel", name: "Barrel", required: true, receiver: "upper" },
+  { id: "handguard", name: "Handguard", receiver: "upper" },
+  { id: "muzzle", name: "Muzzle Device", receiver: "upper" },
+  { id: "bcg", name: "Bolt Carrier Group", receiver: "upper" },
+  { id: "foregrip", name: "Foregrip", receiver: "upper" },
+  { id: "optic", name: "Optic", receiver: "upper" },
 ];
 
 // Combined categories for backward compatibility
@@ -367,7 +367,6 @@ const ComponentsPanel: React.FC<{
               className="w-full p-4 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between bg-gray-900/50"
             >
               <div className="flex items-center gap-3">
-                <span className="text-xl">🔧</span>
                 <div>
                   <div className="text-base font-bold text-white">LOWER RECEIVER</div>
                   <div className="text-xs text-gray-400 font-mono">TRIGGER • STOCK • GRIP</div>
@@ -382,10 +381,9 @@ const ComponentsPanel: React.FC<{
                   <div key={category.id} className="border-b border-gray-800/30 last:border-b-0 p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <span className="text-base">{category.icon}</span>
                         <div>
                           <div className="text-sm font-medium text-white">{category.name}</div>
-                          {category.required && (
+                          {category.required && (!selected[category.id] || selected[category.id]?.id === "none") && (
                             <div className="text-xs text-red-400 font-mono">REQUIRED</div>
                           )}
                         </div>
@@ -415,7 +413,6 @@ const ComponentsPanel: React.FC<{
                           onClick={() => onOpenModal(category.id)}
                           className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-600 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 rounded-lg transition-colors"
                         >
-                          <span className="text-lg">{category.icon}</span>
                           SELECT {category.name.toUpperCase()}
                         </button>
                       )}
@@ -433,7 +430,6 @@ const ComponentsPanel: React.FC<{
               className="w-full p-4 text-left hover:bg-gray-800/50 transition-colors flex items-center justify-between bg-gray-900/50"
             >
               <div className="flex items-center gap-3">
-                <span className="text-xl">⚙️</span>
                 <div>
                   <div className="text-base font-bold text-white">UPPER RECEIVER</div>
                   <div className="text-xs text-gray-400 font-mono">BARREL • HANDGUARD • OPTICS</div>
@@ -461,10 +457,9 @@ const ComponentsPanel: React.FC<{
                       <div key={category.id} className="border-b border-gray-800/30 last:border-b-0 p-4">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-3">
-                            <span className="text-base">{category.icon}</span>
                             <div>
                               <div className="text-sm font-medium text-white">{category.name}</div>
-                              {category.required && (
+                              {category.required && (!selected[category.id] || selected[category.id]?.id === "none") && (
                                 <div className="text-xs text-red-400 font-mono">REQUIRED</div>
                               )}
                             </div>
@@ -494,7 +489,6 @@ const ComponentsPanel: React.FC<{
                               onClick={() => onOpenModal(category.id)}
                               className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-600 hover:border-cyan-500 text-gray-400 hover:text-cyan-400 rounded-lg transition-colors"
                             >
-                              <span className="text-lg">{category.icon}</span>
                               SELECT {category.name.toUpperCase()}
                             </button>
                           )}
@@ -765,7 +759,7 @@ function AR15ForgeBuilderInner() {
           onSelect={handlePartSelect}
           parts={PARTS_DATABASE[modalCategory]}
           categoryName={currentCategory.name}
-          categoryIcon={currentCategory.icon || "🔧"}
+          categoryIcon=""
           selectedPart={selected[modalCategory]}
         />
       )}

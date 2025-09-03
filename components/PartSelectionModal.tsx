@@ -68,7 +68,6 @@ export default function PartSelectionModal({
         {/* Header */}
         <div className="p-6 border-b border-gray-700 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">{categoryIcon}</span>
             <div>
               <h2 className="text-2xl font-bold text-white">Select {categoryName}</h2>
               <p className="text-gray-400 font-mono text-sm">CHOOSE YOUR COMPONENT</p>
