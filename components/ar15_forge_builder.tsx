@@ -2,10 +2,14 @@
 
 import React, { useMemo, useState } from "react";
 import { Filter, Search, DollarSign, Target, ChevronLeft, ChevronRight, RotateCcw, Save } from "lucide-react";
+import ForgeQuestionnaire from "./ForgeQuestionnaire";
+import { ForgeProvider, useForgeContext, filterCompatibleParts, FirearmConfiguration } from "./ForgeContext";
 
 /*************************
  * Types
  *************************/
+import type { PartCompatibility } from "./ForgeContext";
+
 export type Part = {
   id: string;
   name: string;
@@ -13,6 +17,8 @@ export type Part = {
   price: number;
   color: string;
   weightOz?: number;
+  compatibility: PartCompatibility;
+  description?: string;
 };
 
 export type SelectedParts = {
@@ -36,70 +42,70 @@ export type CategoryKey = keyof SelectedParts;
  *************************/
 const PARTS_DATABASE: Record<CategoryKey, Part[]> = {
   lower: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "lower-aero", name: "M4E1 Lower", brand: "Aero", price: 129.99, color: "#1f2937" },
-    { id: "lower-anderson", name: "AM-15 Lower", brand: "Anderson", price: 89.99, color: "#1f2937" },
-    { id: "lower-psa", name: "PA-15 Lower", brand: "PSA", price: 99.99, color: "#1f2937" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "lower-aero", name: "M4E1 Lower", brand: "Aero", price: 129.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "lower-anderson", name: "AM-15 Lower", brand: "Anderson", price: 89.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "lower-psa", name: "PA-15 Lower", brand: "PSA", price: 99.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
   ],
   upper: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "upper-aero", name: "M4E1 Upper", brand: "Aero", price: 119.99, color: "#1f2937" },
-    { id: "upper-bcm", name: "BCM Upper", brand: "BCM", price: 189.99, color: "#1f2937" },
-    { id: "upper-psa", name: "PA-15 Upper", brand: "PSA", price: 99.99, color: "#1f2937" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "upper-aero", name: "M4E1 Upper", brand: "Aero", price: 119.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "upper-bcm", name: "BCM Upper", brand: "BCM", price: 189.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "upper-psa", name: "PA-15 Upper", brand: "PSA", price: 99.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
   ],
   grip: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "magpul-moe", name: "MOE Grip", brand: "Magpul", price: 19.99, color: "#374151" },
-    { id: "magpul-k2", name: "K2 Grip", brand: "Magpul", price: 24.99, color: "#374151" },
-    { id: "bcm-mod3", name: "Mod 3 Grip", brand: "BCM", price: 29.99, color: "#374151" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "magpul-moe", name: "MOE Grip", brand: "Magpul", price: 19.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "magpul-k2", name: "K2 Grip", brand: "Magpul", price: 24.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "bcm-mod3", name: "Mod 3 Grip", brand: "BCM", price: 29.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
   ],
   foregrip: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "magpul-afg", name: "AFG", brand: "Magpul", price: 24.99, color: "#374151" },
-    { id: "magpul-rvg", name: "RVG", brand: "Magpul", price: 19.99, color: "#374151" },
-    { id: "bcm-vert", name: "Vertical Grip", brand: "BCM", price: 34.99, color: "#374151" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "magpul-afg", name: "AFG", brand: "Magpul", price: 24.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "magpul-rvg", name: "RVG", brand: "Magpul", price: 19.99, color: "#374151", compatibility: { firearmTypes: ["rifle", "shotgun"] } },
+    { id: "bcm-vert", name: "Vertical Grip", brand: "BCM", price: 34.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
   ],
   barrel: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "faxon-16", name: "16\" Gov't", brand: "Faxon", price: 169.0, color: "#6b7280" },
-    { id: "ballistic-advantage-18", name: "18\" SPR", brand: "BA", price: 199.99, color: "#6b7280" },
-    { id: "criterion-14.5", name: "14.5\" Core", brand: "Criterion", price: 289.99, color: "#6b7280" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "faxon-16", name: "16\" Gov't", brand: "Faxon", price: 169.0, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "ballistic-advantage-18", name: "18\" SPR", brand: "BA", price: 199.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "criterion-14.5", name: "14.5\" Core", brand: "Criterion", price: 289.99, color: "#6b7280", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
   ],
   handguard: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "smr-mk16", name: "Geissele MK16", brand: "Geissele", price: 299.0, color: "#374151" },
-    { id: "magpul-moe", name: "MOE SL", brand: "Magpul", price: 89.99, color: "#374151" },
-    { id: "bcm-mcmr", name: "MCMR-15", brand: "BCM", price: 199.99, color: "#374151" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "smr-mk16", name: "Geissele MK16", brand: "Geissele", price: 299.0, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "magpul-moe", name: "MOE SL", brand: "Magpul", price: 89.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "bcm-mcmr", name: "MCMR-15", brand: "BCM", price: 199.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
   ],
   stock: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "b5-sopmod", name: "SOPMOD", brand: "B5 Systems", price: 79.99, color: "#374151" },
-    { id: "magpul-ctr", name: "CTR", brand: "Magpul", price: 59.99, color: "#374151" },
-    { id: "bcm-gunfighter", name: "Gunfighter", brand: "BCM", price: 69.99, color: "#374151" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "b5-sopmod", name: "SOPMOD", brand: "B5 Systems", price: 79.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "magpul-ctr", name: "CTR", brand: "Magpul", price: 59.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "bcm-gunfighter", name: "Gunfighter", brand: "BCM", price: 69.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
   ],
   muzzle: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "a2-birdcage", name: "A2", brand: "Mil-Spec", price: 12.99, color: "#1f2937" },
-    { id: "surefire-warcomp", name: "WarComp", brand: "SureFire", price: 149.99, color: "#1f2937" },
-    { id: "dead-air-flash", name: "Flash Hider", brand: "Dead Air", price: 89.99, color: "#1f2937" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "a2-birdcage", name: "A2", brand: "Mil-Spec", price: 12.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "surefire-warcomp", name: "WarComp", brand: "SureFire", price: 149.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "dead-air-flash", name: "Flash Hider", brand: "Dead Air", price: 89.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
   ],
   optic: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "holosun-510c", name: "510C", brand: "Holosun", price: 299.99, color: "#374151" },
-    { id: "aimpoint-t2", name: "Micro T-2", brand: "Aimpoint", price: 899.99, color: "#374151" },
-    { id: "eotech-xps2", name: "XPS2-0", brand: "EOTech", price: 559.99, color: "#374151" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "holosun-510c", name: "510C", brand: "Holosun", price: 299.99, color: "#374151", compatibility: { firearmTypes: ["rifle", "pistol"], subTypes: ["ar15", "ar10", "striker", "hammer"] } },
+    { id: "aimpoint-t2", name: "Micro T-2", brand: "Aimpoint", price: 899.99, color: "#374151", compatibility: { firearmTypes: ["rifle", "pistol"], subTypes: ["ar15", "ar10", "striker", "hammer"] } },
+    { id: "eotech-xps2", name: "XPS2-0", brand: "EOTech", price: 559.99, color: "#374151", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
   ],
   trigger: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "larue-mbt", name: "MBT-2S", brand: "LaRue", price: 99.0, color: "#1f2937" },
-    { id: "geissele-ssa", name: "SSA", brand: "Geissele", price: 249.99, color: "#1f2937" },
-    { id: "cmc-single", name: "Single Stage", brand: "CMC", price: 159.99, color: "#1f2937" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "larue-mbt", name: "MBT-2S", brand: "LaRue", price: 99.0, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "geissele-ssa", name: "SSA", brand: "Geissele", price: 249.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
+    { id: "cmc-single", name: "Single Stage", brand: "CMC", price: 159.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15", "ar10"] } },
   ],
   bcg: [
-    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111" },
-    { id: "toolcraft-nitride", name: "5.56 BCG", brand: "Toolcraft", price: 109.0, color: "#1f2937" },
-    { id: "bcm-auto", name: "Auto BCG", brand: "BCM", price: 189.99, color: "#1f2937" },
-    { id: "lmt-enhanced", name: "Enhanced BCG", brand: "LMT", price: 349.99, color: "#1f2937" },
+    { id: "none", name: "(None)", brand: "—", price: 0, color: "#111", compatibility: { firearmTypes: ["rifle", "pistol", "shotgun"] } },
+    { id: "toolcraft-nitride", name: "5.56 BCG", brand: "Toolcraft", price: 109.0, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "bcm-auto", name: "Auto BCG", brand: "BCM", price: 189.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
+    { id: "lmt-enhanced", name: "Enhanced BCG", brand: "LMT", price: 349.99, color: "#1f2937", compatibility: { firearmTypes: ["rifle"], subTypes: ["ar15"] } },
   ],
 };
 
@@ -289,6 +295,7 @@ const ComponentsPanel: React.FC<{
   setExpanded: (key: CategoryKey | null) => void;
 }> = ({ selected, onSelect, expanded, setExpanded }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { configuration } = useForgeContext();
 
   return (
     <>
@@ -342,7 +349,7 @@ const ComponentsPanel: React.FC<{
               
               {expanded === category.id && (
                 <div className="bg-gray-950/50 p-2">
-                  {PARTS_DATABASE[category.id].map((part) => (
+                  {filterCompatibleParts(PARTS_DATABASE[category.id], configuration).map((part) => (
                     <button
                       key={part.id}
                       onClick={() => onSelect(category.id, part)}
@@ -483,7 +490,8 @@ const FilterPanel: React.FC<{
 /*************************
  * Main Forge Component
  *************************/
-export default function AR15ForgeBuilder() {
+function AR15ForgeBuilderInner() {
+  const [showQuestionnaire, setShowQuestionnaire] = useState(true);
   const [selected, setSelected] = useState<SelectedParts>({
     lower: PARTS_DATABASE.lower[0],
     upper: PARTS_DATABASE.upper[0],
@@ -505,6 +513,18 @@ export default function AR15ForgeBuilder() {
   const selectPart = (key: CategoryKey, part: Part) => {
     setSelected(prev => ({ ...prev, [key]: part }));
   };
+
+  const { setConfiguration } = useForgeContext();
+
+  const handleQuestionnaireComplete = (configuration: FirearmConfiguration) => {
+    setConfiguration(configuration);
+    setShowQuestionnaire(false);
+  };
+
+  // Show questionnaire on initial load
+  if (showQuestionnaire) {
+    return <ForgeQuestionnaire onComplete={handleQuestionnaireComplete} />;
+  }
 
   return (
     <div className="h-screen w-screen bg-slate-950 relative overflow-hidden">
@@ -566,5 +586,13 @@ export default function AR15ForgeBuilder() {
         setSelectedBrands={setSelectedBrands}
       />
     </div>
+  );
+}
+
+export default function AR15ForgeBuilder() {
+  return (
+    <ForgeProvider>
+      <AR15ForgeBuilderInner />
+    </ForgeProvider>
   );
 }
