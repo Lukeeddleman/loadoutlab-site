@@ -264,7 +264,7 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
             </h1>
             <div className="h-px w-32 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-light leading-relaxed">
-              Professional AR-15 configuration tool with real-time pricing, compatibility checking, and detailed component specifications from trusted manufacturers.
+              Professional firearm configuration tool with real-time pricing, compatibility checking, and detailed component specifications from trusted manufacturers.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
@@ -328,7 +328,7 @@ const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => voi
           <h2 className="text-3xl font-bold mb-2 tracking-wide">START BUILDING TODAY</h2>
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
           <p className="text-gray-300 text-lg mb-8 font-light">
-            Join thousands of firearms enthusiasts who trust LoadoutLab for their AR-15 build planning and component selection.
+            Join thousands of firearms enthusiasts who trust LoadoutLab for their firearm build planning and component selection.
           </p>
           <a 
             href="/forge"
@@ -382,7 +382,7 @@ const AboutPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2 tracking-wide">ABOUT LOADOUTLAB</h1>
           <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-          <p className="text-gray-400 font-mono">PROFESSIONAL AR-15 BUILD PLATFORM</p>
+          <p className="text-gray-400 font-mono">PROFESSIONAL FIREARM BUILD PLATFORM</p>
         </div>
         <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-8">
           <div className="space-y-6 text-gray-300 font-light leading-relaxed">
@@ -404,7 +404,7 @@ const AboutPage = () => {
               <p className="text-cyan-300 font-mono text-sm">
                 PLATFORM STATUS: ACTIVE<br />
                 BUILD TOOLS: FULLY OPERATIONAL<br />
-                COMPATIBILITY: AR-15 PLATFORM
+                COMPATIBILITY: MULTI-PLATFORM SUPPORT
               </p>
             </div>
           </div>
