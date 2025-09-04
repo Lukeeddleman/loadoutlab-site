@@ -354,7 +354,7 @@ const ComponentsPanel: React.FC<{
   buildingPhase: "foundation" | "complete";
 }> = ({ selected, onOpenModal, buildingPhase }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [expandedSection, setExpandedSection] = useState<"lower" | "upper" | null>("lower");
+  const [expandedSection, setExpandedSection] = useState<"lower" | "upper" | null>(null);
   const { configuration } = useForgeContext();
 
   const hasUpperReceiver = selected.upper && selected.upper.id !== "none";
