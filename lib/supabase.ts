@@ -1,12 +1,28 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Dynamic Supabase client that gets environment variables at runtime
+let _supabaseClient: any = null;
 
-// Create a fallback client for build time that won't cause errors
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : createClient('https://placeholder.supabase.co', 'placeholder-key');
+function getSupabaseClient() {
+  if (!_supabaseClient) {
+    // Get environment variables at runtime, not at module load time
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Missing Supabase environment variables. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    }
+
+    _supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+  }
+  return _supabaseClient;
+}
+
+// Export object with lazy getters
+export const supabase = {
+  get auth() { return getSupabaseClient().auth; },
+  from(table: string) { return getSupabaseClient().from(table); }
+};
 
 // Database Types
 export type Database = {
