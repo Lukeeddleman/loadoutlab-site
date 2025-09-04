@@ -4,19 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 function createSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  
-  console.log('Creating Supabase client with:', {
-    hasUrl: !!supabaseUrl,
-    hasKey: !!supabaseAnonKey,
-    url: supabaseUrl,
-    keyLength: supabaseAnonKey?.length || 0
-  });
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Missing Supabase environment variables:', {
-      NEXT_PUBLIC_SUPABASE_URL: supabaseUrl,
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: supabaseAnonKey ? '[PRESENT]' : '[MISSING]'
-    });
     throw new Error('Supabase environment variables are not configured');
   }
 
@@ -105,8 +94,6 @@ export const getCurrentUser = async () => {
 };
 
 export const signUp = async (email: string, password: string, metadata?: { username?: string; full_name?: string }) => {
-  console.log('Attempting to sign up with:', { email, hasPassword: !!password, metadata });
-  
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -114,13 +101,6 @@ export const signUp = async (email: string, password: string, metadata?: { usern
       data: metadata
     }
   });
-  
-  console.log('Sign up result:', { 
-    success: !!data?.user?.id, 
-    userId: data?.user?.id,
-    error: error?.message 
-  });
-  
   return { data, error };
 };
 
