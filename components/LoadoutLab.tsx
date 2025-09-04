@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Wrench, Target, Shield, ChevronRight, Crosshair, Settings, DollarSign, Zap, Activity, Cpu } from 'lucide-react';
+import { Wrench, Target, Shield, ChevronRight, Crosshair, Settings, DollarSign, Zap, Activity, Cpu, User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 
 const LoadoutLab = () => {
@@ -171,6 +172,7 @@ const LoadoutLab = () => {
 // Main website content after age verification
 const MainSite = () => {
   const [currentSection, setCurrentSection] = useState('home');
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-slate-900 text-white relative overflow-hidden">
@@ -221,11 +223,27 @@ const MainSite = () => {
             >
               ABOUT
             </button>
+            {user && (
+              <a 
+                href="/account"
+                className="font-medium transition-colors tracking-wide text-gray-300 hover:text-white flex items-center gap-2"
+              >
+                <User className="w-4 h-4" />
+                ACCOUNT
+              </a>
+            )}
           </div>
           
-          <a href="/forge" className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-6 py-2 rounded-lg font-medium transition-all duration-200 border border-cyan-500/30 tracking-wide">
-            START BUILD
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="/forge" className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-6 py-2 rounded-lg font-medium transition-all duration-200 border border-cyan-500/30 tracking-wide">
+              START BUILD
+            </a>
+            {!user && (
+              <a href="/forge" className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg font-medium transition-colors tracking-wide">
+                SIGN IN
+              </a>
+            )}
+          </div>
         </div>
       </nav>
 
