@@ -3,6 +3,13 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+console.log('Supabase initialization:', {
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  url: supabaseUrl,
+  keyLength: supabaseAnonKey.length
+});
+
 // Create a fallback client for build time
 export const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey)
@@ -87,14 +94,25 @@ export const getCurrentUser = async () => {
 };
 
 export const signUp = async (email: string, password: string, metadata?: { username?: string; full_name?: string }) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: metadata
-    }
-  });
-  return { data, error };
+  console.log('Attempting to sign up with:', { email, hasPassword: !!password, metadata });
+  console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+  console.log('Using placeholder client:', supabaseUrl === 'https://placeholder.supabase.co');
+  
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: metadata
+      }
+    });
+    
+    console.log('Sign up result:', { data: data?.user?.id ? 'User created' : 'No user', error });
+    return { data, error };
+  } catch (err) {
+    console.error('Sign up catch error:', err);
+    return { data: null, error: { message: 'Network error during sign up' } };
+  }
 };
 
 export const signIn = async (email: string, password: string) => {
