@@ -1,19 +1,30 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Function to get Supabase client with runtime environment variable checking
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  console.log('Creating Supabase client with:', {
+    hasUrl: !!supabaseUrl,
+    hasKey: !!supabaseAnonKey,
+    url: supabaseUrl,
+    keyLength: supabaseAnonKey?.length || 0
+  });
 
-console.log('Supabase initialization:', {
-  hasUrl: !!supabaseUrl,
-  hasKey: !!supabaseAnonKey,
-  url: supabaseUrl,
-  keyLength: supabaseAnonKey.length
-});
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Missing Supabase environment variables:', {
+      NEXT_PUBLIC_SUPABASE_URL: supabaseUrl,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: supabaseAnonKey ? '[PRESENT]' : '[MISSING]'
+    });
+    throw new Error('Supabase environment variables are not configured');
+  }
 
-// Create a fallback client for build time
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : createClient('https://placeholder.supabase.co', 'placeholder-key');
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
+
+// Create client instance
+export const supabase = createSupabaseClient();
 
 // Database Types
 export type Database = {
@@ -95,24 +106,22 @@ export const getCurrentUser = async () => {
 
 export const signUp = async (email: string, password: string, metadata?: { username?: string; full_name?: string }) => {
   console.log('Attempting to sign up with:', { email, hasPassword: !!password, metadata });
-  console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-  console.log('Using placeholder client:', supabaseUrl === 'https://placeholder.supabase.co');
   
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: metadata
-      }
-    });
-    
-    console.log('Sign up result:', { data: data?.user?.id ? 'User created' : 'No user', error });
-    return { data, error };
-  } catch (err) {
-    console.error('Sign up catch error:', err);
-    return { data: null, error: { message: 'Network error during sign up' } };
-  }
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: metadata
+    }
+  });
+  
+  console.log('Sign up result:', { 
+    success: !!data?.user?.id, 
+    userId: data?.user?.id,
+    error: error?.message 
+  });
+  
+  return { data, error };
 };
 
 export const signIn = async (email: string, password: string) => {
