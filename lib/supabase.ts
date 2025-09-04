@@ -3,6 +3,17 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+// Debug logging to see what's happening
+if (typeof window !== 'undefined') {
+  console.log('Client-side Supabase config:', {
+    hasUrl: !!supabaseUrl,
+    hasKey: !!supabaseAnonKey,
+    url: supabaseUrl || '[MISSING]',
+    keyLength: supabaseAnonKey.length || 0,
+    isPlaceholder: supabaseUrl === 'https://placeholder.supabase.co'
+  });
+}
+
 // Create a fallback client for build time that won't cause errors
 export const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey)
