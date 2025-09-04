@@ -1,19 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Function to get Supabase client with runtime environment variable checking
-function createSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Supabase environment variables are not configured');
-  }
-
-  return createClient(supabaseUrl, supabaseAnonKey);
-}
-
-// Create client instance
-export const supabase = createSupabaseClient();
+// Create a fallback client for build time that won't cause errors
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : createClient('https://placeholder.supabase.co', 'placeholder-key');
 
 // Database Types
 export type Database = {
@@ -88,12 +81,21 @@ export type Database = {
 };
 
 // Auth helper functions
+// Check if we have valid Supabase configuration
+const hasValidConfig = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
 export const getCurrentUser = async () => {
+  if (!hasValidConfig) {
+    return { user: null, error: { message: 'Supabase not configured' } };
+  }
   const { data: { user }, error } = await supabase.auth.getUser();
   return { user, error };
 };
 
 export const signUp = async (email: string, password: string, metadata?: { username?: string; full_name?: string }) => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -105,6 +107,9 @@ export const signUp = async (email: string, password: string, metadata?: { usern
 };
 
 export const signIn = async (email: string, password: string) => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -113,6 +118,9 @@ export const signIn = async (email: string, password: string) => {
 };
 
 export const signOut = async () => {
+  if (!hasValidConfig) {
+    return { error: { message: 'Supabase not configured' } };
+  }
   const { error } = await supabase.auth.signOut();
   return { error };
 };
@@ -124,6 +132,10 @@ export const saveBuild = async (build: {
   configuration: any;
   is_public?: boolean;
 }) => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
@@ -143,6 +155,10 @@ export const saveBuild = async (build: {
 };
 
 export const getUserBuilds = async () => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
@@ -160,6 +176,10 @@ export const getUserBuilds = async () => {
 };
 
 export const getPublicBuilds = async () => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
+
   const { data, error } = await supabase
     .from('builds')
     .select(`
@@ -175,6 +195,10 @@ export const getPublicBuilds = async () => {
 };
 
 export const getTemplates = async () => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
+
   const { data, error } = await supabase
     .from('builds')
     .select(`
@@ -193,6 +217,10 @@ export const updateBuild = async (buildId: string, updates: {
   configuration?: any;
   is_public?: boolean;
 }) => {
+  if (!hasValidConfig) {
+    return { data: null, error: { message: 'Supabase not configured' } };
+  }
+
   const { data, error } = await supabase
     .from('builds')
     .update({
@@ -207,6 +235,10 @@ export const updateBuild = async (buildId: string, updates: {
 };
 
 export const deleteBuild = async (buildId: string) => {
+  if (!hasValidConfig) {
+    return { error: { message: 'Supabase not configured' } };
+  }
+
   const { error } = await supabase
     .from('builds')
     .delete()
