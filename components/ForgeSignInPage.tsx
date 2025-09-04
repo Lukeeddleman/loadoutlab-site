@@ -1,13 +1,51 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { User, Lock, ChevronRight, Save, Share, Eye } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface SignInPageProps {
   onContinueAsGuest: () => void;
 }
 
 export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) {
+  const { signIn, signUp } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      if (isSignUp) {
+        const { error } = await signUp(email, password, { full_name: fullName });
+        if (error) {
+          setError(error.message);
+        } else {
+          // Success - user will be automatically signed in
+          onContinueAsGuest(); // This will now continue as authenticated user
+        }
+      } else {
+        const { error } = await signIn(email, password);
+        if (error) {
+          setError(error.message);
+        } else {
+          // Success - continue to forge
+          onContinueAsGuest(); // This will now continue as authenticated user
+        }
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -23,24 +61,64 @@ export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) 
         </div>
 
         {/* Sign In Form */}
-        <div className="bg-gray-900/95 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-6 mb-6">
+        <form onSubmit={handleSubmit} className="bg-gray-900/95 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-6 mb-6">
+          {/* Toggle Sign In / Sign Up */}
+          <div className="flex mb-6 bg-gray-800/50 rounded-lg p-1">
+            <button
+              type="button"
+              onClick={() => setIsSignUp(false)}
+              className={`flex-1 py-2 text-sm font-mono rounded-md transition-colors ${
+                !isSignUp 
+                  ? "bg-cyan-600 text-white" 
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              SIGN IN
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsSignUp(true)}
+              className={`flex-1 py-2 text-sm font-mono rounded-md transition-colors ${
+                isSignUp 
+                  ? "bg-cyan-600 text-white" 
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              SIGN UP
+            </button>
+          </div>
+
           <div className="space-y-4">
-            {/* Username Field */}
-            <div>
-              <label className="block text-xs text-gray-400 font-mono mb-2">USERNAME</label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input
-                  type="text"
-                  placeholder="Enter username"
-                  disabled
-                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-gray-500 placeholder-gray-600 cursor-not-allowed"
-                />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <span className="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs font-mono rounded border border-orange-500/30">
-                    COMING SOON
-                  </span>
+            {/* Full Name Field (Sign Up Only) */}
+            {isSignUp && (
+              <div>
+                <label className="block text-xs text-gray-400 font-mono mb-2">FULL NAME</label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  />
                 </div>
+              </div>
+            )}
+
+            {/* Email Field */}
+            <div>
+              <label className="block text-xs text-gray-400 font-mono mb-2">EMAIL</label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                />
               </div>
             </div>
 
@@ -48,30 +126,35 @@ export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) 
             <div>
               <label className="block text-xs text-gray-400 font-mono mb-2">PASSWORD</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="password"
-                  placeholder="Enter password"
-                  disabled
-                  className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-gray-500 placeholder-gray-600 cursor-not-allowed"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                 />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <span className="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs font-mono rounded border border-orange-500/30">
-                    COMING SOON
-                  </span>
-                </div>
               </div>
             </div>
 
-            {/* Disabled Sign In Button */}
+            {/* Error Message */}
+            {error && (
+              <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
+                <p className="text-red-400 text-sm font-mono">{error}</p>
+              </div>
+            )}
+
+            {/* Submit Button */}
             <button
-              disabled
-              className="w-full py-3 bg-gray-700/50 border border-gray-600 text-gray-500 font-mono text-sm rounded-lg cursor-not-allowed"
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-mono text-sm rounded-lg transition-all duration-300"
             >
-              SIGN IN
+              {loading ? "PROCESSING..." : isSignUp ? "CREATE ACCOUNT" : "SIGN IN"}
             </button>
           </div>
-        </div>
+        </form>
 
         {/* Account Benefits */}
         <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 mb-6">
