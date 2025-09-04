@@ -239,7 +239,7 @@ const MainSite = () => {
               START BUILD
             </a>
             {!user && (
-              <a href="/forge" className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg font-medium transition-colors tracking-wide">
+              <a href="/signin" className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg font-medium transition-colors tracking-wide">
                 SIGN IN
               </a>
             )}

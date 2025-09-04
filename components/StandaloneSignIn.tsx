@@ -1,21 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
-import { User, Lock, ChevronRight, Save, Share, Eye, ExternalLink } from "lucide-react";
+import React, { useState, useEffect, Suspense } from "react";
+import { User, Lock, Target, Save, Share, Eye } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter, useSearchParams } from "next/navigation";
 
-interface SignInPageProps {
-  onContinueAsGuest: () => void;
-}
-
-export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) {
-  const { signIn, signUp } = useAuth();
+function SignInForm() {
+  const { signIn, signUp, user } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Get redirect parameter from URL
+  const redirect = searchParams.get('redirect') || '/account';
+
+  useEffect(() => {
+    // If user is already signed in, redirect them
+    if (user) {
+      router.push(redirect);
+    }
+  }, [user, router, redirect]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,16 +37,14 @@ export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) 
         if (error) {
           setError(error.message);
         } else {
-          // Success - user will be automatically signed in
-          onContinueAsGuest(); // This will now continue as authenticated user
+          // Success - redirect will happen via useEffect when user state updates
         }
       } else {
         const { error } = await signIn(email, password);
         if (error) {
           setError(error.message);
         } else {
-          // Success - continue to forge
-          onContinueAsGuest(); // This will now continue as authenticated user
+          // Success - redirect will happen via useEffect when user state updates
         }
       }
     } catch (err) {
@@ -46,33 +53,35 @@ export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) 
       setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="mb-4">
-            <div className="text-4xl font-bold text-white mb-2">LOADOUT LAB</div>
-            <div className="text-cyan-400 font-mono text-sm">FORGE • SIGN IN</div>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="relative">
+                <Target className="w-10 h-10 text-cyan-400" />
+                <div className="absolute inset-0 animate-pulse">
+                  <Target className="w-10 h-10 text-cyan-400/30" />
+                </div>
+              </div>
+              <div>
+                <span className="text-2xl font-bold text-white tracking-wide">LOADOUT</span>
+                <span className="text-cyan-400 font-light">LAB</span>
+              </div>
+            </div>
+            <div className="text-cyan-400 font-mono text-sm">
+              {redirect === '/forge' ? 'FORGE • SIGN IN' : 'ACCOUNT • SIGN IN'}
+            </div>
           </div>
           <p className="text-gray-400 text-sm">
-            Sign in to save your builds and access premium features
+            {redirect === '/forge' 
+              ? 'Sign in to save your builds and access premium features'
+              : 'Access your account dashboard and manage your builds'
+            }
           </p>
-        </div>
-
-        {/* Alternative Sign In Option */}
-        <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 mb-6 text-center">
-          <h3 className="text-white font-bold mb-2">Prefer a Dedicated Sign-In Page?</h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Use our full sign-in page for a better experience
-          </p>
-          <a 
-            href="/signin?redirect=/forge"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
-          >
-            <ExternalLink className="w-4 h-4" />
-            Go to Sign-In Page
-          </a>
         </div>
 
         {/* Sign In Form */}
@@ -207,22 +216,28 @@ export default function ForgeSignInPage({ onContinueAsGuest }: SignInPageProps) 
           </div>
         </div>
 
-        {/* Continue as Guest Button */}
-        <button
-          onClick={onContinueAsGuest}
-          className="w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 group"
-        >
-          CONTINUE AS GUEST
-          <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </button>
-
-        {/* Footer Text */}
-        <div className="text-center mt-4">
-          <p className="text-gray-500 text-xs">
-            No account required • Start building immediately
-          </p>
+        {/* Back to Home */}
+        <div className="text-center">
+          <a 
+            href="/"
+            className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
+          >
+            ← Back to Home
+          </a>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function StandaloneSignIn() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
+        <div className="text-cyan-400 font-mono">Loading...</div>
+      </div>
+    }>
+      <SignInForm />
+    </Suspense>
   );
 }
