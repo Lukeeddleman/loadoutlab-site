@@ -1,28 +1,38 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Dynamic Supabase client that gets environment variables at runtime
-let _supabaseClient: any = null;
-
-function getSupabaseClient() {
-  if (!_supabaseClient) {
-    // Get environment variables at runtime, not at module load time
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Missing Supabase environment variables. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    }
-
-    _supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-  }
-  return _supabaseClient;
+// Get environment variables at runtime with fallback
+function getEnvVars() {
+  return {
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+  };
 }
 
-// Export object with lazy getters
-export const supabase = {
-  get auth() { return getSupabaseClient().auth; },
-  from(table: string) { return getSupabaseClient().from(table); }
-};
+// Create Supabase client with fallback for missing env vars
+function createSupabaseClient() {
+  const { url, key } = getEnvVars();
+  
+  // Debug logging (only in browser)
+  if (typeof window !== 'undefined') {
+    console.log('Supabase Environment Check:', {
+      hasUrl: !!url,
+      hasKey: !!key,
+      url: url || '[MISSING]',
+      keyLength: key?.length || 0
+    });
+  }
+  
+  // If we have both env vars, use them
+  if (url && key) {
+    return createClient(url, key);
+  }
+  
+  // Fallback client for development/missing env vars
+  console.warn('Supabase environment variables not found, using fallback client');
+  return createClient('https://placeholder.supabase.co', 'placeholder-key');
+}
+
+export const supabase = createSupabaseClient();
 
 // Database Types
 export type Database = {
