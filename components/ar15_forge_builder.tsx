@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Filter, Search, DollarSign, Target, ChevronLeft, ChevronRight, RotateCcw, Save, Edit3 } from "lucide-react";
+import { Filter, Search, DollarSign, Target, ChevronLeft, ChevronRight, RotateCcw, Save, Edit3, Upload, Download, User } from "lucide-react";
 import ForgeQuestionnaire from "./ForgeQuestionnaire";
 import PartSelectionModal from "./PartSelectionModal";
 import { ForgeProvider, useForgeContext, filterCompatibleParts, FirearmConfiguration } from "./ForgeContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { saveBuild, getUserBuilds, updateBuild } from "@/lib/supabase";
 
 /*************************
  * Types
@@ -539,6 +541,199 @@ const ComponentsPanel: React.FC<{
 };
 
 /*************************
+ * Save Build Modal
+ *************************/
+const SaveBuildModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (name: string, description: string, isPublic: boolean) => Promise<void>;
+  loading: boolean;
+}> = ({ isOpen, onClose, onSave, loading }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name.trim()) {
+      await onSave(name.trim(), description.trim(), isPublic);
+      setName("");
+      setDescription("");
+      setIsPublic(false);
+      onClose();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100]">
+      <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 w-full max-w-md mx-4">
+        <div className="flex items-center gap-3 mb-6">
+          <Save className="w-6 h-6 text-cyan-400" />
+          <h2 className="text-xl font-bold text-white">SAVE BUILD</h2>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Build Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter build name..."
+              className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Description (Optional)</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe your build..."
+              rows={3}
+              className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none"
+            />
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="isPublic"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              className="rounded border-gray-600 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-0"
+            />
+            <label htmlFor="isPublic" className="text-sm text-gray-300">
+              Make this build public (others can view and copy)
+            </label>
+          </div>
+          
+          <div className="flex gap-3 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading || !name.trim()}
+              className="flex-1 py-3 bg-cyan-600 hover:bg-cyan-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              {loading ? "SAVING..." : "SAVE BUILD"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+/*************************
+ * Load Build Modal
+ *************************/
+const LoadBuildModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onLoad: (buildId: string, buildData: any) => void;
+  loading: boolean;
+}> = ({ isOpen, onClose, onLoad, loading }) => {
+  const [builds, setBuilds] = useState<any[]>([]);
+  const [loadingBuilds, setLoadingBuilds] = useState(false);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      loadUserBuilds();
+    }
+  }, [isOpen]);
+
+  const loadUserBuilds = async () => {
+    setLoadingBuilds(true);
+    try {
+      const { data, error } = await getUserBuilds();
+      if (error) {
+        console.error("Error loading builds:", error);
+      } else {
+        setBuilds(data || []);
+      }
+    } catch (err) {
+      console.error("Error loading builds:", err);
+    } finally {
+      setLoadingBuilds(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100]">
+      <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 w-full max-w-2xl mx-4 max-h-[80vh] flex flex-col">
+        <div className="flex items-center gap-3 mb-6">
+          <Download className="w-6 h-6 text-cyan-400" />
+          <h2 className="text-xl font-bold text-white">LOAD BUILD</h2>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto">
+          {loadingBuilds ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-cyan-400 font-mono">Loading your builds...</div>
+            </div>
+          ) : builds.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-gray-400 mb-2">No saved builds found</div>
+              <div className="text-sm text-gray-500">Create your first build and save it to see it here!</div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {builds.map((build) => (
+                <div key={build.id} className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 hover:border-cyan-500/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="text-white font-medium">{build.name}</div>
+                      {build.description && (
+                        <div className="text-sm text-gray-400 mt-1">{build.description}</div>
+                      )}
+                      <div className="flex items-center gap-4 mt-2">
+                        <div className="text-xs text-gray-500 font-mono">
+                          Created: {new Date(build.created_at).toLocaleDateString()}
+                        </div>
+                        {build.is_public && (
+                          <div className="text-xs text-cyan-400 font-mono">PUBLIC</div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => onLoad(build.id, build.configuration)}
+                      disabled={loading}
+                      className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 disabled:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                    >
+                      LOAD
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div className="flex justify-end pt-4 border-t border-gray-800">
+          <button
+            onClick={onClose}
+            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/*************************
  * Right Filter Panel
  *************************/
 const FilterPanel: React.FC<{
@@ -546,8 +741,16 @@ const FilterPanel: React.FC<{
   setPriceRange: (range: [number, number]) => void;
   selectedBrands: string[];
   setSelectedBrands: (brands: string[]) => void;
-}> = ({ priceRange, setPriceRange, selectedBrands, setSelectedBrands }) => {
+  selected: SelectedParts;
+  onResetAll: () => void;
+  onLoadBuild?: (buildData: any) => void;
+}> = ({ priceRange, setPriceRange, selectedBrands, setSelectedBrands, selected, onResetAll, onLoadBuild }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [loadLoading, setLoadLoading] = useState(false);
+  const { user } = useAuth();
   
   const allBrands = useMemo(() => {
     const brands = new Set<string>();
@@ -556,6 +759,54 @@ const FilterPanel: React.FC<{
     );
     return Array.from(brands).sort();
   }, []);
+
+  const handleSaveBuild = async (name: string, description: string, isPublic: boolean) => {
+    setSaveLoading(true);
+    try {
+      const buildConfig = {
+        selected,
+        priceRange,
+        selectedBrands,
+        total: sumSelected(selected)
+      };
+
+      const { data, error } = await saveBuild({
+        name,
+        description: description || undefined,
+        configuration: buildConfig,
+        is_public: isPublic
+      });
+
+      if (error) {
+        console.error("Error saving build:", error);
+        alert("Failed to save build. Please try again.");
+      } else {
+        alert("Build saved successfully!");
+      }
+    } catch (err) {
+      console.error("Error saving build:", err);
+      alert("Failed to save build. Please try again.");
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+
+  const handleLoadBuildFromModal = (buildId: string, buildData: any) => {
+    setLoadLoading(true);
+    try {
+      // Call the parent's load handler if available
+      if (onLoadBuild) {
+        onLoadBuild(buildData);
+      }
+      
+      setShowLoadModal(false);
+      setLoadLoading(false);
+    } catch (err) {
+      console.error("Error loading build:", err);
+      alert("Failed to load build. Please try again.");
+      setLoadLoading(false);
+    }
+  };
 
   return (
     <>
@@ -634,17 +885,56 @@ const FilterPanel: React.FC<{
 
           {/* Quick Actions */}
           <div className="space-y-2">
-            <button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-              <Save className="w-4 h-4" />
-              Save Build
-            </button>
-            <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+            {user ? (
+              <>
+                <button 
+                  onClick={() => setShowSaveModal(true)}
+                  className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  <Save className="w-4 h-4" />
+                  Save Build
+                </button>
+                <button 
+                  onClick={() => setShowLoadModal(true)}
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Load Build
+                </button>
+              </>
+            ) : (
+              <div className="bg-gray-800/50 rounded-lg p-4 text-center">
+                <User className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                <div className="text-sm text-gray-300 mb-2">Sign in to save builds</div>
+                <div className="text-xs text-gray-500">Create an account to save and load your custom builds</div>
+              </div>
+            )}
+            <button 
+              onClick={onResetAll}
+              className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
               <RotateCcw className="w-4 h-4" />
               Reset All
             </button>
           </div>
         </div>
       </div>
+
+      {/* Save Build Modal */}
+      <SaveBuildModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        onSave={handleSaveBuild}
+        loading={saveLoading}
+      />
+
+      {/* Load Build Modal */}
+      <LoadBuildModal
+        isOpen={showLoadModal}
+        onClose={() => setShowLoadModal(false)}
+        onLoad={handleLoadBuildFromModal}
+        loading={loadLoading}
+      />
     </>
   );
 };
@@ -719,6 +1009,61 @@ function AR15ForgeBuilderInner() {
     setBuildingPhase("complete"); // Start in complete phase to show all components
   };
 
+  const handleResetAll = () => {
+    setSelected({
+      lower: PARTS_DATABASE.lower[0],
+      upper: PARTS_DATABASE.upper[0],
+      grip: PARTS_DATABASE.grip[0],
+      foregrip: PARTS_DATABASE.foregrip[0],
+      barrel: PARTS_DATABASE.barrel[0],
+      handguard: PARTS_DATABASE.handguard[0],
+      stock: PARTS_DATABASE.stock[0],
+      muzzle: PARTS_DATABASE.muzzle[0],
+      optic: PARTS_DATABASE.optic[0],
+      trigger: PARTS_DATABASE.trigger[0],
+      bcg: PARTS_DATABASE.bcg[0],
+      gasblock: PARTS_DATABASE.gasblock[0],
+      buffertube: PARTS_DATABASE.buffertube[0],
+      buffer: PARTS_DATABASE.buffer[0],
+      bufferspring: PARTS_DATABASE.bufferspring[0],
+    });
+    setPriceRange([0, 1000]);
+    setSelectedBrands([]);
+  };
+
+  const handleLoadBuild = (buildData: any) => {
+    if (buildData.selected) {
+      // Convert the saved part IDs back to actual parts from the database
+      const loadedSelected: SelectedParts = {
+        lower: PARTS_DATABASE.lower.find(p => p.id === buildData.selected.lower?.id) || PARTS_DATABASE.lower[0],
+        upper: PARTS_DATABASE.upper.find(p => p.id === buildData.selected.upper?.id) || PARTS_DATABASE.upper[0],
+        grip: PARTS_DATABASE.grip.find(p => p.id === buildData.selected.grip?.id) || PARTS_DATABASE.grip[0],
+        foregrip: PARTS_DATABASE.foregrip.find(p => p.id === buildData.selected.foregrip?.id) || PARTS_DATABASE.foregrip[0],
+        barrel: PARTS_DATABASE.barrel.find(p => p.id === buildData.selected.barrel?.id) || PARTS_DATABASE.barrel[0],
+        handguard: PARTS_DATABASE.handguard.find(p => p.id === buildData.selected.handguard?.id) || PARTS_DATABASE.handguard[0],
+        stock: PARTS_DATABASE.stock.find(p => p.id === buildData.selected.stock?.id) || PARTS_DATABASE.stock[0],
+        muzzle: PARTS_DATABASE.muzzle.find(p => p.id === buildData.selected.muzzle?.id) || PARTS_DATABASE.muzzle[0],
+        optic: PARTS_DATABASE.optic.find(p => p.id === buildData.selected.optic?.id) || PARTS_DATABASE.optic[0],
+        trigger: PARTS_DATABASE.trigger.find(p => p.id === buildData.selected.trigger?.id) || PARTS_DATABASE.trigger[0],
+        bcg: PARTS_DATABASE.bcg.find(p => p.id === buildData.selected.bcg?.id) || PARTS_DATABASE.bcg[0],
+        gasblock: PARTS_DATABASE.gasblock.find(p => p.id === buildData.selected.gasblock?.id) || PARTS_DATABASE.gasblock[0],
+        buffertube: PARTS_DATABASE.buffertube.find(p => p.id === buildData.selected.buffertube?.id) || PARTS_DATABASE.buffertube[0],
+        buffer: PARTS_DATABASE.buffer.find(p => p.id === buildData.selected.buffer?.id) || PARTS_DATABASE.buffer[0],
+        bufferspring: PARTS_DATABASE.bufferspring.find(p => p.id === buildData.selected.bufferspring?.id) || PARTS_DATABASE.bufferspring[0],
+      };
+      
+      setSelected(loadedSelected);
+      
+      // Restore filter settings if available
+      if (buildData.priceRange) {
+        setPriceRange(buildData.priceRange);
+      }
+      if (buildData.selectedBrands) {
+        setSelectedBrands(buildData.selectedBrands);
+      }
+    }
+  };
+
   // Show questionnaire on initial load
   if (showQuestionnaire) {
     return <ForgeQuestionnaire onComplete={handleQuestionnaireComplete} />;
@@ -785,6 +1130,9 @@ function AR15ForgeBuilderInner() {
         setPriceRange={setPriceRange}
         selectedBrands={selectedBrands}
         setSelectedBrands={setSelectedBrands}
+        selected={selected}
+        onResetAll={handleResetAll}
+        onLoadBuild={handleLoadBuild}
       />
 
       {/* Part Selection Modal */}
