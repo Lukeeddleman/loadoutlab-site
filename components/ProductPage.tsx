@@ -22,6 +22,34 @@ interface Product {
   variants: Variant[];
 }
 
+const PRODUCT_DESCRIPTIONS: Record<string, { tagline: string; description: string; details: string[] }> = {
+  'Loadout Lab Weathered Cap': {
+    tagline: 'Worn in. Built for the range.',
+    description:
+      'The Loadout Lab Weathered Cap is a distressed dad hat that looks like it\'s already been through a few thousand rounds. Otto Cap construction, low-profile fit, pre-broken-in feel right out of the box. Wear it at the range, on the road, or anywhere you carry the Loadout Lab standard.',
+    details: [
+      'Otto Cap 104-1018 distressed dad hat',
+      'One size fits most — adjustable strap',
+      'DTF front print',
+      'Unstructured, low-profile crown',
+      'Pre-distressed finish',
+    ],
+  },
+  'SAAMI .308 Tee': {
+    tagline: 'Know your specs.',
+    description:
+      'The SAAMI .308 Tee is for the shooter who knows their round. Cotton Heritage MC1087 box tee — heavy, boxy, built to last. This isn\'t a soft fashion tee. It\'s the shirt you wear when you know exactly what you\'re doing and don\'t need to explain it.',
+    details: [
+      'Cotton Heritage MC1087 men\'s box tee',
+      '100% ring-spun cotton',
+      'Boxy, relaxed fit',
+      'Pre-shrunk heavyweight fabric',
+      'Available in Black and Navy Blazer',
+      'Sizes S–4XL (2XL+ slightly higher price)',
+    ],
+  },
+};
+
 export default function ProductPage({ product }: { product: Product }) {
   const colorNames = Object.keys(product.colors);
   const [selectedColor, setSelectedColor] = useState(colorNames[0] || '');
@@ -146,23 +174,38 @@ export default function ProductPage({ product }: { product: Product }) {
 
           {/* Details */}
           <div className="py-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-6 h-px bg-red-600" />
-              <span className="text-red-500 text-xs font-mono tracking-widest">LOADOUT LAB GEAR</span>
-            </div>
+            {(() => {
+              const desc = PRODUCT_DESCRIPTIONS[product.name];
+              return (
+                <>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-6 h-px bg-red-600" />
+                    <span className="text-red-500 text-xs font-mono tracking-widest">LOADOUT LAB GEAR</span>
+                  </div>
 
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-3">
-              {product.name}
-            </h1>
+                  <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2">
+                    {product.name}
+                  </h1>
 
-            <p className="text-red-500 font-mono text-2xl mb-8">
-              ${variant?.price.toFixed(2) ?? '--'}
-              {selectedSize === '2XL' || selectedSize === '3XL' || selectedSize === '4XL'
-                ? <span className="text-zinc-600 text-sm ml-2">(extended size)</span>
-                : null}
-            </p>
+                  {desc && (
+                    <p className="text-zinc-500 text-sm font-mono tracking-wide italic mb-4">{desc.tagline}</p>
+                  )}
 
-            <div className="h-px w-full bg-zinc-900 mb-8" />
+                  <p className="text-red-500 font-mono text-2xl mb-6">
+                    ${variant?.price.toFixed(2) ?? '--'}
+                    {selectedSize === '2XL' || selectedSize === '3XL' || selectedSize === '4XL'
+                      ? <span className="text-zinc-600 text-sm ml-2">(extended size)</span>
+                      : null}
+                  </p>
+
+                  <div className="h-px w-full bg-zinc-900 mb-6" />
+
+                  {desc && (
+                    <p className="text-zinc-400 text-sm leading-relaxed mb-6">{desc.description}</p>
+                  )}
+                </>
+              );
+            })()}
 
             {/* Color selector */}
             {colorNames.length > 1 && (
@@ -222,6 +265,21 @@ export default function ProductPage({ product }: { product: Product }) {
             <p className="text-zinc-600 text-xs font-mono text-center mt-4">
               SHIPS VIA PRINTFUL · FULFILLED IN 2–5 BUSINESS DAYS
             </p>
+
+            {/* Product details list */}
+            {PRODUCT_DESCRIPTIONS[product.name]?.details && (
+              <div className="mt-8 border-t border-zinc-900 pt-6">
+                <p className="text-zinc-500 text-xs font-mono tracking-widest mb-3">PRODUCT DETAILS</p>
+                <ul className="space-y-2">
+                  {PRODUCT_DESCRIPTIONS[product.name].details.map((detail, i) => (
+                    <li key={i} className="flex items-start gap-2 text-zinc-400 text-sm">
+                      <span className="text-red-600 mt-1 flex-shrink-0">—</span>
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>
