@@ -317,26 +317,6 @@ const AboutSection = () => (
   </section>
 );
 
-// ─── Calendly embed ───────────────────────────────────────────────────────────
-
-const CalendlyEmbed = () => {
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => { document.body.removeChild(script); };
-  }, []);
-
-  return (
-    <div
-      className="calendly-inline-widget w-full rounded-xl overflow-hidden border border-zinc-800"
-      data-url="https://calendly.com/luke-eddleman-0obz6s?hide_gdpr_banner=1&background_color=09090b&text_color=ffffff&primary_color=dc2626"
-      style={{ minWidth: '320px', height: '700px' }}
-    />
-  );
-};
-
 // ─── Classes ──────────────────────────────────────────────────────────────────
 
 const ClassesSection = () => {
@@ -360,24 +340,28 @@ const ClassesSection = () => {
 
   const offerings = [
     {
+      slug: 'fundamentals',
       level: 'BEGINNER',
       title: 'FUNDAMENTALS',
       desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
       duration: '2–3 Hours',
     },
     {
+      slug: 'defensive-pistol',
       level: 'INTERMEDIATE',
       title: 'DEFENSIVE PISTOL',
       desc: 'Drawing from holster, close-quarters drills, malfunction clearing, and real-world defensive scenarios.',
       duration: '3–4 Hours',
     },
     {
+      slug: 'carbine-ar-platform',
       level: 'INTERMEDIATE',
       title: 'CARBINE / AR PLATFORM',
       desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
       duration: '3–4 Hours',
     },
     {
+      slug: 'private-instruction',
       level: 'ALL LEVELS',
       title: 'PRIVATE INSTRUCTION',
       desc: 'One-on-one sessions tailored to your goals, experience level, and schedule. Maximum results, minimum wasted time.',
@@ -407,8 +391,8 @@ const ClassesSection = () => {
         {/* Class cards */}
         <div className="grid md:grid-cols-2 gap-5 mb-16">
           {offerings.map((cls) => (
-            <div key={cls.title}
-              className="bg-black border border-zinc-900 hover:border-red-600/30 rounded-xl p-7 transition-all duration-300 group">
+            <a key={cls.title} href={`/classes/${cls.slug}`}
+              className="bg-black border border-zinc-900 hover:border-red-600/30 rounded-xl p-7 transition-all duration-300 group block">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <span className="text-red-500 text-xs font-mono tracking-widest block mb-1">{cls.level}</span>
@@ -420,19 +404,20 @@ const ClassesSection = () => {
                 </div>
               </div>
               <div className="h-px w-full bg-zinc-900 group-hover:bg-red-600/20 transition-colors mb-4" />
-              <p className="text-zinc-500 text-sm leading-relaxed">{cls.desc}</p>
-            </div>
+              <p className="text-zinc-500 text-sm leading-relaxed mb-4">{cls.desc}</p>
+              <span className="text-red-500 group-hover:text-red-400 text-xs font-black tracking-widest flex items-center gap-1 transition-colors">
+                LEARN MORE & BOOK <ArrowRight className="w-3 h-3" />
+              </span>
+            </a>
           ))}
         </div>
 
-        {/* Booking */}
-        <div>
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-black text-white tracking-tight mb-2">BOOK A SESSION</h3>
-            <div className="h-px w-16 bg-red-600/40 mx-auto mb-4" />
-            <p className="text-zinc-500 text-sm">Pick a class and grab a spot directly below.</p>
-          </div>
-          <CalendlyEmbed />
+        {/* Book CTA */}
+        <div className="text-center mt-4">
+          <a href="/contact"
+            className="inline-flex items-center gap-2 border border-zinc-800 hover:border-red-600/40 text-zinc-400 hover:text-white px-6 py-3 rounded-lg font-black text-xs tracking-widest transition-colors">
+            QUESTIONS? CONTACT LUKE <ArrowRight className="w-3.5 h-3.5" />
+          </a>
         </div>
       </div>
     </section>
