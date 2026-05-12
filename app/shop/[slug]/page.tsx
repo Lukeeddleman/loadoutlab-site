@@ -19,18 +19,13 @@ interface Product {
   variants: Variant[];
 }
 
+export const dynamic = 'force-dynamic';
+
 async function getProducts(): Promise<Product[]> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://loadoutlab.com';
-  const res = await fetch(`${baseUrl}/api/products`, { next: { revalidate: 300 } });
+  const res = await fetch(`${baseUrl}/api/products`, { cache: 'no-store' });
   const data = await res.json();
   return data.products || [];
-}
-
-export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((p) => ({
-    slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-  }));
 }
 
 export default async function ShopProductPage({ params }: { params: Promise<{ slug: string }> }) {
