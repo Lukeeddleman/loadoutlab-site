@@ -446,10 +446,13 @@ const Footer = () => (
           ))}
         </div>
       </div>
-      <div className="border-t border-zinc-900 pt-8 text-center">
+      <div className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row items-center justify-between gap-3">
         <p className="text-zinc-800 text-xs font-mono">
           © {new Date().getFullYear()} LOADOUT LAB. ALL RIGHTS RESERVED.
         </p>
+        <a href="tel:5125535798" className="text-zinc-600 hover:text-zinc-400 text-xs font-mono tracking-widest transition-colors">
+          (512) 553-5798
+        </a>
       </div>
     </div>
   </footer>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FlaskConical, Mail, Send, CheckCircle, ArrowLeft } from 'lucide-react';
+import { FlaskConical, Mail, Phone, Send, CheckCircle, ArrowLeft } from 'lucide-react';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -92,6 +92,18 @@ export default function ContactPage() {
                   <a href="mailto:luke@loadoutlab.com"
                     className="text-white text-sm hover:text-red-400 transition-colors">
                     luke@loadoutlab.com
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-red-600/10 border border-red-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-4 h-4 text-red-500" />
+                </div>
+                <div>
+                  <div className="text-zinc-600 text-xs font-mono tracking-widest mb-0.5">PHONE</div>
+                  <a href="tel:5125535798"
+                    className="text-white text-sm hover:text-red-400 transition-colors">
+                    (512) 553-5798
                   </a>
                 </div>
               </div>
