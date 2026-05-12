@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { User, Lock, Target, Save, Share, Eye } from "lucide-react";
+import { User, Lock, FlaskConical, Calendar, Bell, Shield } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -15,39 +15,25 @@ function SignInForm() {
   const [error, setError] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  // Get redirect parameter from URL
-  const redirect = searchParams.get('redirect') || '/account';
+  const redirect = searchParams.get("redirect") || "/account";
 
   useEffect(() => {
-    // If user is already signed in, redirect them
-    if (user) {
-      router.push(redirect);
-    }
+    if (user) router.push(redirect);
   }, [user, router, redirect]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
       if (isSignUp) {
         const { error } = await signUp(email, password, { full_name: fullName });
-        if (error) {
-          setError(error.message);
-        } else {
-          // Success - redirect will happen via useEffect when user state updates
-        }
+        if (error) setError(error.message);
       } else {
         const { error } = await signIn(email, password);
-        if (error) {
-          setError(error.message);
-        } else {
-          // Success - redirect will happen via useEffect when user state updates
-        }
+        if (error) setError(error.message);
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -55,174 +41,141 @@ function SignInForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mb-4">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="relative">
-                <Target className="w-10 h-10 text-cyan-400" />
-                <div className="absolute inset-0 animate-pulse">
-                  <Target className="w-10 h-10 text-cyan-400/30" />
-                </div>
-              </div>
-              <div>
-                <span className="text-2xl font-bold text-white tracking-wide">LOADOUT</span>
-                <span className="text-cyan-400 font-light">LAB</span>
-              </div>
-            </div>
-            <div className="text-cyan-400 font-mono text-sm">
-              {redirect === '/forge' ? 'FORGE • SIGN IN' : 'ACCOUNT • SIGN IN'}
-            </div>
-          </div>
-          <p className="text-gray-400 text-sm">
-            {redirect === '/forge' 
-              ? 'Sign in to save your builds and access premium features'
-              : 'Access your account dashboard and manage your builds'
-            }
-          </p>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Grid */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: `linear-gradient(rgba(220,38,38,0.04) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(220,38,38,0.04) 1px, transparent 1px)`,
+        backgroundSize: '40px 40px'
+      }} />
+      {/* Corner accents */}
+      <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-red-600/30 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-20 h-20 border-r-2 border-t-2 border-red-600/30 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-20 h-20 border-l-2 border-b-2 border-red-600/30 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-red-600/30 pointer-events-none" />
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <a href="/" className="inline-flex items-center gap-2 mb-6 group">
+            <FlaskConical className="w-7 h-7 text-red-500 group-hover:text-red-400 transition-colors" />
+            <span className="text-white font-black tracking-widest text-lg">
+              LOADOUT<span className="text-red-500">LAB</span>
+            </span>
+          </a>
+          <h1 className="text-3xl font-black text-white tracking-tight mb-1">
+            {isSignUp ? "CREATE ACCOUNT" : "WELCOME BACK"}
+          </h1>
+          <div className="h-px w-16 bg-red-600 mx-auto mt-3" />
         </div>
 
-        {/* Sign In Form */}
-        <form onSubmit={handleSubmit} className="bg-gray-900/95 backdrop-blur-sm border border-cyan-500/30 rounded-2xl p-6 mb-6">
-          {/* Toggle Sign In / Sign Up */}
-          <div className="flex mb-6 bg-gray-800/50 rounded-lg p-1">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(false)}
-              className={`flex-1 py-2 text-sm font-mono rounded-md transition-colors ${
-                !isSignUp 
-                  ? "bg-cyan-600 text-white" 
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              SIGN IN
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsSignUp(true)}
-              className={`flex-1 py-2 text-sm font-mono rounded-md transition-colors ${
-                isSignUp 
-                  ? "bg-cyan-600 text-white" 
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              SIGN UP
-            </button>
-          </div>
+        {/* Toggle */}
+        <div className="flex bg-zinc-950 border border-zinc-800 rounded-lg p-1 mb-6">
+          <button
+            type="button"
+            onClick={() => setIsSignUp(false)}
+            className={`flex-1 py-2.5 text-xs font-black tracking-widest rounded-md transition-colors ${
+              !isSignUp ? "bg-red-600 text-white" : "text-zinc-500 hover:text-white"
+            }`}
+          >
+            SIGN IN
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsSignUp(true)}
+            className={`flex-1 py-2.5 text-xs font-black tracking-widest rounded-md transition-colors ${
+              isSignUp ? "bg-red-600 text-white" : "text-zinc-500 hover:text-white"
+            }`}
+          >
+            CREATE ACCOUNT
+          </button>
+        </div>
 
-          <div className="space-y-4">
-            {/* Full Name Field (Sign Up Only) */}
-            {isSignUp && (
-              <div>
-                <label className="block text-xs text-gray-400 font-mono mb-2">FULL NAME</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Enter your full name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Email Field */}
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="bg-zinc-950 border border-zinc-800 rounded-xl p-7 mb-5 space-y-4">
+          {isSignUp && (
             <div>
-              <label className="block text-xs text-gray-400 font-mono mb-2">EMAIL</label>
+              <label className="block text-xs text-zinc-500 font-mono tracking-widest mb-2">FULL NAME</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
                 <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  type="text"
+                  placeholder="Your name"
+                  value={fullName}
+                  onChange={e => setFullName(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-black border border-zinc-800 focus:border-red-600 rounded-lg text-white placeholder-zinc-700 outline-none transition-colors text-sm"
                 />
               </div>
             </div>
+          )}
 
-            {/* Password Field */}
-            <div>
-              <label className="block text-xs text-gray-400 font-mono mb-2">PASSWORD</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                />
-              </div>
+          <div>
+            <label className="block text-xs text-zinc-500 font-mono tracking-widest mb-2">EMAIL</label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                className="w-full pl-10 pr-4 py-3 bg-black border border-zinc-800 focus:border-red-600 rounded-lg text-white placeholder-zinc-700 outline-none transition-colors text-sm"
+              />
             </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
-                <p className="text-red-400 text-sm font-mono">{error}</p>
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-mono text-sm rounded-lg transition-all duration-300"
-            >
-              {loading ? "PROCESSING..." : isSignUp ? "CREATE ACCOUNT" : "SIGN IN"}
-            </button>
           </div>
+
+          <div>
+            <label className="block text-xs text-zinc-500 font-mono tracking-widest mb-2">PASSWORD</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="w-full pl-10 pr-4 py-3 bg-black border border-zinc-800 focus:border-red-600 rounded-lg text-white placeholder-zinc-700 outline-none transition-colors text-sm"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <p className="text-red-400 text-sm font-mono">{error}</p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 bg-red-600 hover:bg-red-500 disabled:bg-zinc-800 disabled:cursor-not-allowed text-white font-black text-sm tracking-widest rounded-lg transition-colors mt-2"
+          >
+            {loading ? "PROCESSING..." : isSignUp ? "CREATE ACCOUNT" : "SIGN IN"}
+          </button>
         </form>
 
-        {/* Account Benefits */}
-        <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 mb-6">
-          <h3 className="text-white font-bold mb-4 text-center">Account Benefits</h3>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
-                <Save className="w-4 h-4 text-cyan-400" />
+        {/* Benefits */}
+        <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6 mb-6 space-y-4">
+          {[
+            { Icon: Calendar, label: "Class Registration", desc: "Book and manage your training sessions" },
+            { Icon: Bell,     label: "Schedule Alerts",    desc: "Get notified when new classes drop" },
+            { Icon: Shield,   label: "Training History",   desc: "Track your progress over time" },
+          ].map(({ Icon, label, desc }) => (
+            <div key={label} className="flex items-center gap-4">
+              <div className="w-8 h-8 bg-red-600/10 border border-red-600/20 rounded flex items-center justify-center flex-shrink-0">
+                <Icon className="w-4 h-4 text-red-500" />
               </div>
               <div>
-                <div className="text-white text-sm font-medium">Save Builds</div>
-                <div className="text-gray-400 text-xs">Keep your configurations for future reference</div>
+                <div className="text-white text-sm font-bold">{label}</div>
+                <div className="text-zinc-600 text-xs">{desc}</div>
               </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Eye className="w-4 h-4 text-blue-400" />
-              </div>
-              <div>
-                <div className="text-white text-sm font-medium">View Presets & Templates</div>
-                <div className="text-gray-400 text-xs">Access curated builds from experts</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <Share className="w-4 h-4 text-purple-400" />
-              </div>
-              <div>
-                <div className="text-white text-sm font-medium">Share to Social Media</div>
-                <div className="text-gray-400 text-xs">Show off your builds on social platforms</div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Back to Home */}
         <div className="text-center">
-          <a 
-            href="/"
-            className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
-          >
-            ← Back to Home
+          <a href="/" className="text-zinc-700 hover:text-zinc-400 text-xs tracking-widest font-mono transition-colors">
+            ← BACK TO HOME
           </a>
         </div>
       </div>
@@ -233,8 +186,8 @@ function SignInForm() {
 export default function StandaloneSignIn() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
-        <div className="text-cyan-400 font-mono">Loading...</div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-red-500 font-mono text-xs tracking-widest">LOADING...</div>
       </div>
     }>
       <SignInForm />

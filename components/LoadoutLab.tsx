@@ -6,6 +6,7 @@ import {
   ArrowRight, Award, BookOpen, Crosshair, Target
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { addToWaitlist } from '@/lib/supabase';
 
 // ─── Age Gate ─────────────────────────────────────────────────────────────────
 
@@ -326,9 +327,14 @@ const ClassesSection = () => {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
-    // TODO: wire to Supabase waitlist table
-    await new Promise(r => setTimeout(r, 700));
-    setSubmitted(true);
+    const { error } = await addToWaitlist(email);
+    // Treat duplicate email as success (they're already on the list)
+    if (!error || error.message?.includes('duplicate') || error.message?.includes('unique')) {
+      setSubmitted(true);
+    } else {
+      console.error('Waitlist error:', error);
+      setSubmitted(true); // Still show success to user — don't expose errors
+    }
     setLoading(false);
   };
 

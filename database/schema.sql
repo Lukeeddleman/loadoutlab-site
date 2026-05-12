@@ -53,6 +53,19 @@ CREATE POLICY "Users can update their own builds" ON public.builds
 CREATE POLICY "Users can delete their own builds" ON public.builds
   FOR DELETE USING (auth.uid() = user_id);
 
+-- Waitlist table for class signup interest
+CREATE TABLE IF NOT EXISTS public.waitlist (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+ALTER TABLE public.waitlist ENABLE ROW LEVEL SECURITY;
+
+-- Anyone can insert their email, nobody can read others'
+CREATE POLICY "Anyone can join waitlist" ON public.waitlist
+  FOR INSERT WITH CHECK (true);
+
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS builds_user_id_idx ON public.builds(user_id);
 CREATE INDEX IF NOT EXISTS builds_is_public_idx ON public.builds(is_public);

@@ -260,6 +260,17 @@ export const updateBuild = async (buildId: string, updates: {
   return { data, error };
 };
 
+// Waitlist
+export const addToWaitlist = async (email: string) => {
+  if (!hasValidConfig) {
+    return { error: { message: 'Supabase not configured' } };
+  }
+  const { error } = await supabase
+    .from('waitlist')
+    .insert({ email });
+  return { error };
+};
+
 export const deleteBuild = async (buildId: string) => {
   if (!hasValidConfig) {
     return { error: { message: 'Supabase not configured' } };
