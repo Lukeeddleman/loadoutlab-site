@@ -18,7 +18,7 @@ const PLACEMENTS_BY_PRODUCT: Record<number, string[]> = {
   396: ['front_dtf_hat'],
 };
 
-async function pollTask(apiKey: string, taskKey: string, maxAttempts = 20): Promise<string[]> {
+async function pollTask(apiKey: string, taskKey: string, maxAttempts = 20): Promise<string> {
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((r) => setTimeout(r, 2000));
     const res = await fetch(`https://api.printful.com/mockup-generator/task?task_key=${taskKey}`, {
@@ -26,15 +26,27 @@ async function pollTask(apiKey: string, taskKey: string, maxAttempts = 20): Prom
     });
     const data = await res.json();
     const status = data.result?.status;
-
     if (status === 'completed') {
-      return (data.result?.mockups || []).map((m: { mockup_url: string }) => m.mockup_url);
+      return data.result?.mockups?.[0]?.mockup_url || '';
     }
-    if (status === 'failed') {
-      throw new Error('Mockup generation failed');
-    }
+    if (status === 'failed') throw new Error('Mockup generation failed');
   }
   throw new Error('Mockup generation timed out');
+}
+
+async function createTask(apiKey: string, productId: number, variantId: number, placement: string, imageUrl: string): Promise<string> {
+  const res = await fetch(`https://api.printful.com/mockup-generator/create-task/${productId}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      variant_ids: [variantId],
+      format: 'jpg',
+      files: [{ placement, image_url: imageUrl }],
+    }),
+  });
+  const data = await res.json();
+  if (data.code !== 200) throw new Error(`Task creation failed for ${placement}: ${data.result}`);
+  return data.result?.task_key;
 }
 
 export async function GET(req: NextRequest) {
@@ -55,50 +67,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unknown product' }, { status: 400 });
   }
 
-  // Create mockup task
-  const taskRes = await fetch(`https://api.printful.com/mockup-generator/create-task/${productId}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      variant_ids: [variantId],
-      format: 'jpg',
-      files: placements.map((placement) => ({
-        placement,
-        image_url: files[placement],
-        position: {
-          area_width: 1800,
-          area_height: 2400,
-          width: 1800,
-          height: 2400,
-          top: 0,
-          left: 0,
-        },
-      })),
-    }),
-  });
+  // Create one task per placement, then poll all in parallel
+  const taskKeys = await Promise.all(
+    placements.map((placement) => createTask(apiKey, productId, variantId, placement, files[placement]))
+  );
 
-  const taskData = await taskRes.json();
-  if (taskData.code !== 200) {
-    return NextResponse.json({ error: 'Task creation failed', detail: taskData }, { status: 500 });
-  }
-
-  const taskKey = taskData.result?.task_key;
-  if (!taskKey) {
-    return NextResponse.json({ error: 'No task key returned' }, { status: 500 });
-  }
-
-  // Poll for completion
-  const mockupUrls = await pollTask(apiKey, taskKey);
+  const mockupUrls = await Promise.all(
+    taskKeys.map((key) => pollTask(apiKey, key))
+  );
 
   return NextResponse.json(
-    { mockups: mockupUrls },
-    {
-      headers: {
-        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=3600',
-      },
-    }
+    { mockups: mockupUrls.filter(Boolean) },
+    { headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=3600' } }
   );
 }
