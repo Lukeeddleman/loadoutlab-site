@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   FlaskConical, Shield, ChevronRight, Calendar,
-  ShoppingBag, User, Menu, X, CheckCircle,
+  ShoppingBag, User, Menu, X,
   ArrowRight, Award, BookOpen, Crosshair, Target
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -317,6 +317,26 @@ const AboutSection = () => (
   </section>
 );
 
+// ─── Calendly embed ───────────────────────────────────────────────────────────
+
+const CalendlyEmbed = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => { document.body.removeChild(script); };
+  }, []);
+
+  return (
+    <div
+      className="calendly-inline-widget w-full rounded-xl overflow-hidden border border-zinc-800"
+      data-url="https://calendly.com/luke-eddleman-0obz6s?hide_gdpr_banner=1&background_color=09090b&text_color=ffffff&primary_color=dc2626"
+      style={{ minWidth: '320px', height: '700px' }}
+    />
+  );
+};
+
 // ─── Classes ──────────────────────────────────────────────────────────────────
 
 const ClassesSection = () => {
@@ -329,12 +349,11 @@ const ClassesSection = () => {
     if (!email) return;
     setLoading(true);
     const { error } = await addToWaitlist(email);
-    // Treat duplicate email as success (they're already on the list)
     if (!error || error.message?.includes('duplicate') || error.message?.includes('unique')) {
       setSubmitted(true);
     } else {
       console.error('Waitlist error:', error);
-      setSubmitted(true); // Still show success to user — don't expose errors
+      setSubmitted(true);
     }
     setLoading(false);
   };
@@ -406,49 +425,14 @@ const ClassesSection = () => {
           ))}
         </div>
 
-        {/* Waitlist */}
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-black border border-red-600/20 rounded-xl p-10 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-red-600/5 to-transparent pointer-events-none" />
-            <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-red-600/30 pointer-events-none" />
-            <div className="absolute bottom-4 right-4 w-6 h-6 border-r border-b border-red-600/30 pointer-events-none" />
-
-            <div className="relative z-10">
-              {submitted ? (
-                <div>
-                  <CheckCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-black text-white tracking-widest mb-2">YOU&apos;RE ON THE LIST</h3>
-                  <p className="text-zinc-500 text-sm">We&apos;ll reach out as soon as classes are scheduled. Stay sharp.</p>
-                </div>
-              ) : (
-                <>
-                  <Calendar className="w-10 h-10 text-red-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-black text-white tracking-widest mb-2">JOIN THE WAITLIST</h3>
-                  <div className="h-px w-16 bg-red-600/40 mx-auto mb-4" />
-                  <p className="text-zinc-500 text-sm mb-7 max-w-sm mx-auto">
-                    Drop your email and we&apos;ll notify you the moment spots open up.
-                  </p>
-                  <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      required
-                      className="flex-1 bg-zinc-950 border border-zinc-800 focus:border-red-600 text-white placeholder-zinc-700 px-4 py-3 rounded-lg outline-none transition-colors text-sm"
-                    />
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="bg-red-600 hover:bg-red-500 disabled:bg-red-900 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-black text-sm tracking-widest transition-colors whitespace-nowrap"
-                    >
-                      {loading ? '...' : 'NOTIFY ME'}
-                    </button>
-                  </form>
-                </>
-              )}
-            </div>
+        {/* Booking */}
+        <div>
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-black text-white tracking-tight mb-2">BOOK A SESSION</h3>
+            <div className="h-px w-16 bg-red-600/40 mx-auto mb-4" />
+            <p className="text-zinc-500 text-sm">Pick a class and grab a spot directly below.</p>
           </div>
+          <CalendlyEmbed />
         </div>
       </div>
     </section>
