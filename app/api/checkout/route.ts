@@ -16,6 +16,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No items' }, { status: 400 });
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://loadoutlab.com';
+
   const lineItems = items.map((item: {
     name: string;
     price: number;
@@ -23,21 +25,28 @@ export async function POST(req: NextRequest) {
     image?: string;
     color: string;
     size: string;
-  }) => ({
+  }) => {
+    // Stripe requires absolute URLs for images — skip local paths
+    const imageUrl = item.image && item.image.startsWith('http') ? item.image
+      : item.image && item.image.startsWith('/') ? `${siteUrl}${item.image}`
+      : null;
+    return ({
     price_data: {
       currency: 'usd',
       product_data: {
         name: `${item.name} — ${item.color} / ${item.size}`,
-        images: item.image ? [item.image] : [],
+        images: imageUrl ? [imageUrl] : [],
       },
       unit_amount: Math.round(item.price * 100),
     },
     quantity: item.quantity,
-  }));
+  });});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const validLineItems = lineItems.filter((i: any) => i != null);
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    line_items: lineItems,
+    line_items: validLineItems,
     mode: 'payment',
     shipping_address_collection: { allowed_countries: ['US'] },
     shipping_options: [
