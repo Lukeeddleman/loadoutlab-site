@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 
 // Static local image overrides for products that have uploaded mockup sets
 const LOCAL_IMAGES: Record<number, string[]> = {
+  432295388: [ // Loadout Lab Morale Patch
+    '/products/patch/1.jpg',
+    '/products/patch/2.jpg',
+    '/products/patch/3.jpg',
+  ],
   432269121: [ // Loadout Lab Weathered Cap
     '/products/cap/1.jpg',
     '/products/cap/2.jpg',
