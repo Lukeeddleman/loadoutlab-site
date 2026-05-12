@@ -17,9 +17,19 @@ export async function GET() {
     });
     const productsData = await productsRes.json();
 
+    // Test 3: Get full details for each product
+    const productDetails = await Promise.all(
+      (productsData.result || []).map(async (p: { id: number }) => {
+        const res = await fetch(`https://api.printful.com/store/products/${p.id}`, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        return res.json();
+      })
+    );
+
     return NextResponse.json({
-      store: storeData,
       products: productsData,
+      details: productDetails,
     });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
