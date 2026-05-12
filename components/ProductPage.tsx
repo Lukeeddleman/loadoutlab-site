@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight } from 'lucide-react';
+import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
 
 interface Variant {
   id: number;
@@ -133,14 +133,35 @@ export default function ProductPage({ product }: { product: Product }) {
                 className="object-cover transition-all duration-300"
                 priority
               />
+              {/* Prev/Next arrows — only show when multiple mockups */}
+              {mockups.length > 1 && (
+                <>
+                  <button
+                    onClick={() => {
+                      const idx = mockups.indexOf(activeImage);
+                      setActiveImage(mockups[(idx - 1 + mockups.length) % mockups.length]);
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 bg-black/60 hover:bg-black/80 border border-zinc-700 rounded-full flex items-center justify-center transition-all">
+                    <ChevronLeft className="w-4 h-4 text-white" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      const idx = mockups.indexOf(activeImage);
+                      setActiveImage(mockups[(idx + 1) % mockups.length]);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 bg-black/60 hover:bg-black/80 border border-zinc-700 rounded-full flex items-center justify-center transition-all">
+                    <ChevronRight className="w-4 h-4 text-white" />
+                  </button>
+                </>
+              )}
             </div>
-            {/* Thumbnails */}
+            {/* Thumbnail row */}
             {mockups.length > 1 && (
-              <div className="flex gap-3">
+              <div className="flex gap-3 overflow-x-auto pb-1">
                 {mockups.map((url, i) => (
                   <button key={i} onClick={() => setActiveImage(url)}
                     className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      activeImage === url ? 'border-red-600' : 'border-zinc-800 hover:border-zinc-600'
+                      activeImage === url ? 'border-red-600' : 'border-zinc-800 hover:border-zinc-500'
                     }`}>
                     <Image src={url} alt={`View ${i + 1}`} fill className="object-cover" />
                   </button>
