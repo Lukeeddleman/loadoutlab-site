@@ -231,7 +231,7 @@ const StatsBar = () => (
       {[
         { value: 'MILITARY', label: 'VETERAN' },
         { value: 'FEDERAL', label: 'SECURITY' },
-        { value: 'CERTIFIED', label: 'RANGE INSTRUCTOR' },
+        { value: 'EXPERIENCED', label: 'RANGE INSTRUCTOR' },
         { value: 'TEXAS', label: 'BASED' },
       ].map((s) => (
         <div key={s.label} className="group">
@@ -276,7 +276,7 @@ const AboutSection = () => (
             {[
               { Icon: Award,    label: 'U.S. Military Veteran' },
               { Icon: Shield,   label: 'Federal Security Professional' },
-              { Icon: Target,   label: 'Certified Range Instructor' },
+              { Icon: Target,   label: 'Professional Range Instructor' },
               { Icon: BookOpen, label: 'LTC Instruction Coming Soon' },
             ].map(({ Icon, label }) => (
               <div key={label} className="flex items-center gap-3">
