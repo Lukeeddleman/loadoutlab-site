@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm your Loadout Lab account</title>
+</head>
+<body style="margin:0;padding:0;background-color:#000000;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#000000;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <span style="font-size:22px;font-weight:900;letter-spacing:4px;color:#ffffff;">
+                LOADOUT<span style="color:#dc2626;">LAB</span>
+              </span>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background-color:#09090b;border:1px solid #27272a;border-radius:12px;padding:48px 40px;">
+
+              <!-- Top accent line -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                <tr>
+                  <td style="height:2px;background:linear-gradient(90deg,#dc2626,transparent);border-radius:2px;"></td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 6px 0;font-size:11px;letter-spacing:4px;color:#dc2626;font-weight:700;text-transform:uppercase;">
+                Account Verification
+              </p>
+              <h1 style="margin:0 0 16px 0;font-size:28px;font-weight:900;color:#ffffff;letter-spacing:-1px;line-height:1.1;">
+                CONFIRM YOUR<br/>ACCOUNT
+              </h1>
+              <table width="64" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr><td style="height:2px;background-color:#dc2626;border-radius:1px;"></td></tr>
+              </table>
+
+              <p style="margin:0 0 32px 0;font-size:15px;color:#a1a1aa;line-height:1.6;">
+                You&apos;re one step away. Click the button below to verify your email address and activate your Loadout Lab account.
+              </p>
+
+              <!-- CTA Button -->
+              <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                <tr>
+                  <td style="background-color:#dc2626;border-radius:8px;">
+                    <a href="{{ .ConfirmationURL }}"
+                       style="display:inline-block;padding:14px 36px;font-size:12px;font-weight:900;letter-spacing:3px;color:#ffffff;text-decoration:none;text-transform:uppercase;">
+                      VERIFY EMAIL
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 8px 0;font-size:12px;color:#52525b;line-height:1.5;">
+                Or copy and paste this link into your browser:
+              </p>
+              <p style="margin:0 0 32px 0;font-size:11px;color:#dc2626;word-break:break-all;">
+                {{ .ConfirmationURL }}
+              </p>
+
+              <!-- Divider -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr><td style="height:1px;background-color:#27272a;"></td></tr>
+              </table>
+
+              <p style="margin:0;font-size:11px;color:#3f3f46;line-height:1.6;">
+                If you didn&apos;t create a Loadout Lab account, you can safely ignore this email.
+                This link expires in 24 hours.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:28px;">
+              <p style="margin:0;font-size:11px;letter-spacing:2px;color:#3f3f46;font-family:monospace;">
+                CONTROL. TEST. IMPROVE. &nbsp;·&nbsp; LOADOUTLAB.COM
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { User, Lock, FlaskConical, Calendar, Bell, Shield } from "lucide-react";
+import { User, Lock, FlaskConical, Calendar, Bell, Shield, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -13,6 +13,7 @@ function SignInForm() {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/account";
@@ -28,7 +29,11 @@ function SignInForm() {
     try {
       if (isSignUp) {
         const { error } = await signUp(email, password, { full_name: fullName });
-        if (error) setError(error.message);
+        if (error) {
+          setError(error.message);
+        } else {
+          setAwaitingConfirmation(true);
+        }
       } else {
         const { error } = await signIn(email, password);
         if (error) setError(error.message);
@@ -39,6 +44,56 @@ function SignInForm() {
       setLoading(false);
     }
   };
+
+  if (awaitingConfirmation) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: `linear-gradient(rgba(220,38,38,0.04) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(220,38,38,0.04) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px'
+        }} />
+        <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-red-600/30 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-20 h-20 border-r-2 border-t-2 border-red-600/30 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-20 h-20 border-l-2 border-b-2 border-red-600/30 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-red-600/30 pointer-events-none" />
+        <div className="relative z-10 max-w-md w-full text-center">
+          <a href="/" className="inline-flex items-center gap-2 mb-10 group">
+            <FlaskConical className="w-7 h-7 text-red-500 group-hover:text-red-400 transition-colors" />
+            <span className="text-white font-black tracking-widest text-lg">
+              LOADOUT<span className="text-red-500">LAB</span>
+            </span>
+          </a>
+          <div className="bg-zinc-950 border border-red-600/20 rounded-xl p-10 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-red-600/5 to-transparent pointer-events-none" />
+            <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-red-600/30 pointer-events-none" />
+            <div className="absolute bottom-4 right-4 w-6 h-6 border-r border-b border-red-600/30 pointer-events-none" />
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-red-600/10 border border-red-600/25 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Mail className="w-6 h-6 text-red-500" />
+              </div>
+              <h2 className="text-2xl font-black text-white tracking-widest mb-2">CHECK YOUR EMAIL</h2>
+              <div className="h-px w-16 bg-red-600/40 mx-auto mb-5" />
+              <p className="text-zinc-400 text-sm leading-relaxed mb-2">
+                We sent a confirmation link to
+              </p>
+              <p className="text-white font-bold text-sm mb-5">{email}</p>
+              <p className="text-zinc-500 text-xs leading-relaxed mb-8">
+                Click the link in that email to verify your account, then come back here to sign in.
+                Check your spam folder if you don&apos;t see it.
+              </p>
+              <button
+                onClick={() => { setAwaitingConfirmation(false); setIsSignUp(false); }}
+                className="bg-red-600 hover:bg-red-500 text-white px-8 py-3 rounded-lg font-black text-xs tracking-widest transition-colors"
+              >
+                BACK TO SIGN IN
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
