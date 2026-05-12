@@ -1,5 +1,21 @@
 import { NextResponse } from 'next/server';
 
+// Static local image overrides for products that have uploaded mockup sets
+const LOCAL_IMAGES: Record<number, string[]> = {
+  432269121: [ // Loadout Lab Weathered Cap
+    '/products/cap/1.jpg',
+    '/products/cap/2.jpg',
+    '/products/cap/3.jpg',
+    '/products/cap/4.jpg',
+    '/products/cap/5.jpg',
+    '/products/cap/6.jpg',
+    '/products/cap/7.jpg',
+    '/products/cap/8.jpg',
+    '/products/cap/9.jpg',
+    '/products/cap/10.jpg',
+  ],
+};
+
 export async function GET() {
   const apiKey = process.env.PRINTFUL_API_KEY;
   if (!apiKey) return NextResponse.json({ error: 'No PRINTFUL_API_KEY' }, { status: 500 });
@@ -50,10 +66,19 @@ export async function GET() {
     // Get unique sizes
     const sizes = [...new Set(variants.map((v: { size: string }) => v.size))];
 
+    // Use local image overrides if available
+    const localImages = LOCAL_IMAGES[product.id];
+    if (localImages) {
+      Object.keys(colorMap).forEach((color) => {
+        colorMap[color].image = localImages[0];
+        colorMap[color].images = localImages;
+      });
+    }
+
     return {
       id: product.id,
       name: product.name,
-      thumbnail: product.thumbnail_url,
+      thumbnail: localImages?.[0] || product.thumbnail_url,
       colors: colorMap,
       sizes,
       variants: variants.map((v: {
