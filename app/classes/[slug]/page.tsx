@@ -80,8 +80,9 @@ export function generateStaticParams() {
   return Object.keys(CLASSES).map(slug => ({ slug }));
 }
 
-export default function ClassPage({ params }: { params: { slug: string } }) {
-  const cls = CLASSES[params.slug];
+export default async function ClassPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const cls = CLASSES[slug];
   if (!cls) notFound();
   return <ClassDetailPage {...cls} />;
 }
