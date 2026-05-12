@@ -24,7 +24,7 @@ const CLASSES: Record<string, {
       'Live fire drills with instructor feedback',
       'Suitable for first-time shooters and those looking to reinforce the basics',
     ],
-    calUrl: 'https://calendly.com/eddleman-luke/fundamentals',
+    calUrl: 'https://calendly.com/eddleman-luke/new-meeting',
   },
   'defensive-pistol': {
     slug: 'defensive-pistol',
