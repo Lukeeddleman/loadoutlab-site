@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight } from 'lucide-react';
@@ -21,16 +21,45 @@ interface Product {
   variants: Variant[];
 }
 
+// Map our sync product IDs to Printful base product IDs for mockup generator
+const SYNC_TO_BASE: Record<number, number> = {
+  432267769: 917, // SAAMI .308 Tee
+  432269121: 396, // Loadout Lab Weathered Cap
+};
+
 export default function ProductPage({ product }: { product: Product }) {
   const colorNames = Object.keys(product.colors);
   const [selectedColor, setSelectedColor] = useState(colorNames[0] || '');
   const [selectedSize, setSelectedSize] = useState((product.sizes[0] as string) || '');
   const [checkingOut, setCheckingOut] = useState(false);
+  const [mockups, setMockups] = useState<string[]>([]);
+  const [mockupsLoading, setMockupsLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState<string>('');
 
   const variant = product.variants.find(
     (v) => v.color === selectedColor && v.size === selectedSize
   );
-  const currentImage = product.colors[selectedColor]?.image || product.thumbnail;
+  const defaultImage = product.colors[selectedColor]?.image || product.thumbnail;
+  const currentImage = activeImage || defaultImage;
+
+  // Fetch mockups when color/variant changes
+  useEffect(() => {
+    const baseProductId = SYNC_TO_BASE[product.id];
+    if (!baseProductId || !variant) return;
+
+    setMockupsLoading(true);
+    setActiveImage('');
+    fetch(`/api/mockups?productId=${baseProductId}&variantId=${variant.id}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.mockups?.length) {
+          setMockups(d.mockups);
+          setActiveImage(d.mockups[0]);
+        }
+        setMockupsLoading(false);
+      })
+      .catch(() => setMockupsLoading(false));
+  }, [product.id, variant?.id]);
 
   const buyNow = async () => {
     if (!variant) return;
@@ -85,17 +114,38 @@ export default function ProductPage({ product }: { product: Product }) {
       {/* Product */}
       <div className="max-w-6xl mx-auto px-6 pb-28">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/* Image */}
-          <div className="relative aspect-square bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
-            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-red-600/40 z-10" />
-            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/40 z-10" />
-            <Image
-              src={currentImage}
-              alt={`${product.name} — ${selectedColor}`}
-              fill
-              className="object-cover transition-all duration-300"
-              priority
-            />
+          {/* Image gallery */}
+          <div className="flex flex-col gap-4">
+            {/* Main image */}
+            <div className="relative aspect-square bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
+              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-red-600/40 z-10" />
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/40 z-10" />
+              {mockupsLoading && (
+                <div className="absolute inset-0 flex items-center justify-center z-20 bg-zinc-950/60">
+                  <Loader2 className="w-8 h-8 text-red-600 animate-spin" />
+                </div>
+              )}
+              <Image
+                src={currentImage}
+                alt={`${product.name} — ${selectedColor}`}
+                fill
+                className="object-cover transition-all duration-300"
+                priority
+              />
+            </div>
+            {/* Thumbnails */}
+            {mockups.length > 1 && (
+              <div className="flex gap-3">
+                {mockups.map((url, i) => (
+                  <button key={i} onClick={() => setActiveImage(url)}
+                    className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+                      activeImage === url ? 'border-red-600' : 'border-zinc-800 hover:border-zinc-600'
+                    }`}>
+                    <Image src={url} alt={`View ${i + 1}`} fill className="object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Details */}
