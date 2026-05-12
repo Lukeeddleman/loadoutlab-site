@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import MerchStore from '@/components/MerchStore';
 import {
   FlaskConical, Shield, ChevronRight, Calendar,
   ShoppingBag, User, Menu, X,
@@ -415,46 +416,7 @@ const ClassesSection = () => {
   );
 };
 
-// ─── Merch ────────────────────────────────────────────────────────────────────
-
-const MerchSection = () => (
-  <section id="merch" className="bg-black py-28 px-6">
-    <div className="max-w-6xl mx-auto">
-      <div className="text-center mb-16">
-        <div className="flex items-center justify-center gap-3 mb-5">
-          <div className="w-8 h-px bg-red-600" />
-          <span className="text-red-500 text-xs font-mono tracking-widest">LOADOUT LAB GEAR</span>
-          <div className="w-8 h-px bg-red-600" />
-        </div>
-        <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
-          WEAR THE <span className="text-red-600">LAB</span>
-        </h2>
-        <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />
-        <p className="text-zinc-600 text-sm tracking-wide">First drop coming soon.</p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-        {['TEE', 'HAT', 'PATCH', 'MORE'].map((item) => (
-          <div key={item}
-            className="bg-zinc-950 border border-zinc-900 hover:border-red-600/20 rounded-xl aspect-square flex flex-col items-center justify-center relative overflow-hidden group transition-all duration-300">
-            <div className="absolute inset-0 pointer-events-none" style={{
-              backgroundImage: `linear-gradient(rgba(220,38,38,0.03) 1px, transparent 1px),
-                                linear-gradient(90deg, rgba(220,38,38,0.03) 1px, transparent 1px)`,
-              backgroundSize: '20px 20px'
-            }} />
-            <ShoppingBag className="w-10 h-10 text-zinc-800 mb-2 relative z-10 group-hover:text-red-600/30 transition-colors" />
-            <span className="text-zinc-700 text-xs font-mono tracking-widest relative z-10">{item}</span>
-            <span className="text-zinc-800 text-xs relative z-10 mt-1 font-mono">SOON</span>
-          </div>
-        ))}
-      </div>
-
-      <p className="text-center text-zinc-700 text-xs tracking-widest font-mono mt-10">
-        FOLLOW @LOADOUTLAB FOR UPDATES
-      </p>
-    </div>
-  </section>
-);
+// ─── Merch (live store) ───────────────────────────────────────────────────────
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
@@ -504,7 +466,7 @@ const MainSite = () => {
       <StatsBar />
       <AboutSection />
       <ClassesSection />
-      <MerchSection />
+      <MerchStore />
       <Footer />
     </div>
   );
