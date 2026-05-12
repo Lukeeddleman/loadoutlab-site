@@ -6,6 +6,7 @@ import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight } from 'luc
 
 interface Variant {
   id: number;
+  baseVariantId: number;
   color: string;
   size: string;
   price: number;
@@ -49,7 +50,7 @@ export default function ProductPage({ product }: { product: Product }) {
 
     setMockupsLoading(true);
     setActiveImage('');
-    fetch(`/api/mockups?productId=${baseProductId}&variantId=${variant.id}`)
+    fetch(`/api/mockups?productId=${baseProductId}&variantId=${variant.baseVariantId}`)
       .then((r) => r.json())
       .then((d) => {
         if (d.mockups?.length) {

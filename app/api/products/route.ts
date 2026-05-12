@@ -52,12 +52,14 @@ export async function GET() {
       sizes,
       variants: variants.map((v: {
         id: number;
+        variant_id: number;
         color: string;
         size: string;
         retail_price: string;
         sku: string;
       }) => ({
         id: v.id,
+        baseVariantId: v.variant_id,
         color: v.color,
         size: v.size,
         price: parseFloat(v.retail_price),

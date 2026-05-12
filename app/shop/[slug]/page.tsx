@@ -3,6 +3,7 @@ import ProductPage from '@/components/ProductPage';
 
 interface Variant {
   id: number;
+  baseVariantId: number;
   color: string;
   size: string;
   price: number;
