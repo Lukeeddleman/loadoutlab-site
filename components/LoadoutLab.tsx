@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   FlaskConical, Shield, ChevronRight, Calendar,
   ShoppingBag, User, Menu, X,
@@ -288,20 +289,18 @@ const AboutSection = () => (
           </div>
         </div>
 
-        {/* Visual placeholder */}
+        {/* Instructor photo */}
         <div className="relative">
-          <div className="aspect-square bg-zinc-950 border border-zinc-800 rounded-xl flex items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none" style={{
-              backgroundImage: `linear-gradient(rgba(220,38,38,0.05) 1px, transparent 1px),
-                                linear-gradient(90deg, rgba(220,38,38,0.05) 1px, transparent 1px)`,
-              backgroundSize: '30px 30px'
-            }} />
-            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-red-600/40" />
-            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/40" />
-            <div className="relative z-10 text-center p-8">
-              <FlaskConical className="w-20 h-20 text-red-600/20 mx-auto mb-4" />
-              <p className="text-zinc-700 text-xs tracking-widest font-mono">PHOTO COMING SOON</p>
-            </div>
+          <div className="aspect-square bg-zinc-950 border border-zinc-800 rounded-xl relative overflow-hidden">
+            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-red-600/60 z-10" />
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/60 z-10" />
+            <Image
+              src="/instructor.PNG"
+              alt="Luke Eddleman — Loadout Lab Instructor"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </div>
         </div>
       </div>
