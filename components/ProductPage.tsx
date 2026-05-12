@@ -35,6 +35,17 @@ const PRODUCT_DESCRIPTIONS: Record<string, { tagline: string; description: strin
       'Pre-distressed finish',
     ],
   },
+  'Loadout Lab Morale Patch': {
+    tagline: 'Stick it anywhere. Mean it everywhere.',
+    description:
+      'The Loadout Lab morale patch. Velcro-backed, embroidered, built to ride on your plate carrier, range bag, hat, or whatever else you put it on. Small patch, loud statement.',
+    details: [
+      'Embroidered morale patch',
+      'Hook-and-loop velcro backing',
+      'Durable embroidered construction',
+      'One size',
+    ],
+  },
   'SAAMI .308 Tee': {
     tagline: 'Know your specs.',
     description:
