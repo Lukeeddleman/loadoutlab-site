@@ -14,8 +14,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Loadout Lab",
-  description: "Forge the Bleeding Edge",
+  title: "Loadout Lab — Control. Test. Improve.",
+  description: "Texas-based firearms instruction from a military veteran and federal security professional. Classes, gear, and real-world training.",
+  keywords: ["firearms instruction", "texas shooting classes", "gun training", "defensive pistol", "AR-15 training", "concealed carry"],
+  openGraph: {
+    title: "Loadout Lab",
+    description: "Control. Test. Improve. Texas-based firearms instruction.",
+    url: "https://loadoutlab.com",
+    siteName: "Loadout Lab",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,9 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}>
         <AuthProvider>
           {children}
         </AuthProvider>

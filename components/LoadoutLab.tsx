@@ -1,435 +1,578 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Wrench, Target, Shield, ChevronRight, Crosshair, Settings, DollarSign, Zap, Activity, Cpu, User } from 'lucide-react';
+import {
+  FlaskConical, Shield, ChevronRight, Calendar,
+  ShoppingBag, User, Menu, X, CheckCircle,
+  ArrowRight, Award, BookOpen, Crosshair, Target
+} from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
+// ─── Age Gate ─────────────────────────────────────────────────────────────────
 
-const LoadoutLab = () => {
-  const [ageVerified, setAgeVerified] = useState<boolean | null>(null);
-  const [showAgePrompt, setShowAgePrompt] = useState<boolean>(false);
-  const [isRejected, setIsRejected] = useState<boolean>(false);
+const AgeGate = ({ onVerify, visible }: { onVerify: (v: boolean) => void; visible: boolean }) => (
+  <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+    {/* Tactical grid */}
+    <div className="absolute inset-0 pointer-events-none" style={{
+      backgroundImage: `linear-gradient(rgba(220,38,38,0.07) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(220,38,38,0.07) 1px, transparent 1px)`,
+      backgroundSize: '40px 40px'
+    }} />
+    {/* Corner brackets */}
+    <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-red-600/50 pointer-events-none" />
+    <div className="absolute top-0 right-0 w-20 h-20 border-r-2 border-t-2 border-red-600/50 pointer-events-none" />
+    <div className="absolute bottom-0 left-0 w-20 h-20 border-l-2 border-b-2 border-red-600/50 pointer-events-none" />
+    <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-red-600/50 pointer-events-none" />
+
+    {/* Logo */}
+    <div className="absolute top-8 left-8 flex items-center gap-2">
+      <FlaskConical className="w-7 h-7 text-red-500" />
+      <span className="text-white font-black tracking-widest text-lg">
+        LOADOUT<span className="text-red-500">LAB</span>
+      </span>
+    </div>
+
+    {/* Modal */}
+    <div className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+      <div className="relative bg-zinc-950 border border-red-600/25 rounded-xl p-8 max-w-sm w-full shadow-2xl shadow-red-950/40">
+        <div className="absolute inset-0 bg-gradient-to-b from-red-600/5 to-transparent rounded-xl pointer-events-none" />
+        <div className="relative z-10">
+          <div className="text-center mb-7">
+            <Shield className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-black text-white tracking-widest mb-1">AGE VERIFICATION</h2>
+            <div className="h-px w-24 bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto mb-4" />
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              This site contains firearms-related content including instruction, gear, and specifications.
+              You must be 18 or older to enter.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <button
+              onClick={() => onVerify(true)}
+              className="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 tracking-widest text-sm"
+            >
+              I AM 18 OR OLDER <ChevronRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onVerify(false)}
+              className="w-full bg-transparent border border-zinc-800 hover:border-zinc-600 text-zinc-500 hover:text-zinc-300 font-medium py-3 px-6 rounded-lg transition-colors tracking-wide text-sm"
+            >
+              I AM UNDER 18
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Rejected ─────────────────────────────────────────────────────────────────
+
+const RejectedScreen = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center p-4">
+    <div className="text-center max-w-sm">
+      <Shield className="w-16 h-16 text-red-700 mx-auto mb-4" />
+      <h1 className="text-2xl font-black text-white tracking-widest mb-2">ACCESS DENIED</h1>
+      <div className="h-px w-32 bg-gradient-to-r from-transparent via-red-700 to-transparent mx-auto mb-4" />
+      <p className="text-zinc-500 text-sm">
+        Loadout Lab is restricted to users 18 and older due to firearms-related content.
+      </p>
+    </div>
+  </div>
+);
+
+// ─── Navbar ───────────────────────────────────────────────────────────────────
+
+const Navbar = ({ user }: { user: unknown }) => {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    // Check if user has already been verified in this session
-    const verified = sessionStorage.getItem('ageVerified');
-    if (verified === 'true') {
-      setAgeVerified(true);
-    } else if (verified === 'false') {
-      setIsRejected(true);
-    } else {
-      // Show age prompt after a brief delay
-      const timer = setTimeout(() => {
-        setShowAgePrompt(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
+    const fn = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const handleAgeVerification = (isOfAge: boolean) => {
+  const links = [
+    { label: 'HOME', href: '#home' },
+    { label: 'ABOUT', href: '#about' },
+    { label: 'CLASSES', href: '#classes' },
+    { label: 'MERCH', href: '#merch' },
+  ];
 
-    if (isOfAge) {
-      setAgeVerified(true);
-      setShowAgePrompt(false);
-      sessionStorage.setItem('ageVerified', 'true');
-    } else {
-      setIsRejected(true);
-      setShowAgePrompt(false);
-      sessionStorage.setItem('ageVerified', 'false');
-    }
-  };
-
-  // Age rejection screen
-  if (isRejected) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.3) 1px, transparent 0)`,
-          backgroundSize: '20px 20px'
-        }} />
-        
-        <div className="text-center max-w-md relative z-10">
-          <div className="mb-8">
-            <Shield className="w-16 h-16 text-red-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-4">ACCESS DENIED</h1>
-            <div className="h-px w-32 bg-gradient-to-r from-transparent via-red-500 to-transparent mx-auto mb-4" />
-            <p className="text-gray-300 leading-relaxed">
-              LoadoutLab is restricted to users 18 and older due to firearms-related content. 
-              This platform contains detailed firearm specifications and pricing information.
-            </p>
-          </div>
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-            <p className="text-red-300 text-sm font-mono">
-              ACCESS RESTRICTED<br />
-              AGE VERIFICATION REQUIRED
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Main site content
-  if (ageVerified) {
-    return <MainSite />;
-  }
-
-  // Initial loading screen with age prompt
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Advanced grid pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-            radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.1) 0%, transparent 50%)
-          `,
-          backgroundSize: '20px 20px, 20px 20px, 40px 40px'
-        }} />
-      </div>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-zinc-900' : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <a href="#home" className="flex items-center gap-2 group">
+          <FlaskConical className="w-6 h-6 text-red-500 group-hover:text-red-400 transition-colors" />
+          <span className="text-white font-black tracking-widest text-base">
+            LOADOUT<span className="text-red-500">LAB</span>
+          </span>
+        </a>
 
-      {/* Animated corner accents */}
-      <div className="absolute top-0 left-0 w-32 h-32 border-l-2 border-t-2 border-cyan-500/50" />
-      <div className="absolute top-0 right-0 w-32 h-32 border-r-2 border-t-2 border-cyan-500/50" />
-      <div className="absolute bottom-0 left-0 w-32 h-32 border-l-2 border-b-2 border-cyan-500/50" />
-      <div className="absolute bottom-0 right-0 w-32 h-32 border-r-2 border-b-2 border-cyan-500/50" />
-
-      {/* Logo */}
-      <div className="absolute top-8 left-8">
-        <div className="flex items-center space-x-3">
-          <div className="relative">
-            <Target className="w-8 h-8 text-cyan-400" />
-            <div className="absolute inset-0 animate-pulse">
-              <Target className="w-8 h-8 text-cyan-400/50" />
-            </div>
-          </div>
-          <div>
-            <span className="text-xl font-bold text-white tracking-wide">LOADOUT</span>
-            <span className="text-cyan-400 font-light">LAB</span>
-          </div>
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {links.map(l => (
+            <a key={l.label} href={l.href}
+              className="text-zinc-500 hover:text-white text-xs font-bold tracking-widest transition-colors">
+              {l.label}
+            </a>
+          ))}
         </div>
-      </div>
 
-      {/* Status indicators */}
-      <div className="absolute top-8 right-8 flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <Activity className="w-4 h-4 text-green-400" />
-          <span className="text-green-400 text-sm font-mono">SYSTEMS ONLINE</span>
+        {/* CTA */}
+        <div className="hidden md:flex items-center gap-4">
+          {user ? (
+            <a href="/account" className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-xs tracking-widest transition-colors">
+              <User className="w-3.5 h-3.5" /> ACCOUNT
+            </a>
+          ) : (
+            <a href="/signin" className="text-zinc-500 hover:text-white text-xs tracking-widest transition-colors">
+              SIGN IN
+            </a>
+          )}
+          <a href="#classes"
+            className="bg-red-600 hover:bg-red-500 text-white px-5 py-2.5 rounded-lg text-xs font-black tracking-widest transition-colors">
+            BOOK A CLASS
+          </a>
         </div>
+
+        {/* Mobile toggle */}
+        <button className="md:hidden text-zinc-400 hover:text-white transition-colors" onClick={() => setOpen(!open)}>
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
 
-      {/* Age Verification Modal */}
-      <div className={`transition-all duration-1000 ${showAgePrompt ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-        <div className="bg-gray-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-xl p-8 max-w-md shadow-2xl relative">
-          {/* Glowing border effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl blur-sm" />
-          <div className="relative z-10">
-            <div className="text-center mb-6">
-              <div className="relative mb-4">
-                <Shield className="w-12 h-12 text-cyan-400 mx-auto" />
-                <div className="absolute inset-0 animate-pulse">
-                  <Shield className="w-12 h-12 text-cyan-400/30 mx-auto" />
-                </div>
-              </div>
-              <h2 className="text-xl font-bold text-white mb-1 tracking-wide">AGE VERIFICATION</h2>
-              <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-              <p className="text-gray-300 text-sm leading-relaxed font-light">
-                LoadoutLab provides detailed firearm specifications, pricing, and configuration tools. 
-                You must be 18 or older to access this content.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <button
-                onClick={() => handleAgeVerification(true)}
-                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-cyan-500/30"
-              >
-                <span className="tracking-wide">I AM 18+</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-              
-              <button
-                onClick={() => handleAgeVerification(false)}
-                className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 border border-gray-600"
-              >
-                I AM UNDER 18
-              </button>
-            </div>
-
-            <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-              <p className="text-xs text-blue-300 text-center font-mono">
-                By proceeding, you confirm authorization to access restricted military-grade content
-              </p>
-            </div>
-          </div>
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden bg-black/98 border-t border-zinc-900 px-6 py-6 space-y-5">
+          {links.map(l => (
+            <a key={l.label} href={l.href} onClick={() => setOpen(false)}
+              className="block text-zinc-400 hover:text-white text-sm tracking-widest py-1 transition-colors">
+              {l.label}
+            </a>
+          ))}
+          <a href="#classes" onClick={() => setOpen(false)}
+            className="block bg-red-600 text-white text-center py-3 rounded-lg font-black text-sm tracking-widest mt-2">
+            BOOK A CLASS
+          </a>
         </div>
-      </div>
-    </div>
+      )}
+    </nav>
   );
 };
 
-// Main website content after age verification
-const MainSite = () => {
-  const [currentSection, setCurrentSection] = useState('home');
-  const { user } = useAuth();
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 
-  return (
-    <div className="min-h-screen bg-slate-900 text-white relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.3) 1px, transparent 0)`,
-        backgroundSize: '20px 20px'
-      }} />
+const HeroSection = () => (
+  <section id="home" className="min-h-screen bg-black flex items-center relative overflow-hidden pt-20">
+    {/* Grid */}
+    <div className="absolute inset-0 pointer-events-none" style={{
+      backgroundImage: `linear-gradient(rgba(220,38,38,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(220,38,38,0.04) 1px, transparent 1px)`,
+      backgroundSize: '60px 60px'
+    }} />
+    {/* Red ambient glow */}
+    <div className="absolute top-1/3 left-1/3 w-[700px] h-[700px] bg-red-700/8 rounded-full blur-3xl pointer-events-none" />
+    {/* Corner accents */}
+    <div className="absolute top-24 left-6 w-10 h-10 border-l-2 border-t-2 border-red-600/30 pointer-events-none" />
+    <div className="absolute top-24 right-6 w-10 h-10 border-r-2 border-t-2 border-red-600/30 pointer-events-none" />
 
-      {/* Navigation Header */}
-      <nav className="bg-gray-900/95 backdrop-blur-sm border-b border-cyan-500/20 px-6 py-4 relative z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <Target className="w-8 h-8 text-cyan-400" />
-              <div className="absolute inset-0 animate-pulse">
-                <Target className="w-8 h-8 text-cyan-400/30" />
-              </div>
-            </div>
-            <div>
-              <span className="text-xl font-bold text-white tracking-wide">LOADOUT</span>
-              <span className="text-cyan-400 font-light">LAB</span>
-            </div>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={() => setCurrentSection('home')}
-              className={`font-medium transition-colors tracking-wide ${currentSection === 'home' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
-            >
-              HOME
-            </button>
-            <a 
-              href="/forge"
-              className="font-medium transition-colors tracking-wide text-gray-300 hover:text-white"
-            >
-              WEAPON FORGE
-            </a>
-            <button 
-              onClick={() => setCurrentSection('deals')}
-              className={`font-medium transition-colors tracking-wide ${currentSection === 'deals' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
-            >
-              PRICING
-            </button>
-            <button 
-              onClick={() => setCurrentSection('about')}
-              className={`font-medium transition-colors tracking-wide ${currentSection === 'about' ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}
-            >
-              ABOUT
-            </button>
-            {user && (
-              <a 
-                href="/account"
-                className="font-medium transition-colors tracking-wide text-gray-300 hover:text-white flex items-center gap-2"
-              >
-                <User className="w-4 h-4" />
-                ACCOUNT
-              </a>
-            )}
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <a href="/forge" className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-6 py-2 rounded-lg font-medium transition-all duration-200 border border-cyan-500/30 tracking-wide">
-              START BUILD
-            </a>
-            {!user && (
-              <a href="/signin" className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg font-medium transition-colors tracking-wide">
-                SIGN IN
-              </a>
-            )}
-          </div>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      {currentSection === 'home' && <HomePage setCurrentSection={setCurrentSection} />}
-      {currentSection === 'deals' && <DealsPage />}
-      {currentSection === 'about' && <AboutPage />}
-    </div>
-  );
-};
-
-// Home Page Component
-const HomePage = ({ setCurrentSection }: { setCurrentSection: (s: string) => void }) => {
-
-  return (
-    <div>
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-slate-900 via-gray-900 to-black px-6 py-20 relative">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+    <div className="max-w-6xl mx-auto px-6 py-24 relative z-10 w-full">
+      <div className="max-w-3xl">
+        {/* Eyebrow */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-8 h-px bg-red-600" />
+          <span className="text-red-500 text-xs font-mono tracking-widest uppercase">
+            Texas-Based Firearms Instruction
+          </span>
         </div>
 
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <div className="mb-8">
-              <div className="inline-flex items-center space-x-2 text-cyan-400 text-sm font-mono mb-4">
-                <Activity className="w-4 h-4" />
-                <span>FIREARM CONFIGURATION PLATFORM</span>
-              </div>
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">BUILD YOUR</span><br />
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">IDEAL RIFLE</span>
-            </h1>
-            <div className="h-px w-32 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-light leading-relaxed">
-              Professional firearm configuration tool with real-time pricing, compatibility checking, and detailed component specifications from trusted manufacturers.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/forge"
-                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-cyan-500/30"
-              >
-                <Zap className="w-5 h-5" />
-                <span className="tracking-wide">ENTER THE FORGE</span>
-              </a>
-              <button 
-                onClick={() => setCurrentSection('deals')}
-                className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600"
-              >
-                <DollarSign className="w-5 h-5" />
-                <span className="tracking-wide">VIEW PRICING</span>
-              </button>
-            </div>
-          </div>
+        {/* Headline */}
+        <h1 className="text-7xl md:text-9xl font-black text-white leading-none mb-2 tracking-tighter">
+          CONTROL.
+        </h1>
+        <h1 className="text-7xl md:text-9xl font-black text-red-600 leading-none mb-2 tracking-tighter">
+          TEST.
+        </h1>
+        <h1 className="text-7xl md:text-9xl font-black text-white leading-none tracking-tighter">
+          IMPROVE.
+        </h1>
 
-          {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6 text-center relative group hover:border-cyan-500/40 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-              <div className="relative z-10">
-                <Cpu className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-3 tracking-wide">SMART BUILDER</h3>
-                <p className="text-gray-400 font-light">
-                  Interactive rifle builder with real-time compatibility checking, pricing updates, and detailed component specifications.
-                </p>
-              </div>
-            </div>
-            
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6 text-center relative group hover:border-cyan-500/40 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-              <div className="relative z-10">
-                <Activity className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-3 tracking-wide">MARKET DATA</h3>
-                <p className="text-gray-400 font-light">
-                  Current pricing from major retailers and manufacturers. Track availability and compare costs across multiple vendors.
-                </p>
-              </div>
-            </div>
-            
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6 text-center relative group hover:border-cyan-500/40 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-              <div className="relative z-10">
-                <Shield className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-3 tracking-wide">COMPATIBILITY CHECK</h3>
-                <p className="text-gray-400 font-light">
-                  Automatic compatibility verification ensures all selected components work together properly for reliable performance.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div className="h-px w-48 bg-gradient-to-r from-red-600 to-transparent my-8" />
 
-      {/* CTA Section */}
-      <div className="bg-gray-900/80 backdrop-blur-sm px-6 py-16 border-t border-cyan-500/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-2 tracking-wide">START BUILDING TODAY</h2>
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-6" />
-          <p className="text-gray-300 text-lg mb-8 font-light">
-            Join thousands of firearms enthusiasts who trust LoadoutLab for their firearm build planning and component selection.
-          </p>
-          <a 
-            href="/forge"
-            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-200 border border-cyan-500/30 tracking-wide"
-          >
-            ENTER THE FORGE
+        <p className="text-zinc-400 text-lg leading-relaxed mb-10 max-w-xl">
+          Professional firearms instruction from a military veteran and federal security professional.
+          Every student leaves more capable, more confident, and safer with a firearm.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          <a href="#classes"
+            className="bg-red-600 hover:bg-red-500 text-white px-8 py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2">
+            VIEW CLASSES <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="#about"
+            className="border border-zinc-800 hover:border-zinc-600 text-white px-8 py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2">
+            MEET THE INSTRUCTOR
           </a>
         </div>
       </div>
     </div>
-  );
-};
 
-// Deals Page
-const DealsPage = () => {
-  return (
-    <div className="px-6 py-12 min-h-screen">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 tracking-wide">PRICING & DEALS</h1>
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-          <p className="text-gray-400 font-mono">COMPONENT PRICING TRACKER</p>
-        </div>
-        <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-16 text-center">
-          <div className="relative mb-6">
-            <DollarSign className="w-16 h-16 text-cyan-400 mx-auto" />
-            <div className="absolute inset-0 animate-pulse">
-              <DollarSign className="w-16 h-16 text-cyan-400/30 mx-auto" />
-            </div>
+    {/* Decorative crosshair */}
+    <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:block opacity-5 pointer-events-none">
+      <Crosshair className="w-[500px] h-[500px] text-red-600" />
+    </div>
+  </section>
+);
+
+// ─── Stats Bar ────────────────────────────────────────────────────────────────
+
+const StatsBar = () => (
+  <div className="bg-zinc-950 border-y border-zinc-900 py-10">
+    <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      {[
+        { value: 'MILITARY', label: 'VETERAN' },
+        { value: 'FEDERAL', label: 'SECURITY' },
+        { value: 'CERTIFIED', label: 'RANGE INSTRUCTOR' },
+        { value: 'TEXAS', label: 'BASED' },
+      ].map((s) => (
+        <div key={s.label} className="group">
+          <div className="text-lg font-black text-red-500 tracking-widest mb-1 group-hover:text-red-400 transition-colors">
+            {s.value}
           </div>
-          <h3 className="text-xl font-bold text-gray-300 mb-4 tracking-wide">PRICING SYSTEM IN DEVELOPMENT</h3>
-          <p className="text-gray-500 font-light max-w-md mx-auto">
-            Real-time pricing from major retailers and manufacturers. 
-            Track deals, monitor availability, and get alerts on price drops for your build components.
+          <div className="text-xs text-zinc-600 tracking-widest font-mono">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// ─── About ────────────────────────────────────────────────────────────────────
+
+const AboutSection = () => (
+  <section id="about" className="bg-black py-28 px-6">
+    <div className="max-w-6xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-16 items-center">
+        {/* Text */}
+        <div>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-px bg-red-600" />
+            <span className="text-red-500 text-xs font-mono tracking-widest">THE INSTRUCTOR</span>
+          </div>
+          <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
+            BUILT ON<br /><span className="text-red-600">REAL</span><br />EXPERIENCE.
+          </h2>
+          <div className="h-px w-24 bg-red-600/40 mb-7" />
+          <p className="text-zinc-400 leading-relaxed mb-5">
+            Loadout Lab isn&apos;t run by someone who took a weekend course and printed a certificate.
+            This is instruction rooted in years of real-world experience — military service,
+            federal security work, and time spent as a professional range instructor.
           </p>
-          <div className="mt-6 flex items-center justify-center space-x-2 text-cyan-400 text-sm font-mono">
-            <Activity className="w-4 h-4" />
-            <span>STATUS: COMING SOON</span>
+          <p className="text-zinc-400 leading-relaxed mb-10">
+            The goal is simple: take every student from where they are and make them more capable,
+            more confident, and more safe. No judgment, no ego — just results.
+          </p>
+
+          {/* Credentials */}
+          <div className="space-y-3">
+            {[
+              { Icon: Award,    label: 'U.S. Military Veteran' },
+              { Icon: Shield,   label: 'Federal Security Professional' },
+              { Icon: Target,   label: 'Certified Range Instructor' },
+              { Icon: BookOpen, label: 'LTC Instruction Coming Soon' },
+            ].map(({ Icon, label }) => (
+              <div key={label} className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-red-600/10 border border-red-600/25 rounded flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-4 h-4 text-red-500" />
+                </div>
+                <span className="text-zinc-300 text-sm tracking-wide">{label}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
 
-// About Page
-const AboutPage = () => {
-  return (
-    <div className="px-6 py-12 min-h-screen">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 tracking-wide">ABOUT LOADOUTLAB</h1>
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mb-4" />
-          <p className="text-gray-400 font-mono">PROFESSIONAL FIREARM BUILD PLATFORM</p>
-        </div>
-        <div className="bg-gray-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-8">
-          <div className="space-y-6 text-gray-300 font-light leading-relaxed">
-            <p>
-              <span className="text-cyan-400 font-mono">LoadoutLab</span> is an online shopping and comparison platform built specifically for the firearms and tactical community. Our site allows users to assemble their ideal rifle or handgun setup in an interactive "loadout builder," while automatically comparing prices and availability across multiple trusted retailers.
-            </p>
-            <p>
-              Our audience is highly engaged, consisting of firearms enthusiasts, hobbyists, and professionals who are actively shopping for parts such as barrels, optics, handguards, triggers, and other accessories. We deliver a shopping experience that is equal parts intuitive and informative, helping customers discover the best deals while also suggesting similar alternatives that may fit their needs or budget better.
-            </p>
-            <p>
-              By partnering with LoadoutLab, merchants gain exposure to a motivated, purchase-ready audience and benefit from high-quality referral traffic. Our goal is to connect buyers with the right products at the right price, creating wins for both customers and retailers.
-            </p>
-            <p>
-              We provide detailed component information from trusted manufacturers like Aero Precision, BCM, 
-              Magpul, and others. Each part includes specifications, compatibility data, and real-world pricing 
-              to help you make informed decisions for your build.
-            </p>
-            <div className="border-l-2 border-cyan-500/50 pl-4 bg-cyan-500/5 py-3">
-              <p className="text-cyan-300 font-mono text-sm">
-                PLATFORM STATUS: ACTIVE<br />
-                BUILD TOOLS: FULLY OPERATIONAL<br />
-                COMPATIBILITY: MULTI-PLATFORM SUPPORT
-              </p>
+        {/* Visual placeholder */}
+        <div className="relative">
+          <div className="aspect-square bg-zinc-950 border border-zinc-800 rounded-xl flex items-center justify-center relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none" style={{
+              backgroundImage: `linear-gradient(rgba(220,38,38,0.05) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(220,38,38,0.05) 1px, transparent 1px)`,
+              backgroundSize: '30px 30px'
+            }} />
+            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-red-600/40" />
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/40" />
+            <div className="relative z-10 text-center p-8">
+              <FlaskConical className="w-20 h-20 text-red-600/20 mx-auto mb-4" />
+              <p className="text-zinc-700 text-xs tracking-widest font-mono">PHOTO COMING SOON</p>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </section>
+);
+
+// ─── Classes ──────────────────────────────────────────────────────────────────
+
+const ClassesSection = () => {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    // TODO: wire to Supabase waitlist table
+    await new Promise(r => setTimeout(r, 700));
+    setSubmitted(true);
+    setLoading(false);
+  };
+
+  const offerings = [
+    {
+      level: 'BEGINNER',
+      title: 'FUNDAMENTALS',
+      desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
+      duration: '2–3 Hours',
+    },
+    {
+      level: 'INTERMEDIATE',
+      title: 'DEFENSIVE PISTOL',
+      desc: 'Drawing from holster, close-quarters drills, malfunction clearing, and real-world defensive scenarios.',
+      duration: '3–4 Hours',
+    },
+    {
+      level: 'INTERMEDIATE',
+      title: 'CARBINE / AR PLATFORM',
+      desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
+      duration: '3–4 Hours',
+    },
+    {
+      level: 'ALL LEVELS',
+      title: 'PRIVATE INSTRUCTION',
+      desc: 'One-on-one sessions tailored to your goals, experience level, and schedule. Maximum results, minimum wasted time.',
+      duration: 'Flexible',
+    },
+  ];
+
+  return (
+    <section id="classes" className="bg-zinc-950 py-28 px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-5">
+            <div className="w-8 h-px bg-red-600" />
+            <span className="text-red-500 text-xs font-mono tracking-widest">TRAINING PROGRAMS</span>
+            <div className="w-8 h-px bg-red-600" />
+          </div>
+          <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
+            WHAT WE <span className="text-red-600">TEACH</span>
+          </h2>
+          <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />
+          <p className="text-zinc-500 max-w-xl mx-auto text-sm leading-relaxed">
+            Classes are being scheduled now. Join the waitlist and you&apos;ll be the first to know when spots open up.
+          </p>
+        </div>
+
+        {/* Class cards */}
+        <div className="grid md:grid-cols-2 gap-5 mb-16">
+          {offerings.map((cls) => (
+            <div key={cls.title}
+              className="bg-black border border-zinc-900 hover:border-red-600/30 rounded-xl p-7 transition-all duration-300 group">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <span className="text-red-500 text-xs font-mono tracking-widest block mb-1">{cls.level}</span>
+                  <h3 className="text-xl font-black text-white tracking-wide">{cls.title}</h3>
+                </div>
+                <div className="flex items-center gap-1.5 text-zinc-600 text-xs font-mono mt-1 flex-shrink-0">
+                  <Calendar className="w-3 h-3" />
+                  <span>{cls.duration}</span>
+                </div>
+              </div>
+              <div className="h-px w-full bg-zinc-900 group-hover:bg-red-600/20 transition-colors mb-4" />
+              <p className="text-zinc-500 text-sm leading-relaxed">{cls.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Waitlist */}
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-black border border-red-600/20 rounded-xl p-10 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-red-600/5 to-transparent pointer-events-none" />
+            <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-red-600/30 pointer-events-none" />
+            <div className="absolute bottom-4 right-4 w-6 h-6 border-r border-b border-red-600/30 pointer-events-none" />
+
+            <div className="relative z-10">
+              {submitted ? (
+                <div>
+                  <CheckCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-black text-white tracking-widest mb-2">YOU&apos;RE ON THE LIST</h3>
+                  <p className="text-zinc-500 text-sm">We&apos;ll reach out as soon as classes are scheduled. Stay sharp.</p>
+                </div>
+              ) : (
+                <>
+                  <Calendar className="w-10 h-10 text-red-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-black text-white tracking-widest mb-2">JOIN THE WAITLIST</h3>
+                  <div className="h-px w-16 bg-red-600/40 mx-auto mb-4" />
+                  <p className="text-zinc-500 text-sm mb-7 max-w-sm mx-auto">
+                    Drop your email and we&apos;ll notify you the moment spots open up.
+                  </p>
+                  <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      required
+                      className="flex-1 bg-zinc-950 border border-zinc-800 focus:border-red-600 text-white placeholder-zinc-700 px-4 py-3 rounded-lg outline-none transition-colors text-sm"
+                    />
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-red-600 hover:bg-red-500 disabled:bg-red-900 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-black text-sm tracking-widest transition-colors whitespace-nowrap"
+                    >
+                      {loading ? '...' : 'NOTIFY ME'}
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
+};
+
+// ─── Merch ────────────────────────────────────────────────────────────────────
+
+const MerchSection = () => (
+  <section id="merch" className="bg-black py-28 px-6">
+    <div className="max-w-6xl mx-auto">
+      <div className="text-center mb-16">
+        <div className="flex items-center justify-center gap-3 mb-5">
+          <div className="w-8 h-px bg-red-600" />
+          <span className="text-red-500 text-xs font-mono tracking-widest">LOADOUT LAB GEAR</span>
+          <div className="w-8 h-px bg-red-600" />
+        </div>
+        <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
+          WEAR THE <span className="text-red-600">LAB</span>
+        </h2>
+        <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />
+        <p className="text-zinc-600 text-sm tracking-wide">First drop coming soon.</p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        {['TEE', 'HAT', 'PATCH', 'MORE'].map((item) => (
+          <div key={item}
+            className="bg-zinc-950 border border-zinc-900 hover:border-red-600/20 rounded-xl aspect-square flex flex-col items-center justify-center relative overflow-hidden group transition-all duration-300">
+            <div className="absolute inset-0 pointer-events-none" style={{
+              backgroundImage: `linear-gradient(rgba(220,38,38,0.03) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(220,38,38,0.03) 1px, transparent 1px)`,
+              backgroundSize: '20px 20px'
+            }} />
+            <ShoppingBag className="w-10 h-10 text-zinc-800 mb-2 relative z-10 group-hover:text-red-600/30 transition-colors" />
+            <span className="text-zinc-700 text-xs font-mono tracking-widest relative z-10">{item}</span>
+            <span className="text-zinc-800 text-xs relative z-10 mt-1 font-mono">SOON</span>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-center text-zinc-700 text-xs tracking-widest font-mono mt-10">
+        FOLLOW @LOADOUTLAB FOR UPDATES
+      </p>
+    </div>
+  </section>
+);
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+const Footer = () => (
+  <footer className="bg-zinc-950 border-t border-zinc-900 px-6 py-14">
+    <div className="max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
+        <div className="flex items-center gap-2">
+          <FlaskConical className="w-6 h-6 text-red-500" />
+          <span className="text-white font-black tracking-widest">
+            LOADOUT<span className="text-red-500">LAB</span>
+          </span>
+        </div>
+        <p className="text-zinc-700 text-xs tracking-widest font-mono text-center">
+          CONTROL. TEST. IMPROVE. &nbsp;·&nbsp; TEXAS-BASED FIREARMS INSTRUCTION
+        </p>
+        <div className="flex items-center gap-6">
+          {[
+            { label: 'CLASSES', href: '#classes' },
+            { label: 'ABOUT', href: '#about' },
+            { label: 'SIGN IN', href: '/signin' },
+          ].map(l => (
+            <a key={l.label} href={l.href}
+              className="text-zinc-700 hover:text-white text-xs tracking-widest transition-colors font-mono">
+              {l.label}
+            </a>
+          ))}
+        </div>
+      </div>
+      <div className="border-t border-zinc-900 pt-8 text-center">
+        <p className="text-zinc-800 text-xs font-mono">
+          © {new Date().getFullYear()} LOADOUT LAB. ALL RIGHTS RESERVED.
+        </p>
+      </div>
+    </div>
+  </footer>
+);
+
+// ─── Main Site ────────────────────────────────────────────────────────────────
+
+const MainSite = () => {
+  const { user } = useAuth();
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <Navbar user={user} />
+      <HeroSection />
+      <StatsBar />
+      <AboutSection />
+      <ClassesSection />
+      <MerchSection />
+      <Footer />
+    </div>
+  );
+};
+
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
+const LoadoutLab = () => {
+  const [ageVerified, setAgeVerified] = useState<boolean | null>(null);
+  const [isRejected, setIsRejected] = useState(false);
+  const [gateVisible, setGateVisible] = useState(false);
+  const [showGate, setShowGate] = useState(false);
+
+  useEffect(() => {
+    const v = sessionStorage.getItem('ageVerified');
+    if (v === 'true') {
+      setAgeVerified(true);
+    } else if (v === 'false') {
+      setIsRejected(true);
+    } else {
+      setShowGate(true);
+      setTimeout(() => setGateVisible(true), 100);
+    }
+  }, []);
+
+  const handleVerify = (over18: boolean) => {
+    sessionStorage.setItem('ageVerified', String(over18));
+    if (over18) setAgeVerified(true);
+    else setIsRejected(true);
+  };
+
+  if (isRejected) return <RejectedScreen />;
+  if (ageVerified) return <MainSite />;
+  if (showGate) return <AgeGate onVerify={handleVerify} visible={gateVisible} />;
+  return <div className="min-h-screen bg-black" />;
 };
 
 export default LoadoutLab;

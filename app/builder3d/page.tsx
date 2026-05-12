@@ -1,5 +1,5 @@
-import RifleBuilder3D from "../../components/RifleBuilder3D";
+import { redirect } from 'next/navigation';
 
 export default function Builder3DPage() {
-  return <RifleBuilder3D />;
+  redirect('/');
 }

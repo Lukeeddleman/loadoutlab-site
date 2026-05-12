@@ -1,5 +1,5 @@
-import AR15ForgeBuilder from "../../components/ar15_forge_builder";
+import { redirect } from 'next/navigation';
 
 export default function ForgePage() {
-  return <AR15ForgeBuilder />;
+  redirect('/');
 }
