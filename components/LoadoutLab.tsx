@@ -98,6 +98,7 @@ const Navbar = ({ user }: { user: unknown }) => {
     { label: 'ABOUT', href: '#about' },
     { label: 'CLASSES', href: '#classes' },
     { label: 'MERCH', href: '#merch' },
+    { label: 'CONTACT', href: '/contact' },
   ];
 
   return (
@@ -264,17 +265,17 @@ const AboutSection = () => (
             <span className="text-red-500 text-xs font-mono tracking-widest">THE INSTRUCTOR</span>
           </div>
           <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
-            BUILT ON<br /><span className="text-red-600">REAL</span><br />EXPERIENCE.
+            LUKE EDDLEMAN.<br /><span className="text-red-600">REAL</span><br />EXPERIENCE.
           </h2>
           <div className="h-px w-24 bg-red-600/40 mb-7" />
           <p className="text-zinc-400 leading-relaxed mb-5">
             Loadout Lab isn&apos;t run by someone who took a weekend course and printed a certificate.
-            This is instruction rooted in years of real-world experience — military service,
-            federal security work, and time spent as a professional range instructor.
+            Luke Eddleman brings years of real-world experience — U.S. military service,
+            federal security work, and time as a professional range instructor.
           </p>
           <p className="text-zinc-400 leading-relaxed mb-10">
             The goal is simple: take every student from where they are and make them more capable,
-            more confident, and more safe. No judgment, no ego — just results.
+            more confident, and safer with a firearm. No judgment, no ego — just results.
           </p>
 
           {/* Credentials */}
@@ -514,6 +515,7 @@ const Footer = () => (
           {[
             { label: 'CLASSES', href: '#classes' },
             { label: 'ABOUT', href: '#about' },
+            { label: 'CONTACT', href: '/contact' },
             { label: 'SIGN IN', href: '/signin' },
           ].map(l => (
             <a key={l.label} href={l.href}
