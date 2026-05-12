@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-04-22.dahlia',
-});
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2026-04-22.dahlia',
+  });
+}
 
 export async function POST(req: NextRequest) {
+  const stripe = getStripe();
   const body = await req.text();
   const sig = req.headers.get('stripe-signature')!;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -25,7 +28,10 @@ export async function POST(req: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
     const items = JSON.parse(session.metadata?.items || '[]');
-    const shipping = session.shipping_details;
+    // shipping_details was renamed to customer_details in newer Stripe API versions
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sessionAny = session as any;
+    const shipping = sessionAny.shipping_details ?? sessionAny.customer_details;
 
     if (!items.length || !shipping?.address) {
       console.error('Missing items or shipping in session:', session.id);
