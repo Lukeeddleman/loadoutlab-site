@@ -25,18 +25,24 @@ export async function GET() {
     const product = d.result.sync_product;
     const variants = d.result.sync_variants;
 
-    // Get unique colors with their mockup images
-    const colorMap: Record<string, { image: string; variantId: number }> = {};
+    // Get unique colors with all available mockup/preview images
+    const colorMap: Record<string, { image: string; variantId: number; images: string[] }> = {};
     variants.forEach((v: {
       color: string;
       id: number;
-      files: { type: string; preview_url: string }[];
+      files: { type: string; preview_url: string; visible: boolean }[];
     }) => {
       if (!colorMap[v.color]) {
-        const mockup = v.files.find((f: { type: string }) => f.type === 'mockup' || f.type === 'preview');
+        // Collect all visible preview/mockup images for this color
+        const imageFiles = v.files.filter((f) =>
+          (f.type === 'mockup' || f.type === 'preview' || f.type === 'front') && f.preview_url
+        );
+        const images = imageFiles.map((f) => f.preview_url);
+        const primaryImage = images[0] || product.thumbnail_url;
         colorMap[v.color] = {
-          image: mockup?.preview_url || product.thumbnail_url,
+          image: primaryImage,
           variantId: v.id,
+          images,
         };
       }
     });

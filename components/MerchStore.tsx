@@ -17,7 +17,7 @@ interface Product {
   id: number;
   name: string;
   thumbnail: string;
-  colors: Record<string, { image: string; variantId: number }>;
+  colors: Record<string, { image: string; variantId: number; images: string[] }>;
   sizes: string[];
   variants: Variant[];
 }

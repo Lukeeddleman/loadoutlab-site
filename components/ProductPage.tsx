@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
+import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight, ChevronLeft } from 'lucide-react'; // Loader2 used in checkout button
 
 interface Variant {
   id: number;
@@ -17,50 +17,29 @@ interface Product {
   id: number;
   name: string;
   thumbnail: string;
-  colors: Record<string, { image: string; variantId: number }>;
+  colors: Record<string, { image: string; variantId: number; images: string[] }>;
   sizes: string[];
   variants: Variant[];
 }
-
-// Map our sync product IDs to Printful base product IDs for mockup generator
-const SYNC_TO_BASE: Record<number, number> = {
-  432267769: 917, // SAAMI .308 Tee
-  432269121: 396, // Loadout Lab Weathered Cap
-};
 
 export default function ProductPage({ product }: { product: Product }) {
   const colorNames = Object.keys(product.colors);
   const [selectedColor, setSelectedColor] = useState(colorNames[0] || '');
   const [selectedSize, setSelectedSize] = useState((product.sizes[0] as string) || '');
   const [checkingOut, setCheckingOut] = useState(false);
-  const [mockups, setMockups] = useState<string[]>([]);
-  const [mockupsLoading, setMockupsLoading] = useState(true);
   const [activeImage, setActiveImage] = useState<string>('');
 
   const variant = product.variants.find(
     (v) => v.color === selectedColor && v.size === selectedSize
   );
-  const defaultImage = product.colors[selectedColor]?.image || product.thumbnail;
-  const currentImage = activeImage || defaultImage;
+  const colorData = product.colors[selectedColor];
+  const images = colorData?.images?.length ? colorData.images : [colorData?.image || product.thumbnail];
+  const currentImage = activeImage || images[0];
 
-  // Fetch mockups when color/variant changes
+  // Reset active image when color changes
   useEffect(() => {
-    const baseProductId = SYNC_TO_BASE[product.id];
-    if (!baseProductId || !variant) return;
-
-    setMockupsLoading(true);
     setActiveImage('');
-    fetch(`/api/mockups?productId=${baseProductId}&variantId=${variant.baseVariantId}`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.mockups?.length) {
-          setMockups(d.mockups);
-          setActiveImage(d.mockups[0]);
-        }
-        setMockupsLoading(false);
-      })
-      .catch(() => setMockupsLoading(false));
-  }, [product.id, variant?.id]);
+  }, [selectedColor]);
 
   const buyNow = async () => {
     if (!variant) return;
@@ -121,11 +100,6 @@ export default function ProductPage({ product }: { product: Product }) {
             <div className="relative aspect-square bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
               <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-red-600/40 z-10" />
               <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/40 z-10" />
-              {mockupsLoading && (
-                <div className="absolute inset-0 flex items-center justify-center z-20 bg-zinc-950/60">
-                  <Loader2 className="w-8 h-8 text-red-600 animate-spin" />
-                </div>
-              )}
               <Image
                 src={currentImage}
                 alt={`${product.name} — ${selectedColor}`}
@@ -133,21 +107,21 @@ export default function ProductPage({ product }: { product: Product }) {
                 className="object-cover transition-all duration-300"
                 priority
               />
-              {/* Prev/Next arrows — only show when multiple mockups */}
-              {mockups.length > 1 && (
+              {/* Prev/Next arrows — only show when multiple images */}
+              {images.length > 1 && (
                 <>
                   <button
                     onClick={() => {
-                      const idx = mockups.indexOf(activeImage);
-                      setActiveImage(mockups[(idx - 1 + mockups.length) % mockups.length]);
+                      const idx = images.indexOf(currentImage);
+                      setActiveImage(images[(idx - 1 + images.length) % images.length]);
                     }}
                     className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 bg-black/60 hover:bg-black/80 border border-zinc-700 rounded-full flex items-center justify-center transition-all">
                     <ChevronLeft className="w-4 h-4 text-white" />
                   </button>
                   <button
                     onClick={() => {
-                      const idx = mockups.indexOf(activeImage);
-                      setActiveImage(mockups[(idx + 1) % mockups.length]);
+                      const idx = images.indexOf(currentImage);
+                      setActiveImage(images[(idx + 1) % images.length]);
                     }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 bg-black/60 hover:bg-black/80 border border-zinc-700 rounded-full flex items-center justify-center transition-all">
                     <ChevronRight className="w-4 h-4 text-white" />
@@ -156,12 +130,12 @@ export default function ProductPage({ product }: { product: Product }) {
               )}
             </div>
             {/* Thumbnail row */}
-            {mockups.length > 1 && (
+            {images.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-1">
-                {mockups.map((url, i) => (
+                {images.map((url, i) => (
                   <button key={i} onClick={() => setActiveImage(url)}
                     className={`relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      activeImage === url ? 'border-red-600' : 'border-zinc-800 hover:border-zinc-500'
+                      currentImage === url ? 'border-red-600' : 'border-zinc-800 hover:border-zinc-500'
                     }`}>
                     <Image src={url} alt={`View ${i + 1}`} fill className="object-cover" />
                   </button>
