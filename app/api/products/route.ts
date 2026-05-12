@@ -14,6 +14,16 @@ const LOCAL_IMAGES: Record<number, string[]> = {
     '/products/cap/9.jpg',
     '/products/cap/10.jpg',
   ],
+  432267769: [ // SAAMI .308 Tee
+    '/products/tee/1.jpg',
+    '/products/tee/2.jpg',
+    '/products/tee/3.jpg',
+    '/products/tee/4.jpg',
+    '/products/tee/5.jpg',
+    '/products/tee/6.jpg',
+    '/products/tee/7.jpg',
+    '/products/tee/8.jpg',
+  ],
 };
 
 export async function GET() {
