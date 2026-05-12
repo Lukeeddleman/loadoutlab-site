@@ -126,15 +126,7 @@ const Navbar = ({ user }: { user: unknown }) => {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          {user ? (
-            <a href="/account" className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-xs tracking-widest transition-colors">
-              <User className="w-3.5 h-3.5" /> ACCOUNT
-            </a>
-          ) : (
-            <a href="/signin" className="text-zinc-500 hover:text-white text-xs tracking-widest transition-colors">
-              SIGN IN
-            </a>
-          )}
+
           <a href="#classes"
             className="bg-red-600 hover:bg-red-500 text-white px-5 py-2.5 rounded-lg text-xs font-black tracking-widest transition-colors">
             BOOK A CLASS
@@ -485,7 +477,6 @@ const Footer = () => (
             { label: 'CLASSES', href: '#classes' },
             { label: 'ABOUT', href: '#about' },
             { label: 'CONTACT', href: '/contact' },
-            { label: 'SIGN IN', href: '/signin' },
           ].map(l => (
             <a key={l.label} href={l.href}
               className="text-zinc-700 hover:text-white text-xs tracking-widest transition-colors font-mono">
