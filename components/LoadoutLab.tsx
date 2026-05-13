@@ -356,6 +356,22 @@ const ClassesSection = () => {
       comingSoon: true,
     },
     {
+      slug: 'squad-training',
+      level: 'ALL LEVELS',
+      title: 'SQUAD TRAINING',
+      desc: 'Train with your people. Group sessions for friends, couples, families, or teams who want to build skills and confidence together.',
+      duration: '3–4 Hours',
+      comingSoon: true,
+    },
+    {
+      slug: 'precision-fundamentals',
+      level: 'INTERMEDIATE / ADVANCED',
+      title: 'PRECISION FUNDAMENTALS',
+      desc: 'Dial in your accuracy. The science and mechanics behind consistent, repeatable precision shooting at distance.',
+      duration: '3–4 Hours',
+      comingSoon: true,
+    },
+    {
       slug: 'private-instruction',
       level: 'ALL LEVELS',
       title: 'PRIVATE INSTRUCTION',
