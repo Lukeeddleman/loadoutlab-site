@@ -406,7 +406,7 @@ const ClassesSection = () => {
             <a key={cls.title} href={`/classes/${cls.slug}`}
               className={`rounded-xl p-7 transition-all duration-300 group block border ${
                 cls.comingSoon
-                  ? 'bg-zinc-950 border-zinc-900 opacity-60 cursor-default'
+                  ? 'bg-zinc-950 border-zinc-900 hover:border-zinc-700 opacity-70 hover:opacity-90'
                   : 'bg-black border-zinc-900 hover:border-red-600/30'
               }`}>
               <div className="flex items-start justify-between mb-3">
@@ -431,7 +431,11 @@ const ClassesSection = () => {
                 cls.comingSoon ? 'bg-zinc-900' : 'bg-zinc-900 group-hover:bg-red-600/20 transition-colors'
               }`} />
               <p className="text-zinc-500 text-sm leading-relaxed mb-4">{cls.desc}</p>
-              {!cls.comingSoon && (
+              {cls.comingSoon ? (
+                <span className="text-zinc-600 group-hover:text-zinc-400 text-xs font-black tracking-widest flex items-center gap-1 transition-colors">
+                  VIEW DETAILS <ArrowRight className="w-3 h-3" />
+                </span>
+              ) : (
                 <span className="text-red-500 group-hover:text-red-400 text-xs font-black tracking-widest flex items-center gap-1 transition-colors">
                   LEARN MORE & BOOK <ArrowRight className="w-3 h-3" />
                 </span>
