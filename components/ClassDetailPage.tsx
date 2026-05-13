@@ -1,7 +1,8 @@
 "use client";
 
-import React from 'react';
-import { FlaskConical, ArrowLeft, Clock, ChevronRight, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { FlaskConical, ArrowLeft, Clock, ChevronRight, CheckCircle, Bell } from 'lucide-react';
+import { addToWaitlist } from '@/lib/supabase';
 
 interface ClassDetailProps {
   slug: string;
@@ -15,6 +16,20 @@ interface ClassDetailProps {
 }
 
 export default function ClassDetailPage({ level, title, duration, desc, details, calUrl, comingSoon }: ClassDetailProps) {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleWaitlist = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    const { error } = await addToWaitlist(email);
+    if (!error || error.message?.includes('duplicate') || error.message?.includes('unique')) {
+      setSubmitted(true);
+    }
+    setLoading(false);
+  };
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Grid */}
@@ -90,20 +105,43 @@ export default function ClassDetailPage({ level, title, duration, desc, details,
               <div className="relative z-10">
                 {comingSoon ? (
                   <>
-                    <p className="text-zinc-600 text-xs font-mono tracking-widest mb-2">AVAILABILITY</p>
-                    <h2 className="text-2xl font-black text-white tracking-tight mb-1">COMING SOON</h2>
-                    <div className="h-px w-16 bg-zinc-800 mb-6" />
-                    <p className="text-zinc-500 text-sm leading-relaxed mb-8">
-                      Group classes are coming soon. Join the waitlist and we&apos;ll notify you when dates open up.
+                    <div className="flex items-center gap-2 mb-2">
+                      <Bell className="w-4 h-4 text-zinc-600" />
+                      <p className="text-zinc-600 text-xs font-mono tracking-widest">COMING SOON</p>
+                    </div>
+                    <h2 className="text-2xl font-black text-white tracking-tight mb-1">GET NOTIFIED</h2>
+                    <div className="h-px w-16 bg-zinc-800 mb-5" />
+                    <p className="text-zinc-500 text-sm leading-relaxed mb-6">
+                      This class is coming soon. Drop your email and you&apos;ll be the first to know when dates open up.
                     </p>
-                    <a
-                      href="/#classes"
-                      className="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2 mb-4"
-                    >
-                      JOIN THE WAITLIST
-                    </a>
-                    <p className="text-zinc-700 text-xs text-center font-mono">
-                      Or call us at (512) 553-5798
+                    {submitted ? (
+                      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 text-center">
+                        <CheckCircle className="w-6 h-6 text-red-500 mx-auto mb-2" />
+                        <p className="text-white text-sm font-bold tracking-wide">You&apos;re on the list.</p>
+                        <p className="text-zinc-500 text-xs mt-1">We&apos;ll reach out when this class opens up.</p>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleWaitlist} className="space-y-3">
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          placeholder="your@email.com"
+                          className="w-full bg-black border border-zinc-800 focus:border-red-600 text-white placeholder-zinc-700 px-4 py-3 rounded-lg outline-none transition-colors text-sm"
+                        />
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-red-600/40 disabled:opacity-50 text-white py-3 rounded-lg font-black text-sm tracking-widest transition-all flex items-center justify-center gap-2"
+                        >
+                          <Bell className="w-4 h-4" />
+                          {loading ? 'SUBMITTING...' : 'NOTIFY ME'}
+                        </button>
+                      </form>
+                    )}
+                    <p className="text-zinc-700 text-xs text-center font-mono mt-4">
+                      Or call (512) 553-5798
                     </p>
                   </>
                 ) : (
