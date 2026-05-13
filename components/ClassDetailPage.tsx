@@ -11,9 +11,10 @@ interface ClassDetailProps {
   desc: string;
   details: string[];
   calUrl: string;
+  comingSoon?: boolean;
 }
 
-export default function ClassDetailPage({ level, title, duration, desc, details, calUrl }: ClassDetailProps) {
+export default function ClassDetailPage({ level, title, duration, desc, details, calUrl, comingSoon }: ClassDetailProps) {
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Grid */}
@@ -87,37 +88,59 @@ export default function ClassDetailPage({ level, title, duration, desc, details,
               <div className="absolute bottom-4 right-4 w-6 h-6 border-r border-b border-red-600/30 pointer-events-none" />
 
               <div className="relative z-10">
-                <p className="text-red-500 text-xs font-mono tracking-widest mb-2">READY TO TRAIN?</p>
-                <h2 className="text-2xl font-black text-white tracking-tight mb-1">BOOK YOUR SPOT</h2>
-                <div className="h-px w-16 bg-red-600/40 mb-6" />
+                {comingSoon ? (
+                  <>
+                    <p className="text-zinc-600 text-xs font-mono tracking-widest mb-2">AVAILABILITY</p>
+                    <h2 className="text-2xl font-black text-white tracking-tight mb-1">COMING SOON</h2>
+                    <div className="h-px w-16 bg-zinc-800 mb-6" />
+                    <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+                      Group classes are coming soon. Join the waitlist and we&apos;ll notify you when dates open up.
+                    </p>
+                    <a
+                      href="/#classes"
+                      className="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2 mb-4"
+                    >
+                      JOIN THE WAITLIST
+                    </a>
+                    <p className="text-zinc-700 text-xs text-center font-mono">
+                      Or call us at (512) 553-5798
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-red-500 text-xs font-mono tracking-widest mb-2">READY TO TRAIN?</p>
+                    <h2 className="text-2xl font-black text-white tracking-tight mb-1">BOOK YOUR SPOT</h2>
+                    <div className="h-px w-16 bg-red-600/40 mb-6" />
 
-                <div className="space-y-3 mb-8">
-                  {[
-                    'Pick a date and time that works for you',
-                    'Receive confirmation and details via email',
-                    'Show up ready to work',
-                  ].map((step, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="w-5 h-5 bg-red-600/20 border border-red-600/30 rounded text-red-500 text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                        {i + 1}
-                      </div>
-                      <span className="text-zinc-400 text-sm">{step}</span>
+                    <div className="space-y-3 mb-8">
+                      {[
+                        'Pick a date and time that works for you',
+                        'Receive confirmation and details via email',
+                        'Show up ready to work',
+                      ].map((step, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <div className="w-5 h-5 bg-red-600/20 border border-red-600/30 rounded text-red-500 text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                            {i + 1}
+                          </div>
+                          <span className="text-zinc-400 text-sm">{step}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
-                <a
-                  href={calUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-red-600 hover:bg-red-500 text-white py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2 mb-4"
-                >
-                  BOOK NOW <ChevronRight className="w-4 h-4" />
-                </a>
+                    <a
+                      href={calUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-red-600 hover:bg-red-500 text-white py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2 mb-4"
+                    >
+                      BOOK NOW <ChevronRight className="w-4 h-4" />
+                    </a>
 
-                <p className="text-zinc-700 text-xs text-center font-mono">
-                  Powered by Calendly &nbsp;·&nbsp; No account required
-                </p>
+                    <p className="text-zinc-700 text-xs text-center font-mono">
+                      Powered by Calendly &nbsp;·&nbsp; No account required
+                    </p>
+                  </>
+                )}
               </div>
             </div>
 

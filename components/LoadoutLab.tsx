@@ -337,6 +337,7 @@ const ClassesSection = () => {
       title: 'FUNDAMENTALS',
       desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
       duration: '2–3 Hours',
+      comingSoon: true,
     },
     {
       slug: 'defensive-pistol',
@@ -344,6 +345,7 @@ const ClassesSection = () => {
       title: 'DEFENSIVE PISTOL',
       desc: 'Drawing from holster, close-quarters drills, malfunction clearing, and real-world defensive scenarios.',
       duration: '3–4 Hours',
+      comingSoon: true,
     },
     {
       slug: 'carbine-ar-platform',
@@ -351,6 +353,7 @@ const ClassesSection = () => {
       title: 'CARBINE / AR PLATFORM',
       desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
       duration: '3–4 Hours',
+      comingSoon: true,
     },
     {
       slug: 'private-instruction',
@@ -358,6 +361,7 @@ const ClassesSection = () => {
       title: 'PRIVATE INSTRUCTION',
       desc: 'One-on-one sessions tailored to your goals, experience level, and schedule. Maximum results, minimum wasted time.',
       duration: 'Flexible',
+      comingSoon: false,
     },
   ];
 
@@ -384,22 +388,38 @@ const ClassesSection = () => {
         <div className="grid md:grid-cols-2 gap-5 mb-16">
           {offerings.map((cls) => (
             <a key={cls.title} href={`/classes/${cls.slug}`}
-              className="bg-black border border-zinc-900 hover:border-red-600/30 rounded-xl p-7 transition-all duration-300 group block">
+              className={`rounded-xl p-7 transition-all duration-300 group block border ${
+                cls.comingSoon
+                  ? 'bg-zinc-950 border-zinc-900 opacity-60 cursor-default'
+                  : 'bg-black border-zinc-900 hover:border-red-600/30'
+              }`}>
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <span className="text-red-500 text-xs font-mono tracking-widest block mb-1">{cls.level}</span>
+                  <span className={`text-xs font-mono tracking-widest block mb-1 ${
+                    cls.comingSoon ? 'text-zinc-600' : 'text-red-500'
+                  }`}>{cls.level}</span>
                   <h3 className="text-xl font-black text-white tracking-wide">{cls.title}</h3>
                 </div>
-                <div className="flex items-center gap-1.5 text-zinc-600 text-xs font-mono mt-1 flex-shrink-0">
-                  <Calendar className="w-3 h-3" />
-                  <span>{cls.duration}</span>
+                <div className="flex items-center gap-1.5 text-xs font-mono mt-1 flex-shrink-0">
+                  {cls.comingSoon ? (
+                    <span className="text-zinc-700 font-mono tracking-widest text-xs border border-zinc-800 rounded px-2 py-0.5">COMING SOON</span>
+                  ) : (
+                    <>
+                      <Calendar className="w-3 h-3 text-zinc-600" />
+                      <span className="text-zinc-600">{cls.duration}</span>
+                    </>
+                  )}
                 </div>
               </div>
-              <div className="h-px w-full bg-zinc-900 group-hover:bg-red-600/20 transition-colors mb-4" />
+              <div className={`h-px w-full mb-4 ${
+                cls.comingSoon ? 'bg-zinc-900' : 'bg-zinc-900 group-hover:bg-red-600/20 transition-colors'
+              }`} />
               <p className="text-zinc-500 text-sm leading-relaxed mb-4">{cls.desc}</p>
-              <span className="text-red-500 group-hover:text-red-400 text-xs font-black tracking-widest flex items-center gap-1 transition-colors">
-                LEARN MORE & BOOK <ArrowRight className="w-3 h-3" />
-              </span>
+              {!cls.comingSoon && (
+                <span className="text-red-500 group-hover:text-red-400 text-xs font-black tracking-widest flex items-center gap-1 transition-colors">
+                  LEARN MORE & BOOK <ArrowRight className="w-3 h-3" />
+                </span>
+              )}
             </a>
           ))}
         </div>

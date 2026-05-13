@@ -9,9 +9,11 @@ const CLASSES: Record<string, {
   desc: string;
   details: string[];
   calUrl: string;
+  comingSoon?: boolean;
 }> = {
   'fundamentals': {
     slug: 'fundamentals',
+    comingSoon: true,
     level: 'BEGINNER',
     title: 'FUNDAMENTALS',
     duration: '2–3 Hours',
@@ -28,6 +30,7 @@ const CLASSES: Record<string, {
   },
   'defensive-pistol': {
     slug: 'defensive-pistol',
+    comingSoon: true,
     level: 'INTERMEDIATE',
     title: 'DEFENSIVE PISTOL',
     duration: '3–4 Hours',
@@ -44,6 +47,7 @@ const CLASSES: Record<string, {
   },
   'carbine-ar-platform': {
     slug: 'carbine-ar-platform',
+    comingSoon: true,
     level: 'INTERMEDIATE',
     title: 'CARBINE / AR PLATFORM',
     duration: '3–4 Hours',
