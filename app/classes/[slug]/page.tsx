@@ -89,7 +89,7 @@ const CLASSES: Record<string, {
       'Ballistics basics — MOA, wind, drop',
       'Proper breathing, trigger control, and follow-through for precision',
       'Positional shooting — prone, supported, and barricade',
-      'Zeroing and andconfirming zero at distance',
+      'Zeroing and confirming zero at distance',
       'Live fire drills with measurable accuracy benchmarks',
       'Prerequisite: basic firearm proficiency required',
     ],
