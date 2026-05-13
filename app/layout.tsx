@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://loadoutlab.com/og-image.png",
+        url: "https://loadoutlab.com/og-image.PNG",
         width: 1200,
         height: 630,
         alt: "Loadout Lab — Texas Firearms Instruction",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Loadout Lab — Control. Test. Improve.",
     description: "Texas-based firearms instruction from a military veteran and federal security professional.",
-    images: ["https://loadoutlab.com/og-image.png"],
+    images: ["https://loadoutlab.com/og-image.PNG"],
   },
 };
 
