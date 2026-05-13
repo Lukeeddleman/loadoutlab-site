@@ -14,6 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   title: "Loadout Lab — Control. Test. Improve.",
   description: "Texas-based firearms instruction from a military veteran and federal security professional. Classes, gear, and real-world training.",
   keywords: ["firearms instruction", "texas shooting classes", "gun training", "defensive pistol", "AR-15 training", "concealed carry"],
