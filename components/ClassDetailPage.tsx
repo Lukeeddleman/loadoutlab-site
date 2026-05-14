@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { FlaskConical, ArrowLeft, Clock, ChevronRight, CheckCircle, Bell, PackageCheck, Backpack } from 'lucide-react';
+import PrivateBookingWidget from '@/components/PrivateBookingWidget';
 import { addToWaitlist } from '@/lib/supabase';
 
 interface ClassDetailProps {
-  slug: string;
+  slug: string; // used to conditionally render private booking widget
   level: string;
   title: string;
   duration: string;
@@ -18,7 +19,7 @@ interface ClassDetailProps {
   comingSoon?: boolean;
 }
 
-export default function ClassDetailPage({ level, title, duration, price, desc, details, included, toBring, calUrl, comingSoon }: ClassDetailProps) {
+export default function ClassDetailPage({ slug, level, title, duration, price, desc, details, included, toBring, calUrl, comingSoon }: ClassDetailProps) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -140,35 +141,39 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
                     <p className="text-red-500 text-xs font-mono tracking-widest mb-2">READY TO TRAIN?</p>
                     <h2 className="text-2xl font-black text-white tracking-tight mb-1">BOOK YOUR SPOT</h2>
                     <div className="h-px w-16 bg-red-600/40 mb-3" />
-                    <p className="text-3xl font-black text-red-500 tracking-tight mb-6">{price}</p>
 
-                    <div className="space-y-3 mb-8">
-                      {[
-                        'Pick a date and time that works for you',
-                        'Receive confirmation and details via email',
-                        'Show up ready to work',
-                      ].map((step, i) => (
-                        <div key={i} className="flex items-start gap-3">
-                          <div className="w-5 h-5 bg-red-600/20 border border-red-600/30 rounded text-red-500 text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                            {i + 1}
-                          </div>
-                          <span className="text-zinc-400 text-sm">{step}</span>
+                    {slug === 'private-instruction' ? (
+                      <PrivateBookingWidget />
+                    ) : (
+                      <>
+                        <p className="text-3xl font-black text-red-500 tracking-tight mb-6">{price}</p>
+                        <div className="space-y-3 mb-8">
+                          {[
+                            'Pick a date and time that works for you',
+                            'Receive confirmation and details via email',
+                            'Show up ready to work',
+                          ].map((step, i) => (
+                            <div key={i} className="flex items-start gap-3">
+                              <div className="w-5 h-5 bg-red-600/20 border border-red-600/30 rounded text-red-500 text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                                {i + 1}
+                              </div>
+                              <span className="text-zinc-400 text-sm">{step}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-
-                    <a
-                      href={calUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-red-600 hover:bg-red-500 text-white py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2 mb-4"
-                    >
-                      BOOK NOW <ChevronRight className="w-4 h-4" />
-                    </a>
-
-                    <p className="text-zinc-700 text-xs text-center font-mono">
-                      Powered by Calendly &nbsp;·&nbsp; No account required
-                    </p>
+                        <a
+                          href={calUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full bg-red-600 hover:bg-red-500 text-white py-4 rounded-lg font-black text-sm tracking-widest transition-colors flex items-center justify-center gap-2 mb-4"
+                        >
+                          BOOK NOW <ChevronRight className="w-4 h-4" />
+                        </a>
+                        <p className="text-zinc-700 text-xs text-center font-mono">
+                          Powered by Calendly &nbsp;·&nbsp; No account required
+                        </p>
+                      </>
+                    )}
                   </>
                 )}
               </div>
