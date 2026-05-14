@@ -141,7 +141,7 @@ export async function GET() {
     return {
       id: product.id,
       name: product.name,
-      thumbnail: localImages?.[0] || product.thumbnail_url,
+      thumbnail: (Array.isArray(localImages) ? localImages[0] : undefined) || product.thumbnail_url,
       colors: colorMap,
       sizes,
       variants: variants.map((v: {
