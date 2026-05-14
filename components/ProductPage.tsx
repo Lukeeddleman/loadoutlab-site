@@ -46,6 +46,42 @@ const PRODUCT_DESCRIPTIONS: Record<string, { tagline: string; description: strin
       'One size',
     ],
   },
+  'Control, Test, Improve Graphic Tee': {
+    tagline: 'The formula. On your back.',
+    description:
+      'This isn\'t a shirt with a logo slapped on it. The Control, Test, Improve Graphic Tee lays out the entire Loadout Lab philosophy — gear specs, range data, blueprint-style AR diagram, coordinates, the whole thing. Wear it when you want people to ask questions you\'re ready to answer.',
+    details: [
+      'Heavyweight black tee',
+      'Full back graphic — AR schematic, LL logo, coordinates, and tagline',
+      'Red, white, and gray on black colorway',
+      'Austin / Kyle, Texas coordinates printed',
+      'Relaxed fit',
+    ],
+  },
+  'Loadout Lab Logo Patch': {
+    tagline: 'Put it where it counts.',
+    description:
+      'The Loadout Lab Logo Patch. Clean LL monogram, "LOADOUT LAB" across the bottom, embroidered on black. Hook-and-loop backing means it goes wherever you go — plate carrier, range bag, hat, jacket, wall. No frills, no fuss.',
+    details: [
+      'Embroidered LL logo patch',
+      'Hook-and-loop velcro backing',
+      'Black background with gray embroidery',
+      'Merrowed border edge',
+      'One size',
+    ],
+  },
+  'Loadout Lab Logo Hat': {
+    tagline: 'Clean lid. No explanation needed.',
+    description:
+      'The Loadout Lab Logo Hat. Black dad hat, embroidered LL monogram up front, nothing else competing for attention. Low-profile, unstructured, fits like it\'s already yours. The hat you reach for without thinking about it.',
+    details: [
+      'Unstructured black dad hat',
+      'Embroidered silver LL monogram',
+      'Low-profile crown',
+      'Adjustable strap — one size fits most',
+      'Ventilated eyelets',
+    ],
+  },
   'SAAMI .308 Tee': {
     tagline: 'Know your specs.',
     description:
