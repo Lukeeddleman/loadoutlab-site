@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FlaskConical, ArrowLeft, Clock, ChevronRight, CheckCircle, Bell, PackageCheck, Backpack } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowLeft, Clock, ChevronRight, CheckCircle, Bell, PackageCheck, Backpack } from 'lucide-react';
 import PrivateBookingWidget from '@/components/PrivateBookingWidget';
 import { addToWaitlist } from '@/lib/supabase';
 
@@ -50,11 +51,8 @@ export default function ClassDetailPage({ slug, level, title, duration, price, d
       {/* Header */}
       <header className="bg-black/95 border-b border-zinc-900 px-6 py-4 relative z-10">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 group">
-            <FlaskConical className="w-6 h-6 text-red-500 group-hover:text-red-400 transition-colors" />
-            <span className="text-white font-black tracking-widest text-base">
-              LOADOUT<span className="text-red-500">LAB</span>
-            </span>
+          <a href="/" className="flex items-center group">
+            <Image src="/logo.png" alt="Loadout Lab" width={120} height={40} className="h-10 w-auto" />
           </a>
           <a href="/#classes" className="flex items-center gap-2 text-zinc-600 hover:text-white text-xs tracking-widest font-mono transition-colors">
             <ArrowLeft className="w-3.5 h-3.5" /> ALL CLASSES
