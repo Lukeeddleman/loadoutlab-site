@@ -9,6 +9,7 @@ interface ClassDetailProps {
   level: string;
   title: string;
   duration: string;
+  price: string;
   desc: string;
   details: string[];
   included: string[];
@@ -17,7 +18,7 @@ interface ClassDetailProps {
   comingSoon?: boolean;
 }
 
-export default function ClassDetailPage({ level, title, duration, desc, details, included, toBring, calUrl, comingSoon }: ClassDetailProps) {
+export default function ClassDetailPage({ level, title, duration, price, desc, details, included, toBring, calUrl, comingSoon }: ClassDetailProps) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -144,7 +145,8 @@ export default function ClassDetailPage({ level, title, duration, desc, details,
                       <p className="text-zinc-600 text-xs font-mono tracking-widest">COMING SOON</p>
                     </div>
                     <h2 className="text-2xl font-black text-white tracking-tight mb-1">GET NOTIFIED</h2>
-                    <div className="h-px w-16 bg-zinc-800 mb-5" />
+                    <div className="h-px w-16 bg-zinc-800 mb-3" />
+                    <p className="text-3xl font-black text-red-500 tracking-tight mb-5">{price}</p>
                     <p className="text-zinc-500 text-sm leading-relaxed mb-6">
                       This class is coming soon. Drop your email and you&apos;ll be the first to know when dates open up.
                     </p>
@@ -182,7 +184,8 @@ export default function ClassDetailPage({ level, title, duration, desc, details,
                   <>
                     <p className="text-red-500 text-xs font-mono tracking-widest mb-2">READY TO TRAIN?</p>
                     <h2 className="text-2xl font-black text-white tracking-tight mb-1">BOOK YOUR SPOT</h2>
-                    <div className="h-px w-16 bg-red-600/40 mb-6" />
+                    <div className="h-px w-16 bg-red-600/40 mb-3" />
+                    <p className="text-3xl font-black text-red-500 tracking-tight mb-6">{price}</p>
 
                     <div className="space-y-3 mb-8">
                       {[

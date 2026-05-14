@@ -6,6 +6,7 @@ const CLASSES: Record<string, {
   level: string;
   title: string;
   duration: string;
+  price: string;
   desc: string;
   details: string[];
   included: string[];
@@ -19,6 +20,7 @@ const CLASSES: Record<string, {
     level: 'BEGINNER',
     title: 'FUNDAMENTALS',
     duration: '2–3 Hours',
+    price: '$85 / person',
     desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
     details: [
       'Firearm safety rules and range etiquette',
@@ -50,6 +52,7 @@ const CLASSES: Record<string, {
     level: 'INTERMEDIATE',
     title: 'DEFENSIVE PISTOL',
     duration: '3–4 Hours',
+    price: '$100 / person',
     desc: 'Drawing from holster, close-quarters drills, malfunction clearing, and real-world defensive scenarios.',
     details: [
       'Safe and efficient draw from holster',
@@ -82,6 +85,7 @@ const CLASSES: Record<string, {
     level: 'INTERMEDIATE',
     title: 'CARBINE / AR PLATFORM',
     duration: '3–4 Hours',
+    price: '$100 / person',
     desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
     details: [
       'AR-15 platform overview and safe handling',
@@ -114,6 +118,7 @@ const CLASSES: Record<string, {
     level: 'ALL LEVELS',
     title: 'SQUAD TRAINING',
     duration: '3–4 Hours',
+    price: '$100 / person',
     desc: 'Train with your people. Group sessions designed for friends, couples, families, or teams who want to build skills and confidence together.',
     details: [
       'Designed for 3–8 participants',
@@ -147,6 +152,7 @@ const CLASSES: Record<string, {
     level: 'INTERMEDIATE / ADVANCED',
     title: 'PRECISION FUNDAMENTALS',
     duration: '3–4 Hours',
+    price: '$100 / person',
     desc: 'Dial in your accuracy. This course covers the science and mechanics behind consistent, repeatable precision shooting at distance.',
     details: [
       'Ballistics basics — MOA, wind, drop',
@@ -180,6 +186,7 @@ const CLASSES: Record<string, {
     level: 'ALL LEVELS',
     title: 'PRIVATE INSTRUCTION',
     duration: 'Flexible',
+    price: '$100 / hour',
     desc: 'One-on-one sessions tailored to your goals, experience level, and schedule. Maximum results, minimum wasted time.',
     details: [
       'Fully customized curriculum for your skill level',
