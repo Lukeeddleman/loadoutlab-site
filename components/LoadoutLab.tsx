@@ -512,7 +512,7 @@ const MainSite = () => {
       <StatsBar />
       <AboutSection />
       <ClassesSection />
-      <MerchStore />
+      <MerchStore limit={3} showViewAll />
       <Footer />
     </div>
   );
