@@ -29,6 +29,21 @@ const LOCAL_IMAGES: Record<number, string[]> = {
     '/products/tee/7.jpg',
     '/products/tee/8.jpg',
   ],
+  432626242: [ // New Hat
+    '/products/hat2/1.jpg',
+    '/products/hat2/2.jpg',
+    '/products/hat2/3.jpg',
+  ],
+  432627030: [ // New Patch
+    '/products/patch2/1.jpg',
+    '/products/patch2/2.jpg',
+    '/products/patch2/3.jpg',
+  ],
+  432629722: [ // New Tee
+    '/products/tee2/1.jpg',
+    '/products/tee2/2.jpg',
+    '/products/tee2/3.jpg',
+  ],
 };
 
 export async function GET() {
