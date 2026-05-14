@@ -50,7 +50,7 @@ export default function MerchStore() {
             <span className="text-red-500 text-xs font-mono tracking-widest">LOADOUT LAB GEAR</span>
             <div className="w-8 h-px bg-red-600" />
           </div>
-          <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
             WEAR THE <span className="text-red-600">LAB</span>
           </h2>
           <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />

@@ -65,7 +65,7 @@ export default function ClassDetailPage({ slug, level, title, duration, price, d
       <main className="max-w-5xl mx-auto px-6 py-16 relative z-10">
 
         {/* Top zone — title + booking card */}
-        <div className="grid md:grid-cols-2 gap-12 items-start mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-12">
 
           {/* Left — title + desc */}
           <div>
@@ -73,7 +73,7 @@ export default function ClassDetailPage({ slug, level, title, duration, price, d
               <div className="w-8 h-px bg-red-600" />
               <span className="text-red-500 text-xs font-mono tracking-widest">{level}</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
               {title}
             </h1>
             <div className="h-px w-24 bg-red-600/40 mb-6" />

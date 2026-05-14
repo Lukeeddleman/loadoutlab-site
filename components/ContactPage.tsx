@@ -72,7 +72,7 @@ export default function ContactPage() {
               <div className="w-8 h-px bg-red-600" />
               <span className="text-red-500 text-xs font-mono tracking-widest">GET IN TOUCH</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
               LET&apos;S<br /><span className="text-red-600">TALK.</span>
             </h1>
             <div className="h-px w-24 bg-red-600/40 mb-8" />
@@ -151,7 +151,7 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="bg-zinc-950 border border-zinc-800 rounded-xl p-8 space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs text-zinc-500 font-mono tracking-widest mb-2">NAME *</label>
                     <input

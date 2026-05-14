@@ -187,13 +187,13 @@ const HeroSection = () => (
         </div>
 
         {/* Headline */}
-        <h1 className="text-7xl md:text-9xl font-black text-white leading-none mb-2 tracking-tighter">
+        <h1 className="text-5xl sm:text-7xl md:text-9xl font-black text-white leading-none mb-2 tracking-tighter">
           CONTROL.
         </h1>
-        <h1 className="text-7xl md:text-9xl font-black text-red-600 leading-none mb-2 tracking-tighter">
+        <h1 className="text-5xl sm:text-7xl md:text-9xl font-black text-red-600 leading-none mb-2 tracking-tighter">
           TEST.
         </h1>
-        <h1 className="text-7xl md:text-9xl font-black text-white leading-none tracking-tighter">
+        <h1 className="text-5xl sm:text-7xl md:text-9xl font-black text-white leading-none tracking-tighter">
           IMPROVE.
         </h1>
 
@@ -258,7 +258,7 @@ const AboutSection = () => (
             <div className="w-8 h-px bg-red-600" />
             <span className="text-red-500 text-xs font-mono tracking-widest">THE INSTRUCTOR</span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4">
             LUKE EDDLEMAN.<br /><span className="text-red-600">REAL</span><br />EXPERIENCE.
           </h2>
           <div className="h-px w-24 bg-red-600/40 mb-7" />
@@ -391,7 +391,7 @@ const ClassesSection = () => {
             <span className="text-red-500 text-xs font-mono tracking-widest">TRAINING PROGRAMS</span>
             <div className="w-8 h-px bg-red-600" />
           </div>
-          <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
             WHAT WE <span className="text-red-600">TEACH</span>
           </h2>
           <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />
@@ -470,8 +470,11 @@ const Footer = () => (
             LOADOUT<span className="text-red-500">LAB</span>
           </span>
         </div>
-        <p className="text-zinc-700 text-xs tracking-widest font-mono text-center">
+        <p className="text-zinc-700 text-xs tracking-widest font-mono text-center hidden sm:block">
           CONTROL. TEST. IMPROVE. &nbsp;·&nbsp; TEXAS-BASED FIREARMS INSTRUCTION
+        </p>
+        <p className="text-zinc-700 text-xs tracking-widest font-mono text-center sm:hidden">
+          TEXAS-BASED FIREARMS INSTRUCTION
         </p>
         <div className="flex items-center gap-6">
           {[
