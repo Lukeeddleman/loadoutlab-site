@@ -60,7 +60,6 @@ const LOCAL_IMAGES: Record<number, string[] | Record<string, string[]>> = {
       '/products/tee2/black/4.jpg',
     ],
     'Navy': ['/products/tee2/navy/1.jpg'],
-    'Dark Heather': ['/products/tee2/dark-heather/1.jpg'],
   },
 };
 
