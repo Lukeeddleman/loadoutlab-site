@@ -31,6 +31,7 @@ const CLASSES: Record<string, {
       'Suitable for first-time shooters and those looking to reinforce the basics',
     ],
     included: [
+      'Classroom instruction followed by live fire training',
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
       'Loaner eye and ear protection if needed',
@@ -63,6 +64,7 @@ const CLASSES: Record<string, {
       'Prerequisite: basic firearm familiarity recommended',
     ],
     included: [
+      'Classroom instruction followed by live fire training',
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
       'Loaner eye and ear protection if needed',
@@ -96,6 +98,7 @@ const CLASSES: Record<string, {
       'Practical drills for home defense and range use',
     ],
     included: [
+      'Classroom instruction followed by live fire training',
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
       'Loaner eye and ear protection if needed',
@@ -129,6 +132,7 @@ const CLASSES: Record<string, {
       'One instructor, full attention on your group',
     ],
     included: [
+      'Classroom instruction followed by live fire training',
       'Range fees covered for the entire group — one price, no surprises',
       'Targets and all range supplies',
       'Curriculum tailored to your group\'s experience level',
@@ -163,6 +167,7 @@ const CLASSES: Record<string, {
       'Prerequisite: basic firearm proficiency required',
     ],
     included: [
+      'Classroom instruction followed by live fire training',
       'Range fees covered — no extra costs at the door',
       'Targets at distance',
       'Loaner eye and ear protection if needed',
@@ -197,6 +202,7 @@ const CLASSES: Record<string, {
       'Great for gift purchases or accelerated skill development',
     ],
     included: [
+      'Classroom instruction followed by live fire training',
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
       'Fully customized session plan built around your goals',
