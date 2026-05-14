@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MerchStore from '@/components/MerchStore';
 import {
-  Shield, ChevronRight, Calendar,
+  FlaskConical, Shield, ChevronRight, Calendar,
   ShoppingBag, User, Menu, X,
   ArrowRight, Award, BookOpen, Crosshair, Target
 } from 'lucide-react';
@@ -27,8 +27,11 @@ const AgeGate = ({ onVerify, visible }: { onVerify: (v: boolean) => void; visibl
     <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-red-600/50 pointer-events-none" />
 
     {/* Logo */}
-    <div className="absolute top-8 left-8">
-      <Image src="/logo.png" alt="Loadout Lab" width={100} height={34} className="h-8 w-auto" />
+    <div className="absolute top-8 left-8 flex items-center gap-2">
+      <FlaskConical className="w-7 h-7 text-red-500" />
+      <span className="text-white font-black tracking-widest text-lg">
+        LOADOUT<span className="text-red-500">LAB</span>
+      </span>
     </div>
 
     {/* Modal */}
@@ -106,8 +109,11 @@ const Navbar = ({ user }: { user: unknown }) => {
     }`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="#home" className="flex items-center group">
-          <Image src="/logo.png" alt="Loadout Lab" width={120} height={40} className="h-10 w-auto" />
+        <a href="#home" className="flex items-center gap-2 group">
+          <FlaskConical className="w-6 h-6 text-red-500 group-hover:text-red-400 transition-colors" />
+          <span className="text-white font-black tracking-widest text-base">
+            LOADOUT<span className="text-red-500">LAB</span>
+          </span>
         </a>
 
         {/* Desktop nav */}
@@ -458,8 +464,11 @@ const Footer = () => (
   <footer className="bg-zinc-950 border-t border-zinc-900 px-6 py-14">
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
-        <div className="flex items-center">
-          <Image src="/logo.png" alt="Loadout Lab" width={120} height={40} className="h-10 w-auto" />
+        <div className="flex items-center gap-2">
+          <FlaskConical className="w-6 h-6 text-red-500" />
+          <span className="text-white font-black tracking-widest">
+            LOADOUT<span className="text-red-500">LAB</span>
+          </span>
         </div>
         <p className="text-zinc-700 text-xs tracking-widest font-mono text-center hidden sm:block">
           CONTROL. TEST. IMPROVE. &nbsp;·&nbsp; TEXAS-BASED FIREARMS INSTRUCTION

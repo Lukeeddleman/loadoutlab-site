@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, ArrowLeft, Loader2, ChevronRight, ChevronLeft } from 'lucide-react'; // Loader2 used in checkout button
+import { FlaskConical, ShoppingBag, ArrowLeft, Loader2, ChevronRight, ChevronLeft } from 'lucide-react'; // Loader2 used in checkout button
 
 interface Variant {
   id: number;
@@ -107,8 +107,11 @@ export default function ProductPage({ product }: { product: Product }) {
     <div className="min-h-screen bg-black text-white">
       {/* Nav */}
       <nav className="border-b border-zinc-900 px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center">
-          <Image src="/logo.png" alt="Loadout Lab" width={100} height={34} className="h-8 w-auto" />
+        <Link href="/" className="flex items-center gap-2">
+          <FlaskConical className="w-5 h-5 text-red-500" />
+          <span className="text-white font-black tracking-widest text-sm">
+            LOADOUT<span className="text-red-500">LAB</span>
+          </span>
         </Link>
         <Link href="/#merch" className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-sm transition-colors">
           <ArrowLeft className="w-4 h-4" />
