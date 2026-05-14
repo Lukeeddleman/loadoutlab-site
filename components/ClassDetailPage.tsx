@@ -106,7 +106,7 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
               <ul className="space-y-3">
                 {included.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
                     <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
                   </li>
                 ))}
