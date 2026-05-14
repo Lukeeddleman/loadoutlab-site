@@ -33,16 +33,23 @@ const LOCAL_IMAGES: Record<number, string[]> = {
     '/products/hat2/1.jpg',
     '/products/hat2/2.jpg',
     '/products/hat2/3.jpg',
+    '/products/hat2/4.jpg',
+    '/products/hat2/5.jpg',
+    '/products/hat2/6.jpg',
+    '/products/hat2/7.jpg',
+    '/products/hat2/8.jpg',
+    '/products/hat2/9.jpg',
+    '/products/hat2/10.jpg',
   ],
   432627030: [ // New Patch
     '/products/patch2/1.jpg',
     '/products/patch2/2.jpg',
-    '/products/patch2/3.jpg',
   ],
   432629722: [ // New Tee
     '/products/tee2/1.jpg',
     '/products/tee2/2.jpg',
     '/products/tee2/3.jpg',
+    '/products/tee2/4.jpg',
   ],
 };
 
