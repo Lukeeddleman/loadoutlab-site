@@ -8,6 +8,8 @@ const CLASSES: Record<string, {
   duration: string;
   desc: string;
   details: string[];
+  included: string[];
+  toBring: string[];
   calUrl: string;
   comingSoon?: boolean;
 }> = {
@@ -26,6 +28,20 @@ const CLASSES: Record<string, {
       'Live fire drills with instructor feedback',
       'Suitable for first-time shooters and those looking to reinforce the basics',
     ],
+    included: [
+      'Private bay range fee — no extra costs at the door',
+      'Targets and all range supplies',
+      'Loaner eye and ear protection if needed',
+      'Post-session debrief and open Q&A',
+    ],
+    toBring: [
+      'Handgun (any caliber)',
+      '50 rounds of ammunition (limited supply available for purchase on-site if needed)',
+      'Eye and ear protection (loaners available)',
+      'Comfortable clothing and closed-toe shoes',
+      'Water and a snack',
+      'Valid ID',
+    ],
     calUrl: 'https://calendly.com/eddleman-luke/fundamentals',
   },
   'defensive-pistol': {
@@ -42,6 +58,21 @@ const CLASSES: Record<string, {
       'Situational awareness and threat assessment',
       'Defensive shooting drills under realistic conditions',
       'Prerequisite: basic firearm familiarity recommended',
+    ],
+    included: [
+      'Private bay range fee — no extra costs at the door',
+      'Targets and all range supplies',
+      'Loaner eye and ear protection if needed',
+      'Post-session debrief and open Q&A',
+    ],
+    toBring: [
+      'Handgun — 9mm, .40, or .45 recommended',
+      '100+ rounds of ammunition (limited supply available for purchase on-site if needed)',
+      'Holster — OWB or IWB (no pocket holsters)',
+      'Eye and ear protection (loaners available)',
+      'Comfortable clothing and closed-toe shoes',
+      'Water and snacks',
+      'Valid ID',
     ],
     calUrl: 'https://calendly.com/eddleman-luke/defensive-pistol',
   },
@@ -60,6 +91,22 @@ const CLASSES: Record<string, {
       'Reloads, malfunctions, and transitions',
       'Practical drills for home defense and range use',
     ],
+    included: [
+      'Private bay range fee — no extra costs at the door',
+      'Targets and all range supplies',
+      'Loaner eye and ear protection if needed',
+      'Post-session debrief and open Q&A',
+    ],
+    toBring: [
+      'AR-15 or similar carbine platform',
+      '100+ rounds (.223/5.56 or applicable caliber — limited supply available for purchase on-site if needed)',
+      '2–3 magazines',
+      'Sling (recommended)',
+      'Eye and ear protection (loaners available)',
+      'Comfortable clothing and closed-toe shoes',
+      'Water and snacks',
+      'Valid ID',
+    ],
     calUrl: 'https://calendly.com/eddleman-luke/carbine-ar-platform',
   },
   'squad-training': {
@@ -75,6 +122,22 @@ const CLASSES: Record<string, {
       'Great for couples, friends, or workplace teams',
       'Build shared language and habits around safe firearm handling',
       'One instructor, full attention on your group',
+    ],
+    included: [
+      'Private bay range fee for the entire group — one price, no surprises',
+      'Targets and all range supplies',
+      'Curriculum tailored to your group\'s experience level',
+      'Loaner eye and ear protection if needed',
+      'Post-session debrief and open Q&A',
+    ],
+    toBring: [
+      'Each participant: handgun or rifle (specify when booking)',
+      'Each participant: 50–100 rounds of ammunition (limited supply available for purchase on-site if needed)',
+      'Eye and ear protection per person (loaners available)',
+      'Holster if running pistol drills',
+      'Comfortable clothing and closed-toe shoes',
+      'Water and snacks',
+      'Valid ID per participant',
     ],
     calUrl: 'https://calendly.com/eddleman-luke/squad-training',
     comingSoon: true,
@@ -93,6 +156,22 @@ const CLASSES: Record<string, {
       'Live fire drills with measurable accuracy benchmarks',
       'Prerequisite: basic firearm proficiency required',
     ],
+    included: [
+      'Private bay range fee — no extra costs at the door',
+      'Targets at distance',
+      'Loaner eye and ear protection if needed',
+      'Post-session debrief and open Q&A',
+    ],
+    toBring: [
+      'Rifle — optic strongly recommended, iron sights acceptable',
+      '50–100 rounds (.308, .223/5.56, or applicable caliber — limited supply available for purchase on-site if needed)',
+      'Bipod or shooting bag (recommended)',
+      'Notebook — you\'ll want to take data',
+      'Eye and ear protection (loaners available)',
+      'Comfortable clothing and closed-toe shoes',
+      'Water and snacks',
+      'Valid ID',
+    ],
     calUrl: 'https://calendly.com/eddleman-luke/precision-fundamentals',
     comingSoon: true,
   },
@@ -109,6 +188,22 @@ const CLASSES: Record<string, {
       'Ideal for new shooters, experienced shooters, or anywhere in between',
       'Direct one-on-one attention from Luke the entire session',
       'Great for gift purchases or accelerated skill development',
+    ],
+    included: [
+      'Private bay range fee — no extra costs at the door',
+      'Targets and all range supplies',
+      'Fully customized session plan built around your goals',
+      'Loaner eye and ear protection if needed',
+      'Post-session debrief and open Q&A',
+    ],
+    toBring: [
+      'Your firearm(s) — discuss with Luke beforehand if unsure',
+      'Ammunition (round count depends on session plan — Luke will advise when you book)',
+      'Any relevant gear for your goals — holster, sling, optic, etc.',
+      'Eye and ear protection (loaners available)',
+      'Comfortable clothing and closed-toe shoes',
+      'Water and snacks',
+      'Valid ID',
     ],
     calUrl: 'https://calendly.com/eddleman-luke/private-instruction',
   },

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { FlaskConical, ArrowLeft, Clock, ChevronRight, CheckCircle, Bell } from 'lucide-react';
+import { FlaskConical, ArrowLeft, Clock, ChevronRight, CheckCircle, Bell, PackageCheck, Backpack } from 'lucide-react';
 import { addToWaitlist } from '@/lib/supabase';
 
 interface ClassDetailProps {
@@ -11,11 +11,13 @@ interface ClassDetailProps {
   duration: string;
   desc: string;
   details: string[];
+  included: string[];
+  toBring: string[];
   calUrl: string;
   comingSoon?: boolean;
 }
 
-export default function ClassDetailPage({ level, title, duration, desc, details, calUrl, comingSoon }: ClassDetailProps) {
+export default function ClassDetailPage({ level, title, duration, desc, details, included, toBring, calUrl, comingSoon }: ClassDetailProps) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -88,6 +90,38 @@ export default function ClassDetailPage({ level, title, duration, desc, details,
                 {details.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* What's included */}
+            <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-7">
+              <div className="flex items-center gap-2 mb-5">
+                <PackageCheck className="w-4 h-4 text-red-500" />
+                <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT&apos;S INCLUDED</p>
+              </div>
+              <ul className="space-y-3">
+                {included.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* What to bring */}
+            <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-7">
+              <div className="flex items-center gap-2 mb-5">
+                <Backpack className="w-4 h-4 text-red-500" />
+                <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT TO BRING</p>
+              </div>
+              <ul className="space-y-3">
+                {toBring.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <ChevronRight className="w-4 h-4 text-zinc-600 flex-shrink-0 mt-0.5" />
                     <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
                   </li>
                 ))}
