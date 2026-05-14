@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 // Static local image overrides for products that have uploaded mockup sets
-const LOCAL_IMAGES: Record<number, string[]> = {
+// Can be a flat array (all colors share images) or a color-keyed object (per-color images)
+const LOCAL_IMAGES: Record<number, string[] | Record<string, string[]>> = {
   432295388: [ // Loadout Lab Morale Patch
     '/products/patch/1.jpg',
     '/products/patch/2.jpg',
@@ -19,16 +20,24 @@ const LOCAL_IMAGES: Record<number, string[]> = {
     '/products/cap/9.jpg',
     '/products/cap/10.jpg',
   ],
-  432267769: [ // SAAMI .308 Tee
-    '/products/tee/1.jpg',
-    '/products/tee/2.jpg',
-    '/products/tee/3.jpg',
-    '/products/tee/4.jpg',
-    '/products/tee/5.jpg',
-    '/products/tee/6.jpg',
-    '/products/tee/7.jpg',
-    '/products/tee/8.jpg',
-  ],
+  432267769: { // SAAMI .308 Tee — per-color
+    'Black': [
+      '/products/tee/black/1.jpg',
+      '/products/tee/black/2.jpg',
+      '/products/tee/black/3.jpg',
+      '/products/tee/black/4.jpg',
+      '/products/tee/black/5.jpg',
+      '/products/tee/black/6.jpg',
+      '/products/tee/black/7.jpg',
+      '/products/tee/black/8.jpg',
+    ],
+    'Navy Blazer': [
+      '/products/tee/navy/1.jpg',
+      '/products/tee/navy/2.jpg',
+      '/products/tee/navy/3.jpg',
+      '/products/tee/navy/4.jpg',
+    ],
+  },
   432626242: [ // New Hat
     '/products/hat2/1.jpg',
     '/products/hat2/2.jpg',
@@ -106,10 +115,25 @@ export async function GET() {
     // Use local image overrides if available
     const localImages = LOCAL_IMAGES[product.id];
     if (localImages) {
-      Object.keys(colorMap).forEach((color) => {
-        colorMap[color].image = localImages[0];
-        colorMap[color].images = localImages;
-      });
+      if (Array.isArray(localImages)) {
+        // Flat array — all colors share the same images
+        Object.keys(colorMap).forEach((color) => {
+          colorMap[color].image = localImages[0];
+          colorMap[color].images = localImages;
+        });
+      } else {
+        // Color-keyed object — each color gets its own images
+        Object.keys(colorMap).forEach((color) => {
+          // Try exact match first, then case-insensitive
+          const key = Object.keys(localImages).find(
+            (k) => k.toLowerCase() === color.toLowerCase()
+          );
+          if (key && localImages[key].length > 0) {
+            colorMap[color].image = localImages[key][0];
+            colorMap[color].images = localImages[key];
+          }
+        });
+      }
     }
 
     return {
