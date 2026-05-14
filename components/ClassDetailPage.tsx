@@ -80,13 +80,15 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
               <span className="font-mono tracking-widest">{duration}</span>
             </div>
 
-            <p className="text-zinc-400 leading-relaxed mb-10 text-lg">
+            <p className="text-zinc-400 leading-relaxed mb-8 text-lg">
               {desc}
             </p>
 
+            <div className="h-px w-full bg-zinc-900 mb-8" />
+
             {/* What's covered */}
-            <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-7">
-              <p className="text-zinc-600 text-xs font-mono tracking-widest mb-5">WHAT&apos;S COVERED</p>
+            <div className="bg-zinc-950 border border-red-600/20 rounded-xl p-7 mb-4">
+              <p className="text-red-500/70 text-xs font-mono tracking-widest mb-5">WHAT&apos;S COVERED</p>
               <ul className="space-y-3">
                 {details.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -97,36 +99,39 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
               </ul>
             </div>
 
-            {/* What's included */}
-            <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-7">
-              <div className="flex items-center gap-2 mb-5">
-                <PackageCheck className="w-4 h-4 text-red-500" />
-                <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT&apos;S INCLUDED</p>
+            {/* Included + Bring — side by side */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* What's included */}
+              <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <PackageCheck className="w-4 h-4 text-red-500" />
+                  <p className="text-zinc-600 text-xs font-mono tracking-widest">INCLUDED</p>
+                </div>
+                <ul className="space-y-3">
+                  {included.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <CheckCircle className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-zinc-400 text-xs leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3">
-                {included.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <CheckCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            {/* What to bring */}
-            <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-7">
-              <div className="flex items-center gap-2 mb-5">
-                <Backpack className="w-4 h-4 text-red-500" />
-                <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT TO BRING</p>
+              {/* What to bring */}
+              <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Backpack className="w-4 h-4 text-red-500" />
+                  <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT TO BRING</p>
+                </div>
+                <ul className="space-y-3">
+                  {toBring.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <ChevronRight className="w-3.5 h-3.5 text-zinc-600 flex-shrink-0 mt-0.5" />
+                      <span className="text-zinc-400 text-xs leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3">
-                {toBring.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <ChevronRight className="w-4 h-4 text-zinc-600 flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
 
