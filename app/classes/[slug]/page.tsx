@@ -33,12 +33,11 @@ const CLASSES: Record<string, {
     included: [
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
-      'Rental firearm available upon request',
       'Loaner eye and ear protection if needed',
       'Post-session debrief and open Q&A',
     ],
     toBring: [
-      'Handgun (any caliber) — or request a rental when booking',
+      'Handgun (any caliber) — rental firearm available for an additional fee, request when booking',
       '50 rounds of ammunition (limited supply available for purchase on-site if needed)',
       'Eye and ear protection (loaners available)',
       'Comfortable clothing and closed-toe shoes',
@@ -66,12 +65,11 @@ const CLASSES: Record<string, {
     included: [
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
-      'Rental firearm available upon request',
       'Loaner eye and ear protection if needed',
       'Post-session debrief and open Q&A',
     ],
     toBring: [
-      'Handgun — 9mm, .40, or .45 recommended (or request a rental when booking)',
+      'Handgun — 9mm, .40, or .45 recommended (rental available for an additional fee — request when booking)',
       '100+ rounds of ammunition (limited supply available for purchase on-site if needed)',
       'Holster — OWB or IWB (no pocket holsters)',
       'Eye and ear protection (loaners available)',
@@ -100,12 +98,11 @@ const CLASSES: Record<string, {
     included: [
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
-      'Rental firearm available upon request',
       'Loaner eye and ear protection if needed',
       'Post-session debrief and open Q&A',
     ],
     toBring: [
-      'AR-15 or similar carbine platform (or request a rental when booking)',
+      'AR-15 or similar carbine platform (rental available for an additional fee — request when booking)',
       '100+ rounds (.223/5.56 or applicable caliber — limited supply available for purchase on-site if needed)',
       '2–3 magazines',
       'Sling (recommended)',
@@ -135,12 +132,11 @@ const CLASSES: Record<string, {
       'Range fees covered for the entire group — one price, no surprises',
       'Targets and all range supplies',
       'Curriculum tailored to your group\'s experience level',
-      'Rental firearms available upon request',
       'Loaner eye and ear protection if needed',
       'Post-session debrief and open Q&A',
     ],
     toBring: [
-      'Each participant: handgun or rifle (specify when booking)',
+      'Each participant: handgun or rifle — rental firearms available for an additional fee, specify when booking',
       'Each participant: 50–100 rounds of ammunition (limited supply available for purchase on-site if needed)',
       'Eye and ear protection per person (loaners available)',
       'Holster if running pistol drills',
@@ -169,12 +165,11 @@ const CLASSES: Record<string, {
     included: [
       'Range fees covered — no extra costs at the door',
       'Targets at distance',
-      'Rental firearm available upon request',
       'Loaner eye and ear protection if needed',
       'Post-session debrief and open Q&A',
     ],
     toBring: [
-      'Rifle — optic strongly recommended, iron sights acceptable',
+      'Rifle — optic strongly recommended, iron sights acceptable (rental available for an additional fee — request when booking)',
       '50–100 rounds (.308, .223/5.56, or applicable caliber — limited supply available for purchase on-site if needed)',
       'Bipod or shooting bag (recommended)',
       'Notebook — you\'ll want to take data',
@@ -205,12 +200,11 @@ const CLASSES: Record<string, {
       'Range fees covered — no extra costs at the door',
       'Targets and all range supplies',
       'Fully customized session plan built around your goals',
-      'Rental firearm available upon request',
       'Loaner eye and ear protection if needed',
       'Post-session debrief and open Q&A',
     ],
     toBring: [
-      'Your firearm(s) — discuss with Luke beforehand if unsure',
+      'Your firearm(s) — discuss with Luke beforehand if unsure (rental available for an additional fee if needed)',
       'Ammunition (round count depends on session plan — Luke will advise when you book)',
       'Any relevant gear for your goals — holster, sling, optic, etc.',
       'Eye and ear protection (loaners available)',
