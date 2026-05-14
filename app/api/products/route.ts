@@ -31,12 +31,8 @@ const LOCAL_IMAGES: Record<number, string[] | Record<string, string[]>> = {
       '/products/tee/black/7.jpg',
       '/products/tee/black/8.jpg',
     ],
-    'Navy Blazer': [
-      '/products/tee/navy/1.jpg',
-      '/products/tee/navy/2.jpg',
-      '/products/tee/navy/3.jpg',
-      '/products/tee/navy/4.jpg',
-    ],
+    'Navy Blazer': ['/products/tee/navy/1.jpg'],
+    'Vintage Black': ['/products/tee/vintage-black/1.jpg'],
   },
   432626242: { // Loadout Lab Logo Hat — per-color
     'Black': [
@@ -56,12 +52,16 @@ const LOCAL_IMAGES: Record<number, string[] | Record<string, string[]>> = {
     '/products/patch2/1.jpg',
     '/products/patch2/2.jpg',
   ],
-  432629722: [ // New Tee
-    '/products/tee2/1.jpg',
-    '/products/tee2/2.jpg',
-    '/products/tee2/3.jpg',
-    '/products/tee2/4.jpg',
-  ],
+  432629722: { // Control, Test, Improve Graphic Tee — per-color
+    'Black': [
+      '/products/tee2/black/1.jpg',
+      '/products/tee2/black/2.jpg',
+      '/products/tee2/black/3.jpg',
+      '/products/tee2/black/4.jpg',
+    ],
+    'Navy': ['/products/tee2/navy/1.jpg'],
+    'Dark Heather': ['/products/tee2/dark-heather/1.jpg'],
+  },
 };
 
 export async function GET() {
