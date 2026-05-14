@@ -62,9 +62,11 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
       </header>
 
       <main className="max-w-5xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
 
-          {/* Left — class info */}
+        {/* Top zone — title + booking card */}
+        <div className="grid md:grid-cols-2 gap-12 items-start mb-12">
+
+          {/* Left — title + desc */}
           <div>
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-px bg-red-600" />
@@ -74,69 +76,17 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
               {title}
             </h1>
             <div className="h-px w-24 bg-red-600/40 mb-6" />
-
-            <div className="flex items-center gap-2 text-zinc-500 text-sm mb-8">
+            <div className="flex items-center gap-2 text-zinc-500 text-sm mb-6">
               <Clock className="w-4 h-4" />
               <span className="font-mono tracking-widest">{duration}</span>
             </div>
-
-            <p className="text-zinc-400 leading-relaxed mb-8 text-lg">
+            <p className="text-zinc-400 leading-relaxed text-lg">
               {desc}
             </p>
-
-            <div className="h-px w-full bg-zinc-900 mb-8" />
-
-            {/* What's covered */}
-            <div className="bg-zinc-950 border border-red-600/20 rounded-xl p-7 mb-4">
-              <p className="text-red-500/70 text-xs font-mono tracking-widest mb-5">WHAT&apos;S COVERED</p>
-              <ul className="space-y-3">
-                {details.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <CheckCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Included + Bring — side by side */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              {/* What's included */}
-              <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <PackageCheck className="w-4 h-4 text-red-500" />
-                  <p className="text-zinc-600 text-xs font-mono tracking-widest">INCLUDED</p>
-                </div>
-                <ul className="space-y-3">
-                  {included.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <CheckCircle className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-400 text-xs leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* What to bring */}
-              <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Backpack className="w-4 h-4 text-red-500" />
-                  <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT TO BRING</p>
-                </div>
-                <ul className="space-y-3">
-                  {toBring.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <ChevronRight className="w-3.5 h-3.5 text-zinc-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-400 text-xs leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
           </div>
 
           {/* Right — booking CTA */}
-          <div className="md:sticky md:top-8">
+          <div>
             <div className="bg-zinc-950 border border-red-600/20 rounded-xl p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-b from-red-600/5 to-transparent pointer-events-none" />
               <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-red-600/30 pointer-events-none" />
@@ -225,7 +175,7 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
             </div>
 
             {/* Questions CTA */}
-            <div className="mt-5 bg-zinc-950 border border-zinc-900 rounded-xl p-6 text-center">
+            <div className="mt-4 bg-zinc-950 border border-zinc-900 rounded-xl p-6 text-center">
               <p className="text-zinc-500 text-sm mb-3">Have questions before booking?</p>
               <a href="/contact"
                 className="text-red-500 hover:text-red-400 text-xs font-black tracking-widest transition-colors">
@@ -233,6 +183,60 @@ export default function ClassDetailPage({ level, title, duration, price, desc, d
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Bottom zone — full-width info cards */}
+        <div className="h-px w-full bg-zinc-900 mb-10" />
+        <div className="grid md:grid-cols-3 gap-6">
+
+          {/* What's covered */}
+          <div className="bg-zinc-950 border border-red-600/20 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <CheckCircle className="w-4 h-4 text-red-500" />
+              <p className="text-red-500/70 text-xs font-mono tracking-widest">WHAT&apos;S COVERED</p>
+            </div>
+            <ul className="space-y-3">
+              {details.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-red-500/60 flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* What's included */}
+          <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <PackageCheck className="w-4 h-4 text-red-500" />
+              <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT&apos;S INCLUDED</p>
+            </div>
+            <ul className="space-y-3">
+              {included.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <CheckCircle className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* What to bring */}
+          <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <Backpack className="w-4 h-4 text-red-500" />
+              <p className="text-zinc-600 text-xs font-mono tracking-widest">WHAT TO BRING</p>
+            </div>
+            <ul className="space-y-3">
+              {toBring.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-zinc-300 text-sm leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
         </div>
       </main>
     </div>
