@@ -9,9 +9,9 @@ function getStripe() {
 
 // Calendly URLs per duration — swap these out once Luke creates the events
 const CALENDLY_URLS: Record<number, string> = {
-  1: 'https://calendly.com/eddleman-luke/private-instruction-1hr',
-  2: 'https://calendly.com/eddleman-luke/private-instruction-2hr',
-  3: 'https://calendly.com/eddleman-luke/private-instruction-3hr',
+  1: 'https://calendly.com/eddleman-luke/private-instruction',
+  2: 'https://calendly.com/eddleman-luke/private-instruction-1-hr-clone',
+  3: 'https://calendly.com/eddleman-luke/private-instruction-2-hr-clone',
 };
 
 export async function POST(req: NextRequest) {
