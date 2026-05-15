@@ -338,6 +338,7 @@ const ClassesSection = () => {
       desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
       duration: '2–3 Hours',
       comingSoon: true,
+      mobileOrderClass: 'order-2 md:order-none',
     },
     {
       slug: 'defensive-pistol',
@@ -346,6 +347,7 @@ const ClassesSection = () => {
       desc: 'Drawing from holster, close-quarters drills, malfunction clearing, and real-world defensive scenarios.',
       duration: '3–4 Hours',
       comingSoon: true,
+      mobileOrderClass: 'order-3 md:order-none',
     },
     {
       slug: 'carbine-ar-platform',
@@ -354,6 +356,7 @@ const ClassesSection = () => {
       desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
       duration: '3–4 Hours',
       comingSoon: true,
+      mobileOrderClass: 'order-4 md:order-none',
     },
     {
       slug: 'squad-training',
@@ -362,6 +365,7 @@ const ClassesSection = () => {
       desc: 'Train with your people. Group sessions for friends, couples, families, or teams who want to build skills and confidence together.',
       duration: '3–4 Hours',
       comingSoon: true,
+      mobileOrderClass: 'order-5 md:order-none',
     },
     {
       slug: 'precision-fundamentals',
@@ -370,6 +374,7 @@ const ClassesSection = () => {
       desc: 'Dial in your accuracy. The science and mechanics behind consistent, repeatable precision shooting at distance.',
       duration: '3–4 Hours',
       comingSoon: true,
+      mobileOrderClass: 'order-6 md:order-none',
     },
     {
       slug: 'private-instruction',
@@ -378,6 +383,7 @@ const ClassesSection = () => {
       desc: 'One-on-one sessions tailored to your goals, experience level, and schedule. Maximum results, minimum wasted time.',
       duration: 'Flexible',
       comingSoon: false,
+      mobileOrderClass: 'order-1 md:order-none',
     },
   ];
 
@@ -404,7 +410,7 @@ const ClassesSection = () => {
         <div className="grid md:grid-cols-2 gap-5 mb-16">
           {offerings.map((cls) => (
             <a key={cls.title} href={`/classes/${cls.slug}`}
-              className={`rounded-xl p-7 transition-all duration-300 group block border ${
+              className={`${cls.mobileOrderClass} rounded-xl p-7 transition-all duration-300 group block border ${`
                 cls.comingSoon
                   ? 'bg-zinc-950 border-zinc-900 hover:border-zinc-700 opacity-70 hover:opacity-90'
                   : 'bg-black border-zinc-900 hover:border-red-600/30'
