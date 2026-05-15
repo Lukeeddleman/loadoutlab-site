@@ -20,20 +20,16 @@ const LOCAL_IMAGES: Record<number, string[] | Record<string, string[]>> = {
     '/products/cap/9.jpg',
     '/products/cap/10.jpg',
   ],
-  432267769: { // SAAMI .308 Tee — per-color
-    'Black': [
-      '/products/tee/black/1.jpg',
-      '/products/tee/black/2.jpg',
-      '/products/tee/black/3.jpg',
-      '/products/tee/black/4.jpg',
-      '/products/tee/black/5.jpg',
-      '/products/tee/black/6.jpg',
-      '/products/tee/black/7.jpg',
-      '/products/tee/black/8.jpg',
-    ],
-    'Navy Blazer': ['/products/tee/navy/1.jpg'],
-    'Vintage Black': ['/products/tee/vintage-black/1.jpg'],
-  },
+  432267769: [ // SAAMI .308 Tee — black only
+    '/products/tee/black/1.jpg',
+    '/products/tee/black/2.jpg',
+    '/products/tee/black/3.jpg',
+    '/products/tee/black/4.jpg',
+    '/products/tee/black/5.jpg',
+    '/products/tee/black/6.jpg',
+    '/products/tee/black/7.jpg',
+    '/products/tee/black/8.jpg',
+  ],
   432626242: { // Loadout Lab Logo Hat — per-color
     'Black': [
       '/products/hat2/black/1.jpg',
