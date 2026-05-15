@@ -149,7 +149,7 @@ export default function ProductPage({ product }: { product: Product }) {
             LOADOUT<span className="text-red-500">LAB</span>
           </span>
         </Link>
-        <Link href="/#merch" className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-sm transition-colors">
+        <Link href="/shop" className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-sm transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Back to shop
         </Link>
@@ -160,7 +160,7 @@ export default function ProductPage({ product }: { product: Product }) {
         <div className="flex items-center gap-2 text-xs font-mono text-zinc-600 min-w-0">
           <Link href="/" className="hover:text-zinc-400 transition-colors flex-shrink-0">HOME</Link>
           <ChevronRight className="w-3 h-3 flex-shrink-0" />
-          <Link href="/#merch" className="hover:text-zinc-400 transition-colors flex-shrink-0">SHOP</Link>
+          <Link href="/shop" className="hover:text-zinc-400 transition-colors flex-shrink-0">SHOP</Link>
           <ChevronRight className="w-3 h-3 flex-shrink-0" />
           <span className="text-zinc-400 truncate">{product.name.toUpperCase()}</span>
         </div>
