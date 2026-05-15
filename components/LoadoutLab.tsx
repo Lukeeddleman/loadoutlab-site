@@ -410,7 +410,7 @@ const ClassesSection = () => {
         <div className="grid md:grid-cols-2 gap-5 mb-16">
           {offerings.map((cls) => (
             <a key={cls.title} href={`/classes/${cls.slug}`}
-              className={`${cls.mobileOrderClass} rounded-xl p-7 transition-all duration-300 group block border ${`
+              className={`${cls.mobileOrderClass} rounded-xl p-7 transition-all duration-300 group block border ${
                 cls.comingSoon
                   ? 'bg-zinc-950 border-zinc-900 hover:border-zinc-700 opacity-70 hover:opacity-90'
                   : 'bg-black border-zinc-900 hover:border-red-600/30'
