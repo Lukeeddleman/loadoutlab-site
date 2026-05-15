@@ -156,13 +156,13 @@ export default function ProductPage({ product }: { product: Product }) {
       </nav>
 
       {/* Breadcrumb */}
-      <div className="px-6 py-4 max-w-6xl mx-auto">
-        <div className="flex items-center gap-2 text-xs font-mono text-zinc-600">
-          <Link href="/" className="hover:text-zinc-400 transition-colors">HOME</Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link href="/#merch" className="hover:text-zinc-400 transition-colors">SHOP</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-zinc-400">{product.name.toUpperCase()}</span>
+      <div className="px-6 py-4 max-w-6xl mx-auto overflow-hidden">
+        <div className="flex items-center gap-2 text-xs font-mono text-zinc-600 min-w-0">
+          <Link href="/" className="hover:text-zinc-400 transition-colors flex-shrink-0">HOME</Link>
+          <ChevronRight className="w-3 h-3 flex-shrink-0" />
+          <Link href="/#merch" className="hover:text-zinc-400 transition-colors flex-shrink-0">SHOP</Link>
+          <ChevronRight className="w-3 h-3 flex-shrink-0" />
+          <span className="text-zinc-400 truncate">{product.name.toUpperCase()}</span>
         </div>
       </div>
 
