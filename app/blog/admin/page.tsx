@@ -318,7 +318,7 @@ export default function BlogAdminPage() {
                 onChange={(e) => setForm((f) => ({ ...f, published: e.target.checked }))}
                 className="w-4 h-4 accent-red-600"
               />
-              <label htmlFor="published" className="text-zinc-400 text-sm">Publish immediately</label>
+              <label htmlFor="published" className="text-zinc-400 text-sm">Make public (uncheck to save as draft)</label>
             </div>
             {saveError && <p className="text-red-500 text-xs">{saveError}</p>}
             <div className="flex items-center gap-3 pt-2">
