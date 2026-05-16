@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { FlaskConical } from 'lucide-react';
 import { getPublishedPosts } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Instructor Feed — Loadout Lab | Austin Firearms Training',
   description: 'Class recaps, shooting tips, and field notes from Luke Eddleman — firearms instructor serving Austin, Kyle, Buda, and San Marcos, TX.',

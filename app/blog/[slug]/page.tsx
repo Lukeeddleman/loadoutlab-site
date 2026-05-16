@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+export const dynamic = 'force-dynamic';
 import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
