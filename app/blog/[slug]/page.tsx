@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FlaskConical, ArrowRight } from 'lucide-react';
@@ -67,8 +68,38 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           <div className="h-px w-full bg-zinc-900 mb-10" />
 
-          <div className="text-zinc-300 text-base leading-relaxed whitespace-pre-wrap">
-            {post.content}
+          <div className="prose prose-invert prose-zinc max-w-none text-zinc-300 leading-relaxed">
+            <ReactMarkdown
+              components={{
+                img: ({ src, alt }) => (
+                  <img
+                    src={src}
+                    alt={alt || ''}
+                    className="rounded-lg w-full my-6 border border-zinc-800"
+                  />
+                ),
+                p: ({ children }) => (
+                  <p className="mb-5 text-zinc-300 leading-relaxed">{children}</p>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-2xl font-black text-white tracking-wide mt-10 mb-4">{children}</h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-xl font-black text-white tracking-wide mt-8 mb-3">{children}</h3>
+                ),
+                strong: ({ children }) => (
+                  <strong className="text-white font-bold">{children}</strong>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc list-inside mb-5 text-zinc-300 space-y-1">{children}</ul>
+                ),
+                li: ({ children }) => (
+                  <li className="text-zinc-300">{children}</li>
+                ),
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
         </div>
       </article>

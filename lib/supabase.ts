@@ -364,3 +364,21 @@ export const deletePost = async (id: string) => {
     .eq('id', id);
   return { error };
 };
+
+// Blog image upload
+export const uploadBlogImage = async (file: File): Promise<{ url: string | null; error: string | null }> => {
+  const ext = file.name.split('.').pop();
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  
+  const { data, error } = await supabase.storage
+    .from('blog-images')
+    .upload(filename, file, { cacheControl: '3600', upsert: false });
+
+  if (error) return { url: null, error: error.message };
+
+  const { data: { publicUrl } } = supabase.storage
+    .from('blog-images')
+    .getPublicUrl(data.path);
+
+  return { url: publicUrl, error: null };
+};

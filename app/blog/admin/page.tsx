@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   supabase,
   signIn,
@@ -8,6 +8,7 @@ import {
   createPost,
   updatePost,
   deletePost,
+  uploadBlogImage,
   type BlogPost,
 } from '@/lib/supabase';
 
@@ -46,6 +47,9 @@ export default function BlogAdminPage() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [slugManual, setSlugManual] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Check auth on load
   useEffect(() => {
@@ -77,6 +81,26 @@ export default function BlogAdminPage() {
       setAuthed(true);
     }
     setLoginLoading(false);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const { url, error } = await uploadBlogImage(file);
+    setUploading(false);
+    if (error || !url) {
+      alert('Upload failed: ' + error);
+      return;
+    }
+    const textarea = contentRef.current;
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const imageMarkdown = `\n![](${url})\n`;
+    const newContent = form.content.slice(0, start) + imageMarkdown + form.content.slice(end);
+    setForm(f => ({ ...f, content: newContent }));
+    e.target.value = '';
   };
 
   const handleTitleChange = (val: string) => {
@@ -259,13 +283,31 @@ export default function BlogAdminPage() {
               />
             </div>
             <div>
-              <label className="block text-zinc-400 text-xs font-mono tracking-widest mb-1">CONTENT *</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-zinc-400 text-xs font-mono tracking-widest">CONTENT *</label>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50 text-zinc-300 px-3 py-1.5 rounded text-xs font-mono tracking-widest transition-colors"
+                >
+                  {uploading ? 'UPLOADING...' : '📷 INSERT PHOTO'}
+                </button>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
               <textarea
+                ref={contentRef}
                 value={form.content}
                 onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
-                rows={14}
-                className="w-full bg-zinc-950 border border-zinc-800 text-white rounded-lg px-4 py-3 text-sm outline-none focus:border-red-600/60 transition-colors resize-y font-mono leading-relaxed"
-                placeholder="Write your post here…"
+                rows={16}
+                placeholder="Write your post here..."
+                className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-white text-sm font-mono resize-y focus:outline-none focus:border-red-600"
               />
             </div>
             <div className="flex items-center gap-3">
