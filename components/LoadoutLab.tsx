@@ -184,7 +184,7 @@ const HeroSection = () => (
         <div className="flex items-center gap-3 mb-8">
           <div className="w-8 h-px bg-red-600" />
           <span className="text-red-500 text-xs font-mono tracking-widest uppercase">
-            Austin, TX — Kyle · Buda · San Marcos
+            Austin, TX - Kyle · Buda · San Marcos
           </span>
         </div>
 
@@ -265,10 +265,10 @@ const AboutSection = () => (
           </h2>
           <div className="h-px w-24 bg-red-600/40 mb-7" />
           <p className="text-zinc-400 leading-relaxed mb-5">
-            Loadout Lab isn&apos;t run by someone who took a weekend course and printed a certificate. Luke Eddleman brings years of real-world experience — U.S. military service, federal security work, and time as a professional range instructor — and brings that training to Austin, Kyle, Buda, San Marcos, and the surrounding Hill Country.
+            Loadout Lab isn&apos;t run by someone who took a weekend course and printed a certificate. Luke Eddleman brings years of real-world experience — U.S. military service, federal security work, and time as a professional range instructor.
           </p>
           <p className="text-zinc-400 leading-relaxed mb-10">
-            The goal is simple: take every student from where they are and make them more capable, more confident, and safer with a firearm. Whether you&apos;re brand new to firearms or looking to sharpen skills you already have, there&apos;s no judgment, no ego — just results.
+            The goal is simple: take every student from where they are and make them more capable, more confident, and safer with a firearm. No judgment, no ego — just results.
           </p>
 
           {/* Credentials */}
@@ -296,7 +296,7 @@ const AboutSection = () => (
             <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-red-600/60 z-10" />
             <Image
               src="/instructor.PNG"
-              alt="Luke Eddleman — Loadout Lab Instructor"
+              alt="Luke Eddleman - Loadout Lab Instructor"
               fill
               className="object-cover object-center"
               priority
@@ -335,7 +335,7 @@ const ClassesSection = () => {
       level: 'BEGINNER',
       title: 'FUNDAMENTALS',
       desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
-      duration: '2–3 Hours',
+      duration: '2-3 Hours',
       comingSoon: true,
       mobileOrderClass: 'order-2 md:order-none',
     },
@@ -344,7 +344,7 @@ const ClassesSection = () => {
       level: 'INTERMEDIATE',
       title: 'DEFENSIVE PISTOL',
       desc: 'Drawing from holster, close-quarters drills, malfunction clearing, and real-world defensive scenarios.',
-      duration: '3–4 Hours',
+      duration: '3-4 Hours',
       comingSoon: true,
       mobileOrderClass: 'order-3 md:order-none',
     },
@@ -353,7 +353,7 @@ const ClassesSection = () => {
       level: 'INTERMEDIATE',
       title: 'CARBINE / AR PLATFORM',
       desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
-      duration: '3–4 Hours',
+      duration: '3-4 Hours',
       comingSoon: true,
       mobileOrderClass: 'order-4 md:order-none',
     },
@@ -362,7 +362,7 @@ const ClassesSection = () => {
       level: 'ALL LEVELS',
       title: 'SQUAD TRAINING',
       desc: 'Train with your people. Group sessions for friends, couples, families, or teams who want to build skills and confidence together.',
-      duration: '3–4 Hours',
+      duration: '3-4 Hours',
       comingSoon: true,
       mobileOrderClass: 'order-5 md:order-none',
     },
@@ -371,7 +371,7 @@ const ClassesSection = () => {
       level: 'INTERMEDIATE / ADVANCED',
       title: 'PRECISION FUNDAMENTALS',
       desc: 'Dial in your accuracy. The science and mechanics behind consistent, repeatable precision shooting at distance.',
-      duration: '3–4 Hours',
+      duration: '3-4 Hours',
       comingSoon: true,
       mobileOrderClass: 'order-6 md:order-none',
     },
@@ -401,7 +401,7 @@ const ClassesSection = () => {
           </h2>
           <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />
           <p className="text-zinc-500 max-w-xl mx-auto text-sm leading-relaxed">
-            Serving Austin, Kyle, Buda, and San Marcos. Classes are being scheduled now — join the waitlist and you&apos;ll be the first to know when spots open in your area.
+            Serving Austin, Kyle, Buda, and San Marcos. Classes are being scheduled now - join the waitlist and you&apos;ll be the first to know when spots open in your area.
           </p>
         </div>
 
