@@ -99,6 +99,8 @@ const Navbar = ({ user }: { user: unknown }) => {
     { label: 'HOME', href: '#home' },
     { label: 'ABOUT', href: '#about' },
     { label: 'CLASSES', href: '#classes' },
+    { label: 'FAQ', href: '/faq' },
+    { label: 'BLOG', href: '/blog' },
     { label: 'MERCH', href: '#merch' },
     { label: 'CONTACT', href: '/contact' },
   ];
@@ -182,7 +184,7 @@ const HeroSection = () => (
         <div className="flex items-center gap-3 mb-8">
           <div className="w-8 h-px bg-red-600" />
           <span className="text-red-500 text-xs font-mono tracking-widest uppercase">
-            Texas-Based Firearms Instruction
+            Austin, TX — Kyle · Buda · San Marcos
           </span>
         </div>
 
@@ -263,13 +265,10 @@ const AboutSection = () => (
           </h2>
           <div className="h-px w-24 bg-red-600/40 mb-7" />
           <p className="text-zinc-400 leading-relaxed mb-5">
-            Loadout Lab isn&apos;t run by someone who took a weekend course and printed a certificate.
-            Luke Eddleman brings years of real-world experience — U.S. military service,
-            federal security work, and time as a professional range instructor.
+            Loadout Lab isn&apos;t run by someone who took a weekend course and printed a certificate. Luke Eddleman brings years of real-world experience — U.S. military service, federal security work, and time as a professional range instructor — and brings that training to Austin, Kyle, Buda, San Marcos, and the surrounding Hill Country.
           </p>
           <p className="text-zinc-400 leading-relaxed mb-10">
-            The goal is simple: take every student from where they are and make them more capable,
-            more confident, and safer with a firearm. No judgment, no ego — just results.
+            The goal is simple: take every student from where they are and make them more capable, more confident, and safer with a firearm. Whether you&apos;re brand new to firearms or looking to sharpen skills you already have, there&apos;s no judgment, no ego — just results.
           </p>
 
           {/* Credentials */}
@@ -402,7 +401,7 @@ const ClassesSection = () => {
           </h2>
           <div className="h-px w-24 bg-red-600/40 mx-auto mb-6" />
           <p className="text-zinc-500 max-w-xl mx-auto text-sm leading-relaxed">
-            Classes are being scheduled now. Join the waitlist and you&apos;ll be the first to know when spots open up.
+            Serving Austin, Kyle, Buda, and San Marcos. Classes are being scheduled now — join the waitlist and you&apos;ll be the first to know when spots open in your area.
           </p>
         </div>
 
@@ -456,6 +455,11 @@ const ClassesSection = () => {
             className="inline-flex items-center gap-2 border border-zinc-800 hover:border-red-600/40 text-zinc-400 hover:text-white px-6 py-3 rounded-lg font-black text-xs tracking-widest transition-colors">
             QUESTIONS? CONTACT LUKE <ArrowRight className="w-3.5 h-3.5" />
           </a>
+        </div>
+        <div className="flex flex-wrap justify-center gap-6 mt-6 text-xs font-mono tracking-widest">
+          <a href="/faq" className="text-zinc-600 hover:text-zinc-400 transition-colors">FAQ →</a>
+          <a href="/blog" className="text-zinc-600 hover:text-zinc-400 transition-colors">INSTRUCTOR FEED →</a>
+          <a href="/contact" className="text-zinc-600 hover:text-zinc-400 transition-colors">CONTACT →</a>
         </div>
       </div>
     </section>

@@ -24,9 +24,9 @@ export const metadata: Metadata = {
     shortcut: '/icon.svg',
     apple: '/icon.svg',
   },
-  title: "Loadout Lab — Control. Test. Improve.",
-  description: "Texas-based firearms instruction from a military veteran and federal security professional. Classes, gear, and real-world training.",
-  keywords: ["firearms instruction", "texas shooting classes", "gun training", "defensive pistol", "AR-15 training", "concealed carry"],
+  title: "Loadout Lab — Firearms Instruction in Austin, TX | Control. Test. Improve.",
+  description: "Professional firearms instruction serving Austin, Kyle, Buda, and San Marcos, TX. Classes taught by a military veteran and federal security professional. Pistol, carbine, defensive shooting, and private instruction.",
+  keywords: ["firearms instruction Austin TX", "gun classes Austin Texas", "shooting classes Kyle TX", "shooting classes Buda TX", "shooting classes San Marcos TX", "defensive pistol Austin", "private firearms instruction Austin", "AR-15 training Austin TX", "beginner gun classes Austin", "concealed carry training Austin Texas", "firearms instructor Austin", "range instruction south Austin"],
   openGraph: {
     title: "Loadout Lab",
     description: "Control. Test. Improve. Texas-based firearms instruction.",
@@ -61,6 +61,47 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "Loadout Lab",
+              "description": "Professional firearms instruction serving Austin, Kyle, Buda, and San Marcos, TX. Classes taught by a military veteran and federal security professional.",
+              "url": "https://loadoutlab.com",
+              "telephone": "+15125535798",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Austin",
+                "addressRegion": "TX",
+                "addressCountry": "US"
+              },
+              "areaServed": [
+                {"@type": "City", "name": "Austin"},
+                {"@type": "City", "name": "Kyle"},
+                {"@type": "City", "name": "Buda"},
+                {"@type": "City", "name": "San Marcos"}
+              ],
+              "founder": {
+                "@type": "Person",
+                "name": "Luke Eddleman"
+              },
+              "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Firearms Training Classes",
+                "itemListElement": [
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Fundamentals"}},
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Defensive Pistol"}},
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Carbine / AR Platform"}},
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Squad Training"}},
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Precision Fundamentals"}},
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Private Instruction"}}
+                ]
+              }
+            })
+          }}
+        />
       </body>
     </html>
   );

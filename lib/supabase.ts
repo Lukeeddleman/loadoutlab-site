@@ -283,3 +283,84 @@ export const deleteBuild = async (buildId: string) => {
 
   return { error };
 };
+
+// Blog post types
+export type BlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  content: string;
+  published: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+// Blog helpers
+export const getPublishedPosts = async () => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('id, slug, title, excerpt, published_at, created_at')
+    .eq('published', true)
+    .order('published_at', { ascending: false });
+  return { data, error };
+};
+
+export const getPostBySlug = async (slug: string) => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('slug', slug)
+    .eq('published', true)
+    .single();
+  return { data, error };
+};
+
+export const getAllPostsAdmin = async () => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .order('created_at', { ascending: false });
+  return { data, error };
+};
+
+export const createPost = async (post: {
+  slug: string;
+  title: string;
+  excerpt?: string;
+  content: string;
+  published?: boolean;
+}) => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .insert({
+      ...post,
+      published_at: post.published ? new Date().toISOString() : null,
+    })
+    .select()
+    .single();
+  return { data, error };
+};
+
+export const updatePost = async (id: string, updates: Partial<BlogPost>) => {
+  const payload: Partial<BlogPost> = { ...updates };
+  if (updates.published && !updates.published_at) {
+    (payload as any).published_at = new Date().toISOString();
+  }
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .update(payload)
+    .eq('id', id)
+    .select()
+    .single();
+  return { data, error };
+};
+
+export const deletePost = async (id: string) => {
+  const { error } = await supabase
+    .from('blog_posts')
+    .delete()
+    .eq('id', id);
+  return { error };
+};
