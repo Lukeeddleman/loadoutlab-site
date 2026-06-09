@@ -350,9 +350,9 @@ const ClassesSection = () => {
     },
     {
       slug: 'carbine-ar-platform',
-      level: 'INTERMEDIATE',
-      title: 'CARBINE / AR PLATFORM',
-      desc: 'AR familiarization, zeroing, precision fundamentals, positional shooting, and practical drills.',
+      level: 'BEGINNER',
+      title: 'AR-15 FUNDAMENTALS',
+      desc: 'Platform anatomy, controls, disassembly, grip, stance, zeroing, optics, and malfunction clearing. Everything you need to run your rifle with confidence.',
       duration: '3-4 Hours',
       comingSoon: true,
       mobileOrderClass: 'order-4 md:order-none',
