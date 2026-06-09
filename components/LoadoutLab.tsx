@@ -333,7 +333,7 @@ const ClassesSection = () => {
     {
       slug: 'fundamentals',
       level: 'BEGINNER',
-      title: 'FUNDAMENTALS',
+      title: 'PISTOL FUNDAMENTALS',
       desc: 'Safe handling, range etiquette, stance, grip, sight alignment, and trigger control. The foundation everything else is built on.',
       duration: '2-3 Hours',
       comingSoon: true,
